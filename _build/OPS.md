@@ -26,6 +26,7 @@ How the twice-weekly blog is produced and published. Read this first in every sc
 3. Hostinger MCP: `hosting_git_deploy-website-repository` with username `u925201857`, domain `ashishtadigiri.com`, repository_url `https://github.com/ashishtadigiri7-pixel/ashishtadigiri-blog.git`, branch `main`, directory `blog`.
 4. Verify with WebFetch that `https://ashishtadigiri.com/blog/<slug>/` shows the new title, then tell Ash it is live with the link.
 5. The site's main menu, root sitemap and robots.txt already include the blog. Don't edit root files.
+6. Google Search Console: the domain property `sc-domain:ashishtadigiri.com` is verified, and `/blog/sitemap.xml` was submitted on 24 Oct 2026, so Google finds new posts from the sitemap. Cloud runs can't reach Search Console, so in the live-link message remind Ash he can paste the new URL into Search Console's URL Inspection and click Request indexing to speed it up (optional).
 
 ## Editorial rules (summary)
 - One real news item from the last 7 days in Ash's fields, cited to primary sources, turned into a method the reader can apply (formula, worked example, decision rule, checklist or tool).
