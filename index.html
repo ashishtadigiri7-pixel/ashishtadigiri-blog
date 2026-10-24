@@ -300,6 +300,21 @@ table.pl td{padding:8px 12px}
 .prose a.btn-p,.prose a.btn-p:hover{color:#05060b}
 .prose a.btn-g{color:var(--fg-2)}
 .prose a.btn-g:hover{color:var(--fg)}
+
+/* tables wrap text instead of forcing sideways scroll */
+table.data th,table.data td{white-space:normal;vertical-align:middle}
+table.data th{line-height:1.4}
+table.data td.num,table.data th.num{white-space:nowrap}
+table.data td.mono{white-space:nowrap;font-size:13px}
+/* planner fits the article column on desktop */
+table.pl{table-layout:fixed;min-width:640px}
+table.pl col.c-name{width:31%}table.pl col.c-q{width:13%}table.pl col.c-t{width:8%}table.pl col.c-x{width:9%}
+table.pl th{padding:12px 8px;font-size:10px;letter-spacing:.06em}
+table.pl th:first-child,table.pl td:first-child{padding-left:16px}
+table.pl td{padding:8px}
+.pl-name{min-width:0;width:100%;text-overflow:ellipsis}
+.tg span{min-width:40px;padding:5px 8px;font-size:10.5px}
+.tiers-sum span{line-height:1.35}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Blog", "name": "Lab notes \u00b7 Ashish Tadigiri", "url": "https://ashishtadigiri.com/blog/", "description": "Lab notes from Ashish Tadigiri: this week's news in AI agents, algorithmic trading, prop firms, fintech and web performance, with the method and numbers to act on it.", "author": {"@id": "https://ashishtadigiri.com/#ashish"}, "publisher": {"@id": "https://ashishtadigiri.com/#org"}, "blogPost": [{"@type": "BlogPosting", "headline": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.", "url": "https://ashishtadigiri.com/blog/bulenox-drawdown-lucid-consistency-rule/", "datePublished": "2026-10-24"}, {"@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "url": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "datePublished": "2026-10-24"}]}</script><meta property="og:type" content="website">
 </head>
