@@ -272,3 +272,9 @@ table.pl td{padding:8px 12px}
 .pl-note{margin:0;padding:16px 22px;border-top:1px solid var(--line);font-size:15px;color:var(--fg-2)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .ret{color:var(--faint);font-size:13px}
+
+/* buttons inside article content keep button styling (overrides .prose a) */
+.prose a.btn{text-decoration:none}
+.prose a.btn-p,.prose a.btn-p:hover{color:#05060b}
+.prose a.btn-g{color:var(--fg-2)}
+.prose a.btn-g:hover{color:var(--fg)}
