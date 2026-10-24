@@ -293,3 +293,6 @@ table.pl td{padding:8px}
 .pl-name{min-width:0;width:100%;text-overflow:ellipsis}
 .tg span{min-width:40px;padding:5px 8px;font-size:10.5px}
 .tiers-sum span{line-height:1.35}
+
+/* keep absolutely positioned helpers (screen-reader labels, hidden inputs) inside scroll areas */
+.tablewrap,.planner,.calc{position:relative}
