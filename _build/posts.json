@@ -1,0 +1,52 @@
+{
+  "posts": [
+    {
+      "slug": "prop-firm-drawdown-cuts-october-2026",
+      "status": "draft",
+      "date": "2026-10-27",
+      "title": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.",
+      "title_html": "Bulenox cut its 100K drawdown by <span class=\"grad\">$1,000.</span> Re-size before your next trade.",
+      "dek": "Two futures prop firms tightened their numbers this week. Here is the arithmetic for re-sizing, and the rule that stops Lucid's new 40% consistency cap from costing you a payout.",
+      "excerpt": "Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.",
+      "pillar": "prop",
+      "read": 6,
+      "toc": [["what-changed","What changed"],["size-from-floor","Size from the floor, not the balance"],["consistency","The 40% rule sets your daily stop-win"],["add-on","Should you pay for the 50% add-on?"],["in-code","Why this belongs in code"]],
+      "components": ["calc"],
+      "cta": {
+        "eyebrow": "Run a prop firm or trade evaluations?",
+        "heading": "Put the rules in code, not in your head.",
+        "body": "I build risk engines, position-sizing tools and automated execution for futures traders and prop firms. The firm's limits go in once, and every order is sized and checked against them.",
+        "bullets": ["Risk engines that enforce daily loss limits and trailing drawdown on their own", "Position-sizing and target/stop consoles for Nasdaq and gold futures", "Fixed price, agreed before any code. NDA available."],
+        "secondary": ["See Project Vector", "/#work"]
+      },
+      "sources": [
+        ["Bulenox Help Center: Momentum account parameters", "https://bulenox.com/help-center/momentum#mo-parameters"],
+        ["Bulenox Help Center: Fast Track account parameters", "https://bulenox.com/help-center/fast-track#ft-parameters"],
+        ["Lucid Trading Support: LucidFlex evaluation account", "https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account"],
+        ["PickAPropFirm: futures prop-firm rule changes, tracked daily", "https://pickapropfirm.com/prop-firm-rule-changes/"],
+        ["Copilink: prop firm rule changes, October 2026", "https://copilink.com/prop-firms/changelog"]
+      ],
+      "disclaimer": "Educational content, not financial advice. Rules are as published on each firm's help centre on 24 October 2026 and can change without notice; check your own account dashboard before trading. There are no affiliate links in this post."
+    },
+    {
+      "slug": "ai-agents-insider-threat-permissions",
+      "status": "draft",
+      "date": "2026-10-30",
+      "title": "Microsoft says treat AI agents like insiders. Here is the permission model I would put on yours.",
+      "excerpt": "Microsoft's new guidance: every agent gets its own identity, starts with zero permissions and needs a human for high-impact actions. A 4-tier model you can apply to your own agent.",
+      "pillar": "ai",
+      "read": 7
+    }
+  ],
+  "planned": [
+    {"title": "The 7 checks I run before trusting any backtest", "pillar": "lab", "excerpt": "Out-of-sample splits, walk-forward windows and the drawdown test most backtests skip."},
+    {"title": "A 25,000-post site went from C to A on PageSpeed. The 5 changes.", "pillar": "web", "excerpt": "What actually moved Core Web Vitals on a large WordPress site, in order of impact."}
+  ],
+  "pillars": {
+    "prop": "Prop firms",
+    "ai": "AI agents",
+    "lab": "Algo & quant",
+    "web": "Web & growth",
+    "founder": "Founder"
+  }
+}
