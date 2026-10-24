@@ -232,7 +232,7 @@ def planner_component():
 <div class="acts-sm"><button class="chip" type="button" data-act="add">Add tool</button><button class="chip" type="button" data-act="reset">Reset example</button><button class="chip" type="button" data-act="copy">Copy policy</button></div></div>
 <div class="tiers-sum" aria-live="polite"><div data-t="0"><b>0</b><span>Tier 0 · runs alone</span></div><div data-t="1"><b>0</b><span>Tier 1 · runs alone, logged</span></div><div data-t="2"><b>0</b><span>Tier 2 · needs approval</span></div><div data-t="3"><b>0</b><span>Tier 3 · agent never holds</span></div></div>
 <div class="tablewrap pl-wrap"><table class="data pl"><colgroup><col class="c-name"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-q"><col class="c-t"><col class="c-x"></colgroup><thead><tr><th>Tool</th><th>Writes data?</th><th>Undo in 5 min?</th><th>Leaves company?</th><th>Money, keys or delete?</th><th>Tier</th><th><span class="sr">Remove</span></th></tr></thead><tbody></tbody></table></div>
-<p class="pl-note" id="pl-note"></p>
+<p class="pl-hint">Swipe the table sideways to see each tool's tier.</p><p class="pl-note" id="pl-note"></p>
 </div>
 <p class="note">Rule: money, credentials, deletion or permission changes are Tier 3; read-only is Tier 0; anything that leaves the company or takes over 5 minutes to undo is Tier 2; everything else is Tier 1.</p>"""
 

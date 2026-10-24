@@ -318,6 +318,11 @@ table.pl td{padding:8px}
 
 /* keep absolutely positioned helpers (screen-reader labels, hidden inputs) inside scroll areas */
 .tablewrap,.planner,.calc{position:relative}
+
+/* AT badge inside the byline keeps its own type (overrides .who span) */
+.who .mk{display:inline-grid;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;text-transform:none;color:#05060b}
+.pl-hint{display:none;margin:0;padding:10px 16px 0;font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+@media (max-width:700px){.pl-hint{display:block}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Blog", "name": "Lab notes \u00b7 Ashish Tadigiri", "url": "https://ashishtadigiri.com/blog/", "description": "Lab notes from Ashish Tadigiri: this week's news in AI agents, algorithmic trading, prop firms, fintech and web performance, with the method and numbers to act on it.", "author": {"@id": "https://ashishtadigiri.com/#ashish"}, "publisher": {"@id": "https://ashishtadigiri.com/#org"}, "blogPost": [{"@type": "BlogPosting", "headline": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.", "url": "https://ashishtadigiri.com/blog/bulenox-drawdown-lucid-consistency-rule/", "datePublished": "2026-10-24"}, {"@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "url": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "datePublished": "2026-10-24"}]}</script><meta property="og:type" content="website">
 </head>
