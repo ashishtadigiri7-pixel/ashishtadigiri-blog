@@ -2,8 +2,8 @@
   "posts": [
     {
       "slug": "bulenox-drawdown-lucid-consistency-rule",
-      "status": "draft",
-      "date": "2026-10-27",
+      "status": "live",
+      "date": "2026-10-24",
       "title": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.",
       "title_html": "Bulenox cut its 100K drawdown by <span class=\"grad\">$1,000.</span> Re-size before your next trade.",
       "dek": "Two futures prop firms tightened their numbers this week. Here is the arithmetic for re-sizing, and the rule that stops Lucid's new 40% consistency cap from costing you a payout.",
@@ -109,8 +109,8 @@
     },
     {
       "slug": "ai-agent-permissions-microsoft-insider",
-      "status": "draft",
-      "date": "2026-10-30",
+      "status": "live",
+      "date": "2026-10-24",
       "title": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.",
       "title_html": "Microsoft says treat AI agents as insiders. Give yours <span class=\"grad\">four permission tiers.</span>",
       "dek": "Microsoft's new guidance says every agent needs its own identity, zero standing access and a human for high-impact actions. A two-question rule sorts your agent's tools into four tiers, worked through on an invoicing agent.",

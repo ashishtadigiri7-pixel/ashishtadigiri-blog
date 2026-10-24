@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI Agent Permissions: 4 Tiers After Microsoft&#x27;s Warning</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Microsoft says treat AI agents as insiders. Sort your agent&#x27;s tools into four permission tiers with a two-question rule, a worked example and a planner.">
+<link rel="canonical" href="https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05060B">
+<meta name="author" content="Ashish Tadigiri">
+<meta property="og:site_name" content="Ashish Tadigiri">
+<meta property="og:title" content="Microsoft says treat AI agents as insiders. Give yours four permission tiers.">
+<meta property="og:description" content="Microsoft says treat AI agents as insiders. Sort your agent&#x27;s tools into four permission tiers with a two-question rule, a worked example and a planner.">
+<meta property="og:url" content="https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/">
+<meta property="og:image" content="https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ashishtadigiri">
+<meta name="twitter:title" content="Microsoft says treat AI agents as insiders. Give yours four permission tiers."><meta name="twitter:description" content="Microsoft says treat AI agents as insiders. Sort your agent&#x27;s tools into four permission tiers with a two-question rule, a worked example and a planner."><meta name="twitter:image" content="https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/og.png">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="Ashish Tadigiri · Lab notes" href="/blog/feed.xml">
+<link rel="preload" href="/assets/fonts/sora-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Sora";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/sora-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Sora";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/sora-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Sora";font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/sora-latin-700-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-400-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Martian Mono";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/martian-mono-latin-400-normal.woff2) format("woff2")}@font-face{font-family:"Martian Mono";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/martian-mono-latin-500-normal.woff2) format("woff2")}</style>
+<style>/* Layout concept: the site's dark glass shell (sticky blurred header, noise, cyan→violet glow) wrapped around a 68ch reading column with a sticky contents rail. */
+:root{
+  --bg:#05060b; --surface:#0b0d16; --surface-2:#10131f; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --fg:#eef1fa; --fg-2:#c9d0e0; --muted:#aeb6ca; --dim:#8790a6; --faint:#6f7890;
+  --cyan:#19c3ff; --blue:#2f7bff; --violet:#b23cff; --lilac:#c77dff;
+  --up:#3ddc97; --down:#ff6b81;
+  --fd:"Sora",system-ui,sans-serif; --fb:"Instrument Sans",system-ui,sans-serif; --fm:"Martian Mono",ui-monospace,monospace;
+  --grad:linear-gradient(90deg,#19c3ff,#2f7bff,#b23cff);
+  --maxw:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--fb);font-size:17px;line-height:1.65;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+img{max-width:100%;height:auto}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+@media (max-width:600px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* atmosphere */
+.noise{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40;opacity:.06;mix-blend-mode:overlay}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(25,195,255,.10),rgba(178,60,255,.05) 40%,transparent 70%);transform:translate3d(-999px,-999px,0);transition:opacity .4s;opacity:0}
+@media (pointer:fine){.glow{opacity:1}}
+.prog{position:fixed;left:0;top:env(safe-area-inset-top,0px);height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--grad);z-index:70;box-shadow:0 0 12px rgba(25,195,255,.6)}
+
+/* type helpers */
+.grad{background:linear-gradient(90deg,#19c3ff,#2f7bff,#b23cff,#2f7bff,#19c3ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.lbl{display:inline-flex;align-items:center;gap:12px;font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lbl::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--grad);box-shadow:0 0 10px rgba(25,195,255,.6)}
+.mono{font-family:var(--fm)}
+
+/* header (mirrors the main site) */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(5,6,11,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line)}
+.nav{max-width:var(--maxw);margin:0 auto;padding:14px max(24px,env(safe-area-inset-right,0px)) 14px max(24px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg)}
+.brand img{height:34px;width:auto}
+.mk{display:inline-grid;place-items:center;width:42px;height:34px;border-radius:9px;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;color:#05060b;background:var(--grad);box-shadow:0 0 18px rgba(25,195,255,.35)}
+.brand-name{font-family:var(--fd);font-weight:600;font-size:14px;letter-spacing:.2em}
+.links{display:flex;align-items:center;gap:34px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nl{position:relative;color:var(--muted);text-decoration:none;padding:12px 0}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:1px;background:var(--grad);transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.nl:hover,.nl[aria-current]{color:var(--fg)}
+.nl:hover::after,.nl[aria-current]::after{transform:scaleX(1);transform-origin:left}
+.btn{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:14px;font-family:var(--fb);border:0;cursor:pointer;transition:box-shadow .3s,color .3s,transform .3s}
+.btn svg{transition:transform .3s}
+.btn:hover svg{transform:translateX(3px)}
+.btn-p{background:var(--cyan);color:#05060b}
+.btn-p::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.btn-p:hover::after{transform:translateX(120%)}
+.btn-p:hover{box-shadow:0 0 0 1px var(--cyan),0 10px 40px rgba(25,195,255,.5)}
+.btn-g{background:transparent;color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+.btn-g:hover{color:var(--fg);box-shadow:inset 0 0 0 1px var(--cyan),0 0 24px rgba(25,195,255,.2)}
+.menu-btn{display:none;position:relative;width:46px;height:46px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--fg);cursor:pointer;padding:0}
+.menu-btn i{position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:currentColor;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.menu-btn i:nth-child(1){transform:translateY(-4px)}.menu-btn i:nth-child(2){transform:translateY(4px)}
+.menu-open .menu-btn i:nth-child(1){transform:rotate(45deg)}.menu-open .menu-btn i:nth-child(2){transform:rotate(-45deg)}
+.mnav{position:fixed;inset:0;z-index:45;background:rgba(5,6,11,.97);backdrop-filter:blur(18px);display:flex;flex-direction:column;justify-content:center;gap:4px;padding:110px max(28px,env(safe-area-inset-right,0px)) 40px max(28px,env(safe-area-inset-left,0px));opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.menu-open .mnav{opacity:1;visibility:visible}
+.mlink{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:30px;font-weight:600;letter-spacing:-.03em;color:var(--fg);text-decoration:none}
+.mlink[aria-current]{color:var(--cyan)}
+@media (max-width:960px){.links,.nav>.btn-p{display:none}.menu-btn{display:block}}
+
+/* blog index */
+.hero{position:relative;padding:88px 0 40px;overflow:hidden}
+.hero h1{font-family:var(--fd);font-weight:600;font-size:clamp(44px,7.4vw,96px);line-height:.98;letter-spacing:-.045em;margin:18px 0 20px;text-wrap:balance}
+.hero p{max-width:60ch;color:var(--muted);font-size:18px;margin:0}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.hero-meta b{color:var(--fg);font-weight:500}
+.tools{position:sticky;top:calc(env(safe-area-inset-top,0px) + 73px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--muted);cursor:pointer;transition:all .25s}
+.chip:hover{color:var(--fg);border-color:rgba(25,195,255,.5)}
+.chip[aria-pressed="true"]{color:#05060b;background:var(--cyan);border-color:var(--cyan)}
+.chip .n{opacity:.6;margin-left:6px}
+.search{display:flex;align-items:center;gap:10px;min-width:min(100%,260px);padding:0 16px;height:42px;border-radius:999px;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--dim)}
+.search:focus-within{border-color:var(--cyan)}
+.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--fg);font:inherit;font-size:15px}
+.feat{position:relative;display:grid;grid-template-columns:1.15fr 1fr;gap:0;margin:22px 0 28px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:inherit;isolation:isolate}
+.feat:hover{border-color:rgba(25,195,255,.35)}
+.feat-art{position:relative;min-height:340px;background:radial-gradient(120% 90% at 20% 10%,rgba(25,195,255,.22),transparent 55%),radial-gradient(100% 90% at 90% 90%,rgba(178,60,255,.25),transparent 55%),#070912;overflow:hidden}
+.feat-art svg{position:absolute;inset:0;width:100%;height:100%}
+.feat-body{padding:40px;display:flex;flex-direction:column;gap:16px;justify-content:center;min-width:0}
+.feat-body h2{font-family:var(--fd);font-weight:600;font-size:clamp(26px,3vw,38px);line-height:1.12;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.feat-body p{color:var(--muted);margin:0}
+@media (max-width:860px){.feat{grid-template-columns:1fr}.feat-art{min-height:220px}.feat-body{padding:26px}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;padding-bottom:40px}
+.card{position:relative;display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:20px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:inherit;overflow:hidden;isolation:isolate;transition:border-color .3s,transform .4s cubic-bezier(.16,1,.3,1)}
+.spot::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(420px circle at var(--mx,50%) var(--my,-20%),rgba(25,195,255,.12),transparent 45%);opacity:0;transition:opacity .3s}
+.spot:hover::before{opacity:1}
+a.card:hover{border-color:rgba(25,195,255,.35);transform:translateY(-3px)}
+.card h3{font-family:var(--fd);font-weight:600;font-size:21px;line-height:1.25;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.card p{margin:0;color:var(--muted);font-size:15.5px}
+.card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.card.is-planned{border-style:dashed;background:transparent}
+.card.is-planned h3{color:var(--fg-2)}
+.tag{display:inline-flex;align-items:center;gap:8px;width:max-content;font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.tag[data-p="ai"]{color:var(--lilac)}.tag[data-p="lab"]{color:#5c9bff}.tag[data-p="web"]{color:var(--up)}.tag[data-p="founder"]{color:#ffc46b}
+.status{padding:4px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--muted)}
+.empty{grid-column:1/-1;padding:48px 24px;text-align:center;color:var(--dim);border:1px dashed var(--line-2);border-radius:20px}
+.nl-box{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin:20px 0 80px;padding:34px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(25,195,255,.08),rgba(178,60,255,.08))}
+.nl-box h2{font-family:var(--fd);font-weight:600;font-size:28px;letter-spacing:-.03em;margin:8px 0 6px;line-height:1.15}
+.nl-box p{margin:0;color:var(--muted)}
+@media (max-width:760px){.nl-box{grid-template-columns:1fr;padding:24px}}
+
+/* post */
+.post-hero{position:relative;padding:64px 0 36px;overflow:hidden}
+.crumbs{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.crumbs a{text-decoration:none;color:var(--muted)}.crumbs a:hover{color:var(--cyan)}
+.post-hero h1{font-family:var(--fd);font-weight:600;font-size:clamp(34px,5.2vw,64px);line-height:1.04;letter-spacing:-.042em;margin:22px 0 18px;max-width:20ch;text-wrap:balance}
+.dek{font-size:clamp(18px,2vw,21px);color:var(--fg-2);max-width:62ch;margin:0}
+.byline{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
+.who{display:flex;align-items:center;gap:12px}
+.who b{display:block;font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.who span{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.facts b{color:var(--fg-2);font-weight:500}
+.share{margin-left:auto;display:flex;gap:8px}
+.icon-btn{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--fg-2);cursor:pointer;text-decoration:none;transition:all .25s}
+.icon-btn:hover{color:var(--fg);border-color:var(--cyan);box-shadow:0 0 18px rgba(25,195,255,.25)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:72px;align-items:start;padding-bottom:40px}
+@media (max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+.prose{max-width:70ch;min-width:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2{font-family:var(--fd);font-weight:600;font-size:clamp(25px,2.6vw,32px);line-height:1.15;letter-spacing:-.03em;margin-top:2.2em;text-wrap:balance;display:flex;gap:14px;align-items:baseline}
+.prose h2 .no{font-family:var(--fm);font-size:13px;font-weight:500;letter-spacing:.06em;color:var(--cyan);flex-shrink:0}
+.prose h3{font-family:var(--fd);font-weight:600;font-size:20px;letter-spacing:-.02em;margin-top:1.8em}
+.prose p,.prose li{color:var(--fg-2)}
+.prose strong{color:var(--fg);font-weight:600}
+.prose a{color:var(--cyan);text-decoration:underline;text-decoration-color:rgba(25,195,255,.35);text-underline-offset:3px}
+.prose a:hover{text-decoration-color:var(--cyan)}
+.prose ul,.prose ol{padding-left:1.2em}
+.prose li+li{margin-top:.45em}
+.prose li::marker{color:var(--cyan)}
+.lede{font-size:19px;color:var(--fg)!important}
+.box{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:24px 26px}
+.box h4{margin:0 0 12px;font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.box ol,.box ul{margin:0}
+.formula{position:relative;padding:22px 24px;border-radius:16px;background:#070912;border:1px solid rgba(25,195,255,.25);font-family:var(--fm);font-size:clamp(13px,1.6vw,15px);line-height:1.7;color:var(--fg);overflow-x:auto;box-shadow:0 0 40px rgba(25,195,255,.06) inset}
+.formula .k{color:var(--cyan)}.formula .c{color:var(--dim)}
+.copy{position:absolute;top:10px;right:10px;font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted);cursor:pointer}
+.copy:hover{color:var(--fg);border-color:var(--cyan)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table.data{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:14px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+table.data td{padding:13px 16px;border-bottom:1px solid var(--line);color:var(--fg-2);white-space:nowrap}
+table.data tr:last-child td{border-bottom:0}
+table.data td.num,table.data th.num{text-align:right}
+table.data .down{color:var(--down)}table.data .up{color:var(--up)}
+table.data tbody tr:hover td{background:rgba(25,195,255,.04)}
+.note{font-size:14px;color:var(--dim)!important}
+figure{margin:0}
+figure.chart{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px 22px 16px}
+figure.chart svg{display:block;width:100%;height:auto}
+figcaption{margin-top:10px;font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--dim)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+.pull{border-left:2px solid transparent;border-image:var(--grad) 1;padding:4px 0 4px 22px;font-family:var(--fd);font-weight:500;font-size:clamp(20px,2.2vw,25px);line-height:1.35;letter-spacing:-.02em;color:var(--fg)!important}
+
+/* calculator */
+.calc{border-radius:22px;border:1px solid rgba(25,195,255,.28);background:radial-gradient(120% 120% at 0% 0%,rgba(25,195,255,.08),transparent 50%),radial-gradient(120% 120% at 100% 100%,rgba(178,60,255,.08),transparent 50%),var(--surface);overflow:hidden}
+.calc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.calc-head .lbl{color:var(--fg)}
+.tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:#070912;border:1px solid var(--line)}
+.tab{font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--cyan);color:#05060b}
+.calc-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+@media (max-width:720px){.calc-body{grid-template-columns:1fr}}
+.inputs{display:grid;gap:14px;padding:22px;border-right:1px solid var(--line);align-content:start}
+@media (max-width:720px){.inputs{border-right:0;border-bottom:1px solid var(--line)}}
+.field{display:grid;gap:6px}
+.field label{font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.field input,.field select{width:100%;height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line-2);background:#070912;color:var(--fg);font:inherit;font-size:15px;font-variant-numeric:tabular-nums}
+.field input:focus,.field select:focus{outline:0;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(25,195,255,.15)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;height:44px;border-radius:12px;border:1px solid var(--line-2);background:#070912;color:var(--muted);font-family:var(--fm);font-size:12px;cursor:pointer}
+.seg button[aria-pressed="true"]{border-color:var(--cyan);color:var(--fg);box-shadow:0 0 0 3px rgba(25,195,255,.15)}
+.out{padding:22px;display:grid;gap:16px;align-content:start}
+.big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.big .v{font-family:var(--fd);font-weight:600;font-size:64px;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.big .u{font-family:var(--fm);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meter{height:10px;border-radius:999px;background:#070912;border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:inherit;background:var(--grad);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.lines{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14.5px}
+.lines li{display:flex;justify-content:space-between;gap:16px;padding-bottom:8px;border-bottom:1px dashed var(--line);color:var(--muted)}
+.lines li b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.verdict{padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;background:rgba(25,195,255,.07);border:1px solid rgba(25,195,255,.2);color:var(--fg-2)}
+.verdict.warn{background:rgba(255,107,129,.07);border-color:rgba(255,107,129,.3)}
+
+/* cta, author, sources */
+.cta{position:relative;overflow:hidden;margin-top:2.4em;padding:36px;border-radius:24px;border:1px solid rgba(25,195,255,.3);background:radial-gradient(90% 120% at 100% 0%,rgba(178,60,255,.22),transparent 60%),radial-gradient(90% 120% at 0% 100%,rgba(25,195,255,.16),transparent 60%),var(--surface)}
+.cta h3{font-family:var(--fd);font-weight:600;font-size:clamp(26px,3vw,34px);line-height:1.1;letter-spacing:-.035em;margin:12px 0 10px!important;color:var(--fg)}
+.cta p{color:var(--fg-2);max-width:56ch}
+.cta ul{list-style:none;padding:0;display:grid;gap:8px;margin:16px 0 22px}
+.cta li{display:flex;gap:10px;color:var(--fg-2);font-size:15.5px}
+.cta li::before{content:"";flex-shrink:0;margin-top:9px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.cta .acts{display:flex;flex-wrap:wrap;gap:10px}
+.author{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:2.4em;padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--surface)}
+.author .mk{width:56px;height:46px;font-size:19px;border-radius:12px}
+.author b{font-family:var(--fd);font-weight:600;font-size:17px}
+.author p{margin:6px 0 0;font-size:15px;color:var(--muted)!important}
+.sources{font-size:14.5px}
+.sources li{color:var(--muted)!important}
+.disc{font-size:13.5px;color:var(--faint)!important;border-top:1px solid var(--line);padding-top:18px}
+
+/* rail */
+.rail{position:sticky;top:110px;display:grid;gap:22px}
+.toc{border-left:1px solid var(--line);padding-left:18px}
+.toc h4{margin:0 0 12px;font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.toc a{position:relative;display:block;padding:6px 0;font-size:14px;line-height:1.4;color:var(--dim);text-decoration:none;transition:color .25s}
+.toc a::before{content:"";position:absolute;left:-19px;top:6px;bottom:6px;width:1px;background:var(--grad);transform:scaleY(0);transition:transform .35s}
+.toc a:hover{color:var(--fg)}
+.toc a.on{color:var(--fg)}.toc a.on::before{transform:scaleY(1)}
+.mini-cta{padding:20px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.mini-cta p{margin:8px 0 14px;font-size:14px;color:var(--muted)}
+.related{padding:20px 0 90px;border-top:1px solid var(--line)}
+.related h2{font-family:var(--fd);font-weight:600;font-size:28px;letter-spacing:-.03em;margin:26px 0 20px}
+
+/* footer */
+.ftr{border-top:1px solid var(--line);padding-block:34px}
+.ftr .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px}
+.ftr .copy-r{font-size:13px;color:var(--dim)}
+.ftr .hubs{font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--faint)}
+.soc{display:flex;gap:8px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:999px;background:var(--fg);color:#05060b;font-size:14px;font-weight:600;z-index:80;transition:all .35s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.glow{display:none}}
+
+/* FAQ accordion */
+.faq{display:grid;gap:10px}
+.qa{border:1px solid var(--line);border-radius:16px;background:var(--surface);transition:border-color .3s}
+.qa[open]{border-color:rgba(25,195,255,.3)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;font-family:var(--fd);font-weight:600;font-size:17px;letter-spacing:-.015em;color:var(--fg)}
+.qa summary::-webkit-details-marker{display:none}
+.pm{position:relative;flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2)}
+.pm::before,.pm::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:1.5px;margin-top:-.75px;background:var(--cyan);transition:transform .3s}
+.pm::after{transform:rotate(90deg)}
+.qa[open] .pm::after{transform:rotate(0)}
+.qa p{margin:0;padding:0 20px 18px;color:var(--fg-2)}
+
+/* planner */
+.planner{border-radius:22px;border:1px solid rgba(178,60,255,.3);background:radial-gradient(120% 120% at 100% 0%,rgba(178,60,255,.1),transparent 50%),var(--surface);overflow:hidden}
+.acts-sm{display:flex;flex-wrap:wrap;gap:6px}
+.acts-sm .chip{padding:7px 12px;font-size:10.5px}
+.tiers-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.tiers-sum>div{background:var(--surface);padding:14px 16px;display:grid;gap:2px}
+.tiers-sum b{font-family:var(--fd);font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.tiers-sum span{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.tiers-sum [data-t="0"] b{color:var(--up)}.tiers-sum [data-t="1"] b{color:var(--cyan)}.tiers-sum [data-t="2"] b{color:#ffc46b}.tiers-sum [data-t="3"] b{color:var(--down)}
+@media (max-width:640px){.tiers-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pl-wrap{border:0;border-radius:0;background:transparent}
+table.pl td{padding:8px 12px}
+.pl-name{width:100%;min-width:170px;height:36px;padding:0 10px;border-radius:9px;border:1px solid var(--line-2);background:#070912;color:var(--fg);font-family:var(--fm);font-size:12.5px}
+.pl-name:focus{outline:0;border-color:var(--cyan)}
+.tg{position:relative;display:inline-flex;align-items:center;cursor:pointer}
+.tg input{position:absolute;opacity:0;width:1px;height:1px}
+.tg span{display:inline-block;min-width:46px;text-align:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line-2);font-family:var(--fm);font-size:11px;color:var(--muted);transition:all .2s}
+.tg input:checked+span{border-color:var(--cyan);color:var(--fg);background:rgba(25,195,255,.12)}
+.tg input:focus-visible+span{outline:2px solid var(--cyan);outline-offset:2px}
+.tg input:disabled+span{opacity:.35;cursor:not-allowed}
+.tier{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-family:var(--fd);font-weight:700;font-size:14px;color:#05060b}
+.tier.t0{background:var(--up)}.tier.t1{background:var(--cyan)}.tier.t2{background:#ffc46b}.tier.t3{background:var(--down)}
+.rm{width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);background:transparent;color:var(--dim);cursor:pointer;font-size:16px;line-height:1}
+.rm:hover{color:var(--down);border-color:var(--down)}
+.pl-note{margin:0;padding:16px 22px;border-top:1px solid var(--line);font-size:15px;color:var(--fg-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ret{color:var(--faint);font-size:13px}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What did Microsoft say about AI agents being insiders?", "acceptedAnswer": {"@type": "Answer", "text": "On 19 October 2026, Microsoft Security argued that companies should treat AI agents as insiders rather than trusted tools. Its guidance: give each agent its own identity, start it with no permissions, grant access only for the current task and require verified human approval for higher-impact actions."}}, {"@type": "Question", "name": "How do I apply least privilege to an AI agent?", "acceptedAnswer": {"@type": "Answer", "text": "List every tool the agent can call and give it a separate API key or service account. Grant read and reversible draft access only, make credentials expire when the task ends, and keep payment, deletion and credential permissions on a key the agent never holds."}}, {"@type": "Question", "name": "Which AI agent actions should need human approval?", "acceptedAnswer": {"@type": "Answer", "text": "Anything that leaves your company or can't be undone within about five minutes: customer emails, publishing, changes customers can see, and edits to financial records. Refunds, payments, deleting records and changing permissions shouldn't be on the agent's key at all."}}, {"@type": "Question", "name": "What is OWASP Excessive Agency?", "acceptedAnswer": {"@type": "Answer", "text": "Excessive Agency is entry LLM06 in OWASP's 2025 Top 10 for LLM applications. It covers damage caused when an AI system has functions it doesn't need, more permissions than its task requires, or the autonomy to take high-impact actions without approval."}}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "description": "Microsoft says treat AI agents as insiders. Sort your agent's tools into four permission tiers with a two-question rule, a worked example and a planner.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "mainEntityOfPage": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "image": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/og.png", "author": {"@type": "Person", "@id": "https://ashishtadigiri.com/#ashish", "name": "Ashish Tadigiri", "url": "https://ashishtadigiri.com/story/"}, "publisher": {"@type": "Organization", "@id": "https://ashishtadigiri.com/#org", "name": "Ashish Infotech & Finance Solutions", "logo": {"@type": "ImageObject", "url": "https://ashishtadigiri.com/assets/img/icon-512.png"}}, "articleSection": "AI agents", "inLanguage": "en-GB", "keywords": "AI agent permissions, least privilege for AI agents, AI agents insider threat, Microsoft agentic insider, OWASP excessive agency, human approval for AI agents, n8n agent security"}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ashishtadigiri.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://ashishtadigiri.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "item": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/"}]}</script><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-24"><meta property="article:author" content="Ashish Tadigiri">
+</head>
+<body>
+<div class="prog" aria-hidden="true"></div><div class="glow" aria-hidden="true"></div>
+<svg class="noise" aria-hidden="true"><filter id="gn"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#gn)"/></svg>
+<header class="hdr"><nav class="nav" aria-label="Main">
+<a class="brand" href="/"><img src="/assets/img/at-holo-160.webp" width="160" height="90" alt="AT monogram"><span class="brand-name">ASHISH <span class="grad">TADIGIRI</span></span></a>
+<div class="links"><a class="nl" href="/#services">Services</a><a class="nl" href="/#work">Work</a><a class="nl" href="/#process">Process</a><a class="nl" href="/story/">Story</a><a class="nl" href="/blog/" aria-current="page">Blog</a></div>
+<a class="btn btn-p" href="/#contact">Get a free plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><i></i><i></i></button>
+</nav></header>
+<nav class="mnav" id="mobile-menu" aria-label="Mobile"><a class="mlink" href="/#services">Services<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#work">Work<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#process">Process<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/story/">Story<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/blog/" aria-current="page">Blog<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#contact">Contact<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<a class="btn btn-p" style="margin-top:24px;min-height:54px" href="/#contact">Get your free project plan</a></nav>
+<main>
+<section class="post-hero"><div class="orb" style="left:-8%;top:-30%;width:560px;height:560px;background:rgba(25,195,255,.14)"></div><div class="orb" style="right:-10%;top:10%;width:420px;height:420px;background:rgba(178,60,255,.12)"></div>
+<div class="wrap" style="position:relative">
+<div class="crumbs"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span>AI agents</span></div>
+<h1>Microsoft says treat AI agents as insiders. Give yours <span class="grad">four permission tiers.</span></h1>
+<p class="dek">Microsoft&#x27;s new guidance says every agent needs its own identity, zero standing access and a human for high-impact actions. A two-question rule sorts your agent&#x27;s tools into four tiers, worked through on an invoicing agent.</p>
+<div class="byline">
+<div class="who"><span class="mk" aria-hidden="true">AT</span><div><b>Ashish Tadigiri</b><span>Founder · Ashish Infotech &amp; Finance Solutions</span></div></div>
+<div class="facts"><span><b>24 Oct 2026</b></span><span><b>7 min</b> read</span><span class="tag" data-p="ai">AI agents</span></div>
+<div class="share">
+<button class="icon-btn" type="button" data-copy-link="https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/" aria-label="Copy link"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg></button>
+<a class="icon-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a>
+<a class="icon-btn" href="https://x.com/intent/post?url=https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/&amp;text=Microsoft says treat AI agents as insiders. Give yours four permission tiers." target="_blank" rel="noopener" aria-label="Share on X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a>
+</div></div></div></section>
+<div class="wrap layout">
+<article class="prose">
+<p class="lede">On 19 October 2026, Microsoft told enterprises to treat AI agents as insiders. Give each agent its own identity, start it with zero permissions, and make a person approve anything high-impact. That advice fits a five-person company running one n8n agent as well as it fits a bank. The hard part is deciding which actions count as high-impact, so this note gives you a four-tier model and a planner to sort your own agent's tools in ten minutes.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>Microsoft's October 2026 guidance: one identity per agent, no standing permissions, human approval for higher-impact actions (Microsoft Security Blog).</li>
+    <li>Sort every tool with two questions: can you undo it within 5 minutes, and does it leave your company or move money?</li>
+    <li>Take money, credential and delete permissions off the agent's key. Put an approval step in front of anything customers see.</li>
+  </ul>
+</div>
+
+<h2 id="what-happened"><span class="no">01</span>What did Microsoft say about AI agents?</h2>
+<p>In October 2026, Microsoft published two posts on the same day arguing that companies should govern AI agents the way they govern staff with system access. Hayete Gallot, who leads Microsoft Security, wrote that agents "are agentic insiders" and shouldn't be trusted by default. A second post, from Nadim Abdo, who runs identity and network access, listed the controls:</p>
+<ul>
+  <li>Every agent gets its own identity, separate from the person who launched it.</li>
+  <li>Agents start with no permissions and receive only what the approved task needs, for as long as it needs them.</li>
+  <li>Higher-impact actions can require verified human approval.</li>
+  <li>Defender's local agent discovery now recognises 60 agent types, including Claude Code, OpenAI Codex and GitHub Copilot.</li>
+</ul>
+<p>TechCrunch reported that Satya Nadella had already argued earlier in October for monitoring systems that the AI labs don't control. Guardian Agents, the agents that would watch other agents, appear in Microsoft's post as a proposed category. Microsoft gave no release date for them, so treat this as guidance you can apply now with the tools you already have.</p>
+
+<h2 id="why-it-matters"><span class="no">02</span>Why does this matter if you don't use Microsoft?</h2>
+<p>OWASP reached the same conclusion from the attacker's side. Its 2025 Top 10 for LLM applications lists <strong>Excessive Agency (LLM06)</strong> and traces it to three causes. The agent has functions it doesn't need, those functions hold more access than the task requires, or the agent takes high-impact actions without approval. OWASP notes the trigger can be a hallucination, an ambiguous instruction, or text an attacker planted in content the agent reads.</p>
+<p>Your model provider can't set these limits for you. The permissions live in your n8n credentials, your API keys and your database roles, and you control all three. A line in the system prompt asking the agent not to issue refunds is a request the model can ignore. Removing the refund scope from its API key is a control it can't get around. Microsoft's post makes the same point: put deterministic controls around a non-deterministic model.</p>
+
+<h2 id="four-tiers"><span class="no">03</span>The four-tier model for AI agent permissions</h2>
+<p>List every tool your agent can call, then sort each one with this rule. It takes two questions and gives you the control to apply.</p>
+<div class="formula" data-plain="Money, credentials, deletion or permission changes -> Tier 3 | Read-only -> Tier 0 | Leaves the company, or can't be undone within 5 minutes -> Tier 2 | Everything else -> Tier 1"><button class="copy" type="button">Copy</button><span class="k">money, credentials, deletion, permissions</span> → Tier 3<br><span class="k">read-only</span> → Tier 0<br><span class="k">leaves the company, or undo takes over 5 min</span> → Tier 2<br><span class="k">everything else</span> → Tier 1</div>
+<figure class="chart">
+  <svg viewBox="0 0 640 300" role="img" aria-label="Four-tier model for AI agent permissions: Tier 0 read runs alone; Tier 1 reversible internal writes run alone with logs and rate limits; Tier 2 external or hard-to-undo actions need human approval; Tier 3 money, credentials, deletion and permission changes are never held by the agent.">
+    <defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
+    <g font-family="Martian Mono, monospace" font-size="11" letter-spacing="1">
+      <rect x="0" y="6" width="640" height="62" rx="12" fill="rgba(61,220,151,.08)" stroke="rgba(61,220,151,.35)"/>
+      <text x="20" y="32" fill="#3ddc97">TIER 0 · READ</text><text x="20" y="54" fill="#8790a6">Reads only what the task needs</text>
+      <text x="620" y="43" text-anchor="end" fill="#eef1fa">RUNS ALONE · LOGGED</text>
+      <rect x="0" y="78" width="640" height="62" rx="12" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.35)"/>
+      <text x="20" y="104" fill="#19c3ff">TIER 1 · REVERSIBLE WRITE</text><text x="20" y="126" fill="#8790a6">Drafts and internal records</text>
+      <text x="620" y="115" text-anchor="end" fill="#eef1fa">RUNS ALONE · RATE-LIMITED</text>
+      <rect x="0" y="150" width="640" height="62" rx="12" fill="rgba(255,196,107,.08)" stroke="rgba(255,196,107,.4)"/>
+      <text x="20" y="176" fill="#ffc46b">TIER 2 · EXTERNAL / HARD TO UNDO</text><text x="20" y="198" fill="#8790a6">Emails, publishing, customer data</text>
+      <text x="620" y="187" text-anchor="end" fill="#eef1fa">PERSON APPROVES EACH ACTION</text>
+      <rect x="0" y="222" width="640" height="62" rx="12" fill="rgba(255,107,129,.08)" stroke="rgba(255,107,129,.4)"/>
+      <text x="20" y="248" fill="#ff6b81">TIER 3 · MONEY, KEYS, DELETE</text><text x="20" y="270" fill="#8790a6">Refunds, credentials, roles</text>
+      <text x="620" y="259" text-anchor="end" fill="#eef1fa">AGENT NEVER HOLDS IT</text>
+    </g>
+  </svg>
+  <figcaption>The four tiers, from the actions an agent runs alone to the permissions it never holds.</figcaption>
+</figure>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Tier</th><th>Covers</th><th>Control</th></tr></thead>
+  <tbody>
+    <tr><td>0 · Read</td><td>Reading the records the task needs</td><td>Runs alone. Scoped to those records. Logged.</td></tr>
+    <tr><td>1 · Reversible write</td><td>Drafts, internal notes, files you can restore</td><td>Runs alone. Logged, rate-limited, undo path tested.</td></tr>
+    <tr><td>2 · External or hard to undo</td><td>Customer emails, publishing, data customers see</td><td>Waits for a person to approve that specific action.</td></tr>
+    <tr><td>3 · Money, keys, deletion</td><td>Refunds, payments, API keys, deleting records, role changes</td><td>The agent never holds the permission. A person does it.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The 5-minute line is a rule of thumb. It's about how long a person takes to spot a bad action in a log and reverse it. If reversing takes longer, treat the action as permanent and move it up a tier.</p>
+
+<h2 id="worked-example"><span class="no">04</span>Worked example: an invoicing agent</h2>
+<p>Take a hypothetical invoicing agent sitting on a billing system like the one in Project Scribe, my document and invoicing platform. It reads timesheets, drafts invoices, renders PDFs and emails clients. Run its eight tools through the rule:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Tool</th><th>Writes?</th><th>Undo in 5 min?</th><th>Leaves company?</th><th>Money / keys / delete?</th><th>Tier</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">read_timesheets</td><td>No</td><td>n/a</td><td>No</td><td>No</td><td>0</td></tr>
+    <tr><td class="mono">read_rate_card</td><td>No</td><td>n/a</td><td>No</td><td>No</td><td>0</td></tr>
+    <tr><td class="mono">create_invoice_draft</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>1</td></tr>
+    <tr><td class="mono">render_invoice_pdf</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>1</td></tr>
+    <tr><td class="mono">email_invoice_to_client</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>2</td></tr>
+    <tr><td class="mono">mark_invoice_paid</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>2</td></tr>
+    <tr><td class="mono">issue_refund</td><td>Yes</td><td>No</td><td>Yes</td><td>Yes</td><td class="down">3</td></tr>
+    <tr><td class="mono">delete_client_record</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td class="down">3</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The agent runs four of its eight tools on its own, asks before two, and never holds the last two. In practice that means two keys. The agent gets a key that can read and draft. Refunds and deletions sit on a separate key that only your finance person's session can use, so a poisoned email in the inbox can't trigger either of them.</p>
+<p>Sort your own agent's tools here. The planner opens with the invoicing example; edit the rows or add your own.</p>
+
+<div class="planner" data-planner data-example='[["read_timesheets", 0, 0, 0, 0], ["read_rate_card", 0, 0, 0, 0], ["create_invoice_draft", 1, 1, 0, 0], ["render_invoice_pdf", 1, 1, 0, 0], ["email_invoice_to_client", 1, 0, 1, 0], ["mark_invoice_paid", 1, 0, 0, 0], ["issue_refund", 1, 0, 1, 1], ["delete_client_record", 1, 0, 0, 1]]'>
+<div class="calc-head"><span class="lbl">Agent permission planner</span>
+<div class="acts-sm"><button class="chip" type="button" data-act="add">Add tool</button><button class="chip" type="button" data-act="reset">Reset example</button><button class="chip" type="button" data-act="copy">Copy policy</button></div></div>
+<div class="tiers-sum" aria-live="polite"><div data-t="0"><b>0</b><span>Tier 0 · runs alone</span></div><div data-t="1"><b>0</b><span>Tier 1 · runs alone, logged</span></div><div data-t="2"><b>0</b><span>Tier 2 · needs approval</span></div><div data-t="3"><b>0</b><span>Tier 3 · agent never holds</span></div></div>
+<div class="tablewrap pl-wrap"><table class="data pl"><thead><tr><th>Tool</th><th>Writes data?</th><th>Undo in 5 min?</th><th>Leaves company?</th><th>Money, keys, delete?</th><th>Tier</th><th><span class="sr">Remove</span></th></tr></thead><tbody></tbody></table></div>
+<p class="pl-note" id="pl-note"></p>
+</div>
+<p class="note">Rule: money, credentials, deletion or permission changes are Tier 3; read-only is Tier 0; anything that leaves the company or takes over 5 minutes to undo is Tier 2; everything else is Tier 1.</p>
+
+<h2 id="controls"><span class="no">05</span>How do you make the tiers stick?</h2>
+<p>Microsoft and OWASP list overlapping controls. These six cover both, and you can set them up in n8n, Make or your own code without new software:</p>
+<ol>
+  <li><strong>One identity per agent.</strong> Give each agent its own service account or API key, never a person's login, so its actions show up as its own in your logs.</li>
+  <li><strong>Short-lived, task-scoped credentials.</strong> Issue tokens that expire when the task ends. Microsoft's post calls this dynamic, time-bound permissions.</li>
+  <li><strong>Approval inside the flow.</strong> Tier 2 actions pause and post the recipient, amount and content to Slack or email with Approve and Reject buttons. In n8n, a Wait step does this.</li>
+  <li><strong>One gateway for every tool call.</strong> Route calls through a single function that checks the tier and writes a log line. OWASP calls this complete mediation.</li>
+  <li><strong>Rate limits.</strong> Cap Tier 1 and 2 calls per hour. For an invoicing agent, start at 20 outbound emails an hour and adjust from the logs.</li>
+  <li><strong>A kill switch you have tested.</strong> One flag that revokes the agent's key. Flip it once before launch so you know it works.</li>
+</ol>
+
+<h2 id="before-launch"><span class="no">06</span>Audit the agent like any other software</h2>
+<p>When I audited a desktop trading app for a private client (<a href="/#work">Project Aegis</a>), the review covered the installer, the runtime and every dependency, then fixed what it found. An agent deserves the same review before it touches customer data: which tools it can call, which credentials it holds, and who approves what. The tier table above is the first page of that review.</p>
+<p>If you're building an agent or already running one, this is the <a href="/#services">AI agent and automation work</a> I take on, from the first build to a permissions audit of an existing setup.</p>
+
+<h2 id="faq"><span class="no">FAQ</span>Frequently asked questions</h2><div class="faq"><details class="qa" open><summary>What did Microsoft say about AI agents being insiders?<span class="pm" aria-hidden="true"></span></summary><p>On 19 October 2026, Microsoft Security argued that companies should treat AI agents as insiders rather than trusted tools. Its guidance: give each agent its own identity, start it with no permissions, grant access only for the current task and require verified human approval for higher-impact actions.</p></details><details class="qa"><summary>How do I apply least privilege to an AI agent?<span class="pm" aria-hidden="true"></span></summary><p>List every tool the agent can call and give it a separate API key or service account. Grant read and reversible draft access only, make credentials expire when the task ends, and keep payment, deletion and credential permissions on a key the agent never holds.</p></details><details class="qa"><summary>Which AI agent actions should need human approval?<span class="pm" aria-hidden="true"></span></summary><p>Anything that leaves your company or can&#x27;t be undone within about five minutes: customer emails, publishing, changes customers can see, and edits to financial records. Refunds, payments, deleting records and changing permissions shouldn&#x27;t be on the agent&#x27;s key at all.</p></details><details class="qa"><summary>What is OWASP Excessive Agency?<span class="pm" aria-hidden="true"></span></summary><p>Excessive Agency is entry LLM06 in OWASP&#x27;s 2025 Top 10 for LLM applications. It covers damage caused when an AI system has functions it doesn&#x27;t need, more permissions than its task requires, or the autonomy to take high-impact actions without approval.</p></details></div>
+
+<aside class="cta spot" aria-label="Work with Ashish"><span class="lbl">Shipping an AI agent?</span>
+<h3>Get its permissions right before it goes live.</h3><p>I build custom AI agents, RAG assistants and automation pipelines, and I audit existing ones: which tools they hold, which credentials they use, and which actions need a person.</p><ul><li>Permission audits mapped to the four tiers, with fixes in order of risk</li><li>Agents built with scoped keys, approval steps and logs from day one</li><li>Fixed price, agreed before any work starts. NDA available.</li></ul>
+<p>Tell me what you want to build, fix or automate. Within 24 hours I'll send you a free plan with the approach, timeline and a fixed price.</p>
+<div class="acts"><a class="btn btn-p" href="/#contact">Get your free project plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-g" href="/#work">See Project Aegis</a></div></aside>
+
+<div class="author"><span class="mk" aria-hidden="true">AT</span><div><b>Ashish Tadigiri</b><p>Founder of Ashish Infotech &amp; Finance Solutions. I engineer algorithmic trading systems, AI agents and fintech platforms. 250+ projects since 2014, including work for teams at Yahoo, Adobe and Nike.</p></div></div>
+<h3 id="sources">Sources</h3>
+<ol class="sources"><li><a href="https://blogs.microsoft.com/blog/2026/10/19/securing-the-agentic-insider/" target="_blank" rel="noopener">Microsoft (Hayete Gallot), Official Microsoft Blog: Securing the agentic insider, 19 Oct 2026</a> <span class="ret">· retrieved 24 Oct 2026</span></li><li><a href="https://www.microsoft.com/en-us/security/blog/2026/10/19/agents-are-your-newest-insiders-security-must-move-at-their-speed/" target="_blank" rel="noopener">Microsoft Security Blog (Nadim Abdo): Agents are your newest insiders, 19 Oct 2026</a> <span class="ret">· retrieved 24 Oct 2026</span></li><li><a href="https://techcrunch.com/2026/10/19/microsoft-says-ai-agents-are-like-insider-threats-as-frontier-models-cant-be-trusted/" target="_blank" rel="noopener">TechCrunch: Microsoft says AI agents are like insider threats, 19 Oct 2026</a> <span class="ret">· retrieved 24 Oct 2026</span></li><li><a href="https://owasp.github.io/www-project-top-10-for-large-language-model-applications/2_0_vulns/LLM06_ExcessiveAgency.html" target="_blank" rel="noopener">OWASP Top 10 for LLM Applications 2025: LLM06 Excessive Agency</a> <span class="ret">· retrieved 24 Oct 2026</span></li></ol>
+<p class="disc">This note summarises public guidance from Microsoft and OWASP as of 24 October 2026. It is general technical guidance, not legal or compliance advice. The invoicing agent is a hypothetical example.</p>
+</article>
+<aside class="rail">
+<nav class="toc" aria-label="Contents"><h4>Contents</h4><ol><li><a href="#what-happened">What Microsoft said</a></li><li><a href="#why-it-matters">Why it matters beyond Microsoft</a></li><li><a href="#four-tiers">The four-tier model</a></li><li><a href="#worked-example">Worked example: invoicing agent</a></li><li><a href="#controls">Making the tiers stick</a></li><li><a href="#before-launch">Audit before launch</a></li><li><a href="#faq">FAQ</a></li></ol></nav>
+<div class="mini-cta spot"><span class="lbl">Free project plan</span><p>Send me the problem. A plan, timeline and fixed price within 24 hours.</p><a class="btn btn-p" style="width:100%" href="/#contact">Get my plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</aside>
+</div>
+<section class="related"><div class="wrap"><span class="lbl">Keep reading</span><h2>More lab notes</h2><div class="grid"><a class="card spot" data-pillar="prop" href="/blog/bulenox-drawdown-lucid-consistency-rule/"><span class="tag" data-p="prop">Prop firms</span><h3>Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.</h3><p>Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.</p><div class="foot"><span>24 Oct 2026</span><span>6 min read</span></div></a></div></div></section>
+</main>
+<footer class="ftr"><div class="wrap"><div class="brand"><img src="/assets/img/at-holo-160.webp" width="160" height="90" alt="AT monogram"><span class="copy-r">© 2026 Ashish Infotech &amp; Finance Solutions. All rights reserved.</span></div>
+<span class="hubs">HYD · DXB · AUS</span><div class="soc"><a class="icon-btn" href="https://www.linkedin.com/in/ashishtadigiri/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a><a class="icon-btn" href="https://x.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a><a class="icon-btn" href="https://www.instagram.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></a></div></div></footer><div class="toast" role="status" aria-live="polite"></div>
+<script>(function(){
+  var d=document, root=d.documentElement;
+  function toast(msg){var t=d.querySelector('.toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show')},1800)}
+
+  // mobile menu
+  var mb=d.querySelector('.menu-btn');
+  if(mb){mb.addEventListener('click',function(){var o=root.classList.toggle('menu-open');mb.setAttribute('aria-expanded',o?'true':'false')});
+    d.querySelectorAll('.mlink').forEach(function(a){a.addEventListener('click',function(){root.classList.remove('menu-open');mb.setAttribute('aria-expanded','false')})})}
+
+  // cursor glow + card spotlight
+  var g=d.querySelector('.glow');
+  if(g&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var x=-999,y=-999,cx=x,cy=y;
+    addEventListener('pointermove',function(e){x=e.clientX;y=e.clientY;if(cx<-900){cx=x;cy=y}},{passive:true});
+    (function loop(){cx+=(x-cx)*.12;cy+=(y-cy)*.12;g.style.transform='translate3d('+cx+'px,'+cy+'px,0)';requestAnimationFrame(loop)})();
+  }
+  d.querySelectorAll('.spot').forEach(function(el){el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')})});
+
+  // reading progress
+  var prog=d.querySelector('.prog'), art=d.querySelector('.prose');
+  if(prog&&art){var upd=function(){var r=art.getBoundingClientRect();var h=r.height-innerHeight*.6;var p=Math.min(1,Math.max(0,-r.top/(h>0?h:1)));prog.style.transform='scaleX('+p+')'};addEventListener('scroll',upd,{passive:true});upd()}
+
+  // contents scrollspy
+  var tocLinks=[].slice.call(d.querySelectorAll('.toc a'));
+  if(tocLinks.length&&'IntersectionObserver' in window){
+    var map={};tocLinks.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){tocLinks.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on')}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=d.getElementById(id);if(h)io.observe(h)});
+  }
+
+  // copy helpers
+  function copyText(text,label){
+    var done=function(){toast(label||'Copied')};
+    try{navigator.clipboard.writeText(text).then(done,function(){fallback()})}catch(e){fallback()}
+    function fallback(){var ta=d.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';d.body.appendChild(ta);ta.select();try{d.execCommand('copy');done()}catch(e){toast('Select and copy the text')}ta.remove()}
+  }
+  d.querySelectorAll('[data-copy-link]').forEach(function(b){b.addEventListener('click',function(){copyText(b.getAttribute('data-copy-link')||location.href,'Link copied')})});
+  d.querySelectorAll('.formula .copy').forEach(function(b){b.addEventListener('click',function(){copyText(b.parentNode.getAttribute('data-plain'),'Formula copied')})});
+
+  // index filters + search
+  var chips=[].slice.call(d.querySelectorAll('.chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
+  if(chips.length){
+    var cur='all';
+    function apply(){var term=(q&&q.value||'').trim().toLowerCase();var shown=0;
+      cards.forEach(function(c){var ok=(cur==='all'||c.getAttribute('data-pillar')===cur)&&(!term||c.textContent.toLowerCase().indexOf(term)>-1);c.hidden=!ok;if(ok&&!c.classList.contains('feat'))shown++});
+      var feat=d.querySelector('.feat');var any=shown+(feat&&!feat.hidden?1:0);if(empty)empty.hidden=any>0}
+    chips.forEach(function(ch){ch.addEventListener('click',function(){cur=ch.getAttribute('data-f');chips.forEach(function(c){c.setAttribute('aria-pressed',c===ch?'true':'false')});apply()})});
+    if(q)q.addEventListener('input',apply);
+  }
+
+
+  // agent permission planner
+  d.querySelectorAll('[data-planner]').forEach(function(pl){
+    var ex=JSON.parse(pl.getAttribute('data-example')), tb=pl.querySelector('tbody'), note=pl.querySelector('.pl-note');
+    var CTRL=['Runs alone, scoped and logged','Runs alone, logged and rate-limited','Waits for a person to approve each action','Remove from the agent’s key; a person does it'];
+    function tier(r){if(r[4])return 3;if(!r[1])return 0;if(r[3]||!r[2])return 2;return 1}
+    function yn(v,i,dis){return '<label class="tg"><input type="checkbox" data-i="'+i+'"'+(v?' checked':'')+(dis?' disabled':'')+'><span>'+(v?'Yes':'No')+'</span></label>'}
+    var rows=[];
+    function render(){
+      tb.innerHTML='';var n=[0,0,0,0];
+      rows.forEach(function(r,k){var t=tier(r);n[t]++;var tr=d.createElement('tr');
+        tr.innerHTML='<td><input class="pl-name" aria-label="Tool name" value="'+r[0].replace(/"/g,'&quot;')+'"></td><td>'+yn(r[1],1)+'</td><td>'+yn(r[2],2,!r[1])+'</td><td>'+yn(r[3],3)+'</td><td>'+yn(r[4],4)+'</td><td><span class="tier t'+t+'" title="'+CTRL[t]+'">'+t+'</span></td><td><button class="rm" type="button" aria-label="Remove '+r[0]+'">×</button></td>';
+        tr.querySelector('.pl-name').addEventListener('input',function(e){r[0]=e.target.value;summ()});
+        [].forEach.call(tr.querySelectorAll('input[type=checkbox]'),function(c){c.addEventListener('change',function(){r[+c.getAttribute('data-i')]=c.checked?1:0;render()})});
+        tr.querySelector('.rm').addEventListener('click',function(){rows.splice(k,1);render()});
+        tb.appendChild(tr)});
+      [0,1,2,3].forEach(function(t){pl.querySelector('.tiers-sum [data-t="'+t+'"] b').textContent=n[t]});
+      summ(n)}
+    function summ(n){n=n||[0,1,2,3].map(function(t){return rows.filter(function(r){return tier(r)===t}).length});
+      var tot=rows.length;note.textContent=tot?('Your agent runs '+(n[0]+n[1])+' of '+tot+' tools on its own, asks before '+n[2]+', and should never hold '+n[3]+'.'+(n[3]?' Move those '+n[3]+' onto a separate key.':'')):'Add the tools your agent can call.'}
+    function load(){rows=ex.map(function(r){return r.slice()});render()}
+    pl.querySelector('[data-act="add"]').addEventListener('click',function(){rows.push(['new_tool',1,1,0,0]);render();var ins=tb.querySelectorAll('.pl-name');if(ins.length)ins[ins.length-1].select()});
+    pl.querySelector('[data-act="reset"]').addEventListener('click',load);
+    pl.querySelector('[data-act="copy"]').addEventListener('click',function(){
+      var pol={agent:'my-agent',rule:'tier3=money/keys/delete; tier0=read-only; tier2=external or undo>5min; tier1=other',tools:rows.map(function(r){var t=tier(r);return {tool:r[0],tier:t,control:['auto','auto+log+ratelimit','human_approval','not_granted'][t]}})};
+      copyText(JSON.stringify(pol,null,2),'Policy copied')});
+    load();
+  });
+
+  // calculators
+  d.querySelectorAll('[data-calc]').forEach(function(calc){
+    var tabs=[].slice.call(calc.querySelectorAll('.tab')), panes=[].slice.call(calc.querySelectorAll('[data-pane]'));
+    tabs.forEach(function(t){t.addEventListener('click',function(){tabs.forEach(function(x){x.setAttribute('aria-selected',x===t?'true':'false')});panes.forEach(function(p){p.hidden=p.getAttribute('data-pane')!==t.getAttribute('data-tab')})})});
+    var $=function(id){return calc.querySelector('#'+id)}, fmt=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+
+    // sizing
+    var preset=$('s-preset'),room=$('s-room'),inst=$('s-inst'),stop=$('s-stop'),loss=$('s-loss');
+    function size(){
+      var opt=preset.options[preset.selectedIndex];
+      var R=+room.value||0, pv=+inst.value, S=+stop.value||0, N=+loss.value||0;
+      var per=S*pv*N, max=per>0?Math.floor(R/per):0;
+      var mini=+inst.options[inst.selectedIndex].getAttribute('data-mini');
+      var capMicros=+opt.getAttribute('data-cap')||0, cap=capMicros?(mini?Math.floor(capMicros/10):capMicros):0;
+      $('s-out').textContent=max; $('s-unit').textContent=inst.options[inst.selectedIndex].getAttribute('data-sym')+' contracts';
+      $('s-per').textContent=fmt(per); $('s-each').textContent=fmt(S*pv);
+      $('s-cap').textContent=cap?cap+' '+inst.options[inst.selectedIndex].getAttribute('data-sym'):'Not set';
+      var old=+opt.getAttribute('data-old')||0;
+      $('s-oldrow').hidden=!old; if(old){$('s-old').textContent=(per>0?Math.floor(old/per):0)+' at '+fmt(old)}
+      $('s-meter').style.width=(cap?Math.min(100,max/cap*100):0)+'%';
+      var v=$('s-verdict');
+      if(max===0){v.className='verdict warn';v.textContent='This stop is too wide for the room you have. Tighten the stop, survive fewer losses, or trade a smaller contract.'}
+      else if(cap&&max>=cap){v.className='verdict';v.textContent='The firm’s contract cap ('+cap+') binds before the drawdown does. Stay at or below the cap.'}
+      else{v.className='verdict';v.textContent='The drawdown limits you before the firm’s cap does. '+max+' contracts lets you take '+N+' full stops in a row and still have '+fmt(R-max*per)+' of room left.'}
+    }
+    preset.addEventListener('change',function(){var o=preset.options[preset.selectedIndex];if(o.getAttribute('data-room'))room.value=o.getAttribute('data-room');size()});
+    [room,inst,stop,loss].forEach(function(el){el.addEventListener('input',size)});
+    size();
+
+    // consistency
+    var tgt=$('c-target'),best=$('c-best'),capBtns=[].slice.call(calc.querySelectorAll('[data-cap-pct]')),pct=.4;
+    function cons(){
+      var T=+tgt.value||0,B=+best.value||0, need=Math.max(T,pct>0?B/pct:0);
+      $('c-out').textContent=fmt(need); $('c-extra').textContent=need>T?fmt(need-T)+' above target':'None';
+      $('c-stop').textContent=fmt(pct*T); $('c-days').textContent=Math.ceil(1/pct-1e-9);
+      $('c-pctl').textContent=Math.round(pct*100)+'%';
+      var v=$('c-verdict');
+      if(need>T){v.className='verdict warn';v.textContent='Your best day is '+Math.round(B/T*100)+'% of the target, so you have to keep trading to '+fmt(need)+' before you qualify. A daily stop-win at '+fmt(pct*T)+' prevents this.'}
+      else{v.className='verdict';v.textContent='Your best day fits inside the '+Math.round(pct*100)+'% cap. Keep every day at or under '+fmt(pct*T)+' and the target is all you need.'}
+    }
+    capBtns.forEach(function(b){b.addEventListener('click',function(){pct=+b.getAttribute('data-cap-pct');capBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});cons()})});
+    [tgt,best].forEach(function(el){el.addEventListener('input',cons)});
+    var cp=$('c-preset'); if(cp)cp.addEventListener('change',function(){tgt.value=cp.value;cons()});
+    cons();
+  });
+})();
+</script>
+</body>
+</html>
