@@ -52,7 +52,8 @@ def fonts():
             '<link rel="preload" href="/assets/fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>'
             "<style>" + ff + "</style>")
 
-def head(title, desc, url, og_img, extra=""):
+def head(title, desc, url, og_img, extra="", og_title=None):
+    og_title = og_title or title
     icons = "" if PREVIEW else '<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="Ashish Tadigiri · Lab notes" href="/blog/feed.xml">'
     return f'''<title>{esc(title)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -62,13 +63,13 @@ def head(title, desc, url, og_img, extra=""):
 <meta name="theme-color" content="#05060B">
 <meta name="author" content="Ashish Tadigiri">
 <meta property="og:site_name" content="Ashish Tadigiri">
-<meta property="og:title" content="{esc(title)}">
+<meta property="og:title" content="{esc(og_title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{og_img}">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ashishtadigiri">
-<meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{og_img}">
+<meta name="twitter:title" content="{esc(og_title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{og_img}">
 {icons}
 {fonts()}
 <style>{CSS}</style>
@@ -131,6 +132,50 @@ def card(p, planned=False):
         return f'<a class="card spot" data-pillar="{p["pillar"]}" href="{post_href(p["slug"])}">{inner}</a>'
     return f'<div class="card spot" data-pillar="{p["pillar"]}">{inner}</div>'
 
+def make_og(p):
+    """1200x630 share image in the site's look: dark ground, cyan/violet glow, AT tile, Sora title."""
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter
+    F = os.path.join(HERE, "fonts")
+    W, H = 1200, 630
+    img = Image.new("RGB", (W, H), (5, 6, 11))
+    glow = Image.new("RGB", (W, H), (0, 0, 0)); gd = ImageDraw.Draw(glow)
+    gd.ellipse((-260, -320, 520, 420), fill=(14, 92, 122)); gd.ellipse((760, 260, 1460, 900), fill=(84, 28, 122))
+    glow = glow.filter(ImageFilter.GaussianBlur(140))
+    img = Image.blend(img, glow, 0.85)
+    d = ImageDraw.Draw(img)
+    for x in range(0, W, 60): d.line([(x, 0), (x, H)], fill=(14, 16, 26))
+    # AT tile with horizontal gradient
+    tile = Image.new("RGB", (84, 68)); td = ImageDraw.Draw(tile)
+    for x in range(84):
+        t = x / 83; c = (int(25 + (178 - 25) * t), int(195 + (60 - 195) * t), 255)
+        td.line([(x, 0), (x, 68)], fill=c)
+    mask = Image.new("L", (84, 68), 0); ImageDraw.Draw(mask).rounded_rectangle((0, 0, 83, 67), 16, fill=255)
+    img.paste(tile, (72, 64), mask)
+    sora7 = ImageFont.truetype(os.path.join(F, "Sora-700.ttf"), 30)
+    d.text((114, 98), "AT", font=sora7, fill=(5, 6, 11), anchor="mm")
+    d.text((176, 98), "ASHISH TADIGIRI", font=ImageFont.truetype(os.path.join(F, "Sora-600.ttf"), 24), fill=(238, 241, 250), anchor="lm")
+    mono = ImageFont.truetype(os.path.join(F, "Martian-500.ttf"), 20)
+    d.text((72, 186), ("LAB NOTES  ·  " + PILLARS[p["pillar"]]).upper(), font=mono, fill=(25, 195, 255))
+    size = 64
+    while True:
+        f = ImageFont.truetype(os.path.join(F, "Sora-600.ttf"), size)
+        words, lines, cur = p["title"].split(), [], ""
+        for w in words:
+            t = (cur + " " + w).strip()
+            if d.textlength(t, font=f) <= W - 144: cur = t
+            else: lines.append(cur); cur = w
+        lines.append(cur)
+        if len(lines) * size * 1.12 <= 300 or size <= 44: break
+        size -= 4
+    y = 236
+    for ln in lines:
+        d.text((72, y), ln, font=f, fill=(238, 241, 250)); y += int(size * 1.12)
+    d.line([(72, 548), (W - 72, 548)], fill=(30, 34, 50), width=1)
+    d.text((72, 572), "ashishtadigiri.com/blog", font=mono, fill=(174, 182, 202), anchor="lm")
+    d.text((W - 72, 572), "HYD · DXB · AUS", font=mono, fill=(111, 120, 144), anchor="rm")
+    out_dir = os.path.join(OUT, p["slug"]); os.makedirs(out_dir, exist_ok=True)
+    img.save(os.path.join(out_dir, "og.png"), optimize=True)
+
 def calc_component():
     S = [("Bulenox Momentum 100K · new", 3000, 4000, 120), ("Bulenox Momentum 50K · new", 2000, 2250, 70), ("Bulenox Momentum 150K · new", 4500, 5500, 150),
          ("Lucid LucidFlex 50K", 2000, 0, 40), ("Lucid LucidFlex 100K", 3000, 0, 60), ("Lucid LucidFlex 150K", 4500, 0, 100)]
@@ -188,9 +233,17 @@ def build_post(p):
     body = open(os.path.join(HERE, "posts", p["slug"] + ".html")).read()
     body = body.replace("{{CALC}}", calc_component() if "calc" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
+    body = body.replace("{{SITE}}", SITE if PREVIEW else "")
+    faq = p.get("faq", [])
+    faq_html = ""
+    if faq:
+        items = "".join(f'<details class="qa"{" open" if i == 0 else ""}><summary>{esc(q)}<span class="pm" aria-hidden="true"></span></summary><p>{esc(a)}</p></details>' for i, (q, a) in enumerate(faq))
+        faq_html = f'<h2 id="faq"><span class="no">FAQ</span>Frequently asked questions</h2><div class="faq">{items}</div>'
+    body = body.replace("{{FAQ}}", faq_html)
     url = BASE + p["slug"] + "/"
-    og = (BASE + p["slug"] + "/og.png") if not PREVIEW else SITE + "/assets/img/og-image.jpg"
-    ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "description": p["excerpt"],
+    og = BASE + p["slug"] + "/og.png"
+    make_og(p)
+    ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "description": p.get("meta", p["excerpt"]),
           "datePublished": p["date"], "dateModified": p["date"], "mainEntityOfPage": url, "image": og,
           "author": {"@type": "Person", "@id": SITE + "/#ashish", "name": "Ashish Tadigiri", "url": SITE + "/story/"},
           "publisher": {"@type": "Organization", "@id": SITE + "/#org", "name": "Ashish Infotech & Finance Solutions", "logo": {"@type": "ImageObject", "url": SITE + "/assets/img/icon-512.png"}},
@@ -199,7 +252,9 @@ def build_post(p):
         {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
         {"@type": "ListItem", "position": 2, "name": "Blog", "item": BASE},
         {"@type": "ListItem", "position": 3, "name": p["title"], "item": url}]}
-    extra = f'<script type="application/ld+json">{json.dumps(ld)}</script><script type="application/ld+json">{json.dumps(crumbs_ld)}</script><meta property="og:type" content="article"><meta property="article:published_time" content="{p["date"]}"><meta property="article:author" content="Ashish Tadigiri">'
+    if p.get("keywords"): ld["keywords"] = ", ".join([p["keyword"]] + p["keywords"])
+    faq_ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]} if faq else None
+    extra = (f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>' if faq_ld else "") + f'<script type="application/ld+json">{json.dumps(ld)}</script><script type="application/ld+json">{json.dumps(crumbs_ld)}</script><meta property="og:type" content="article"><meta property="article:published_time" content="{p["date"]}"><meta property="article:author" content="Ashish Tadigiri">'
     toc = "".join(f'<li><a href="#{i}">{esc(t)}</a></li>' for i, t in p["toc"])
     sources = "".join(f'<li><a href="{u}" target="_blank" rel="noopener">{esc(t)}</a></li>' for t, u in p["sources"])
     related = [q for q in posts if q["slug"] != p["slug"]][:2]
@@ -238,7 +293,7 @@ def build_post(p):
 {footer()}'''
     out_dir = os.path.join(OUT, p["slug"])
     os.makedirs(out_dir, exist_ok=True)
-    open(os.path.join(out_dir, "index.html"), "w").write(doc(head(p["title"] + " | Ashish Tadigiri", p["excerpt"], url, og, extra), page, full=True))
+    open(os.path.join(out_dir, "index.html"), "w").write(doc(head(p.get("seo_title", p["title"]), p.get("meta", p["excerpt"]), url, og, extra, og_title=p["title"]), page, full=True))
 
 def build_index():
     feat, rest = (posts[0], posts[1:]) if posts else (None, [])

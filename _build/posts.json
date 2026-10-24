@@ -1,7 +1,7 @@
 {
   "posts": [
     {
-      "slug": "prop-firm-drawdown-cuts-october-2026",
+      "slug": "bulenox-drawdown-lucid-consistency-rule",
       "status": "draft",
       "date": "2026-10-27",
       "title": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.",
@@ -10,23 +10,101 @@
       "excerpt": "Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.",
       "pillar": "prop",
       "read": 6,
-      "toc": [["what-changed","What changed"],["size-from-floor","Size from the floor, not the balance"],["consistency","The 40% rule sets your daily stop-win"],["add-on","Should you pay for the 50% add-on?"],["in-code","Why this belongs in code"]],
-      "components": ["calc"],
+      "toc": [
+        [
+          "what-changed",
+          "What changed at Bulenox and Lucid"
+        ],
+        [
+          "size-from-floor",
+          "Prop firm position sizing"
+        ],
+        [
+          "consistency",
+          "Lucid's 40% consistency rule"
+        ],
+        [
+          "add-on",
+          "Is the 50% add-on worth it?"
+        ],
+        [
+          "in-code",
+          "Why risk rules belong in code"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "calc"
+      ],
       "cta": {
         "eyebrow": "Run a prop firm or trade evaluations?",
         "heading": "Put the rules in code, not in your head.",
         "body": "I build risk engines, position-sizing tools and automated execution for futures traders and prop firms. The firm's limits go in once, and every order is sized and checked against them.",
-        "bullets": ["Risk engines that enforce daily loss limits and trailing drawdown on their own", "Position-sizing and target/stop consoles for Nasdaq and gold futures", "Fixed price, agreed before any code. NDA available."],
-        "secondary": ["See Project Vector", "/#work"]
+        "bullets": [
+          "Risk engines that enforce daily loss limits and trailing drawdown on their own",
+          "Position-sizing and target/stop consoles for Nasdaq and gold futures",
+          "Fixed price, agreed before any code. NDA available."
+        ],
+        "secondary": [
+          "See Project Vector",
+          "/#work"
+        ]
       },
       "sources": [
-        ["Bulenox Help Center: Momentum account parameters", "https://bulenox.com/help-center/momentum#mo-parameters"],
-        ["Bulenox Help Center: Fast Track account parameters", "https://bulenox.com/help-center/fast-track#ft-parameters"],
-        ["Lucid Trading Support: LucidFlex evaluation account", "https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account"],
-        ["PickAPropFirm: futures prop-firm rule changes, tracked daily", "https://pickapropfirm.com/prop-firm-rule-changes/"],
-        ["Copilink: prop firm rule changes, October 2026", "https://copilink.com/prop-firms/changelog"]
+        [
+          "Bulenox Help Center: Momentum account parameters",
+          "https://bulenox.com/help-center/momentum#mo-parameters"
+        ],
+        [
+          "Bulenox Help Center: Fast Track account parameters",
+          "https://bulenox.com/help-center/fast-track#ft-parameters"
+        ],
+        [
+          "Lucid Trading Support: LucidFlex evaluation account",
+          "https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account"
+        ],
+        [
+          "PickAPropFirm: futures prop-firm rule changes, tracked daily",
+          "https://pickapropfirm.com/prop-firm-rule-changes/"
+        ],
+        [
+          "Copilink: prop firm rule changes, October 2026",
+          "https://copilink.com/prop-firms/changelog"
+        ]
       ],
-      "disclaimer": "Educational content, not financial advice. Rules are as published on each firm's help centre on 24 October 2026 and can change without notice; check your own account dashboard before trading. There are no affiliate links in this post."
+      "disclaimer": "Educational content, not financial advice. Rules are as published on each firm's help centre on 24 October 2026 and can change without notice; check your own account dashboard before trading. There are no affiliate links in this post.",
+      "keyword": "Bulenox drawdown",
+      "keywords": [
+        "Bulenox Momentum account",
+        "Lucid consistency rule",
+        "LucidFlex 40% consistency",
+        "prop firm position sizing",
+        "trailing drawdown calculator",
+        "prop firm rule changes October 2026"
+      ],
+      "seo_title": "Bulenox Drawdown Cut & Lucid 40% Rule: How to Re-Size",
+      "meta": "Bulenox cut Momentum drawdowns and Lucid moved to a 40% consistency rule. Use the formula, worked MNQ examples and a free calculator to re-size.",
+      "faq": [
+        [
+          "What is the new Bulenox Momentum drawdown?",
+          "Bulenox lowered Momentum drawdowns in October 2026: the 50K went from $2,250 to $2,000, the 100K from $4,000 to $3,000 and the 150K from $5,500 to $4,500. The cut applies to both the trailing and end-of-day options. Daily loss limits and contract caps did not change."
+        ],
+        [
+          "How do I calculate position size on a prop firm account?",
+          "Divide your room to the failure level by the loss one contract takes across the losing streak you want to survive: room ÷ (stop in points × point value × losses). With $3,000 of room, a 20-point MNQ stop ($2 per point) and 5 losses, that is $3,000 ÷ $200 = 15 contracts."
+        ],
+        [
+          "What is Lucid's 40% consistency rule?",
+          "On LucidFlex evaluations your best single day can be at most 40% of your total profit, down from 50%; the 50% level is now a paid add-on. It means you need at least three winning days, and on a 50K with a $3,000 target any day above $1,200 raises the profit you need to pass."
+        ],
+        [
+          "Is Lucid's 50% consistency add-on worth paying for?",
+          "Work out your best-day share: your largest day divided by net profit over your last 20 trading days. Under 40%, the add-on buys nothing. Between 40% and 50%, price it against the extra days you would trade. Over 50%, a daily stop-win fixes the problem better than the add-on."
+        ]
+      ]
     },
     {
       "slug": "ai-agents-insider-threat-permissions",
@@ -39,8 +117,16 @@
     }
   ],
   "planned": [
-    {"title": "The 7 checks I run before trusting any backtest", "pillar": "lab", "excerpt": "Out-of-sample splits, walk-forward windows and the drawdown test most backtests skip."},
-    {"title": "A 25,000-post site went from C to A on PageSpeed. The 5 changes.", "pillar": "web", "excerpt": "What actually moved Core Web Vitals on a large WordPress site, in order of impact."}
+    {
+      "title": "The 7 checks I run before trusting any backtest",
+      "pillar": "lab",
+      "excerpt": "Out-of-sample splits, walk-forward windows and the drawdown test most backtests skip."
+    },
+    {
+      "title": "A 25,000-post site went from C to A on PageSpeed. The 5 changes.",
+      "pillar": "web",
+      "excerpt": "What actually moved Core Web Vitals on a large WordPress site, in order of impact."
+    }
   ],
   "pillars": {
     "prop": "Prop firms",

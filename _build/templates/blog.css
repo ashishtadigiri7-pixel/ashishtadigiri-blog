@@ -232,3 +232,15 @@ figcaption{margin-top:10px;font-family:var(--fm);font-size:11px;letter-spacing:.
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:999px;background:var(--fg);color:#05060b;font-size:14px;font-weight:600;z-index:80;transition:all .35s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.glow{display:none}}
+
+/* FAQ accordion */
+.faq{display:grid;gap:10px}
+.qa{border:1px solid var(--line);border-radius:16px;background:var(--surface);transition:border-color .3s}
+.qa[open]{border-color:rgba(25,195,255,.3)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;font-family:var(--fd);font-weight:600;font-size:17px;letter-spacing:-.015em;color:var(--fg)}
+.qa summary::-webkit-details-marker{display:none}
+.pm{position:relative;flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2)}
+.pm::before,.pm::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:1.5px;margin-top:-.75px;background:var(--cyan);transition:transform .3s}
+.pm::after{transform:rotate(90deg)}
+.qa[open] .pm::after{transform:rotate(0)}
+.qa p{margin:0;padding:0 20px 18px;color:var(--fg-2)}
