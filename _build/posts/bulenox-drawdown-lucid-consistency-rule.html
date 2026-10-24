@@ -1,4 +1,4 @@
-<p class="lede">This week Bulenox lowered the drawdown on its Momentum accounts, and Lucid moved its LucidFlex consistency limit from 50% to 40%. Neither change touches your strategy. Both change how many contracts you can carry and how big your best day is allowed to be. On a Bulenox 100K, last week's size now runs on a quarter less room.</p>
+<p class="lede">In October 2026, Bulenox lowered the drawdown on its Momentum accounts, and Lucid moved its LucidFlex consistency limit from 50% to 40%. Neither change touches your strategy. Both change how many contracts you can carry and how big your best day is allowed to be. On a Bulenox 100K, last week's size now runs on a quarter less room.</p>
 
 <div class="box">
   <h4>What to do this week</h4>
@@ -66,8 +66,8 @@
   </svg>
   <figcaption>Bulenox Momentum drawdown by account size, before and after the October 2026 change.</figcaption>
 </figure>
-<p class="pull">Bulenox still lets a 100K trade 120 micros. The new drawdown supports 15 at this stop. The contract cap was never the limit that mattered.</p>
-<p>Re-run the number every time the room changes. Halfway to the floor on the new 100K ($1,500 of room), the same setup supports <strong>7 contracts, not 15</strong>. Most accounts that fail near breakeven are still trading day-one size.</p>
+<p>Bulenox still lets a 100K trade 120 micros. At a 20-point stop, the new drawdown caps you at 15, long before the firm's contract limit comes into play.</p>
+<p>Re-run the number every time the room changes. Halfway to the floor on the new 100K ($1,500 of room), the same setup supports <strong>7 contracts instead of 15</strong>. Most accounts that fail near breakeven are still trading day-one size.</p>
 <p>Try it with your own account, instrument and stop:</p>
 
 {{CALC}}
@@ -77,10 +77,10 @@
 <div class="formula" data-plain="Profit needed = best day / 0.40   |   Daily stop-win = 0.40 x profit target"><button class="copy" type="button">Copy</button><span class="k">profit needed</span> = best day ÷ 0.40<br><span class="k">daily stop-win</span> = 0.40 × profit target</div>
 <p>Worked example on a LucidFlex 50K, which has a <strong>$3,000 target</strong>:</p>
 <ul>
-  <li>Best day <strong>$1,200</strong>: you need $1,200 ÷ 0.40 = $3,000. Exactly the target.</li>
+  <li>Best day <strong>$1,200</strong>: you need $1,200 ÷ 0.40 = $3,000, which matches the target.</li>
   <li>Best day <strong>$1,800</strong>: you need <strong>$4,500</strong> at 40%, against $3,600 under the old 50% rule. One good day adds $1,500 of profit, and the risk that comes with it, before you qualify.</li>
 </ul>
-<p>So the rule becomes a daily stop-win: <strong>$1,200 on the 50K, $2,400 on the 100K ($6,000 target), $3,600 on the 150K ($9,000 target)</strong>. Once you are up that much on the day, stop. Profit above it doesn't help you pass. It raises the bar.</p>
+<p>So the rule becomes a daily stop-win: <strong>$1,200 on the 50K, $2,400 on the 100K ($6,000 target), $3,600 on the 150K ($9,000 target)</strong>. Once you are up that much on the day, stop. Profit above it raises the total you need and gets you no closer to passing.</p>
 <p>The same arithmetic explains Lucid's marketing line. At 40%, no single day can exceed 40% of the total, so you need at least 1 ÷ 0.40 = 2.5, rounded up to <strong>3 winning days</strong>. At 50% it is 2. That is the "as few as 3 days" on their page.</p>
 
 <h2 id="add-on"><span class="no">04</span>Is Lucid's 50% consistency add-on worth paying for?</h2>
@@ -98,7 +98,7 @@
 <p class="note">Lucid's evaluation page states the 40% and 50% levels but not the exact calculation method. Reports describe it as best day against total profit. Confirm in your own dashboard before relying on it.</p>
 
 <h2 id="in-code"><span class="no">05</span>Why prop firm risk rules belong in code, not in your head</h2>
-<p>These numbers move often. One public tracker logged more than a dozen futures prop-firm rule changes between 15 and 23 October alone. A rule you have to remember mid-session is a rule you will break when the session gets busy.</p>
+<p>These numbers move often. One public tracker logged 12 futures prop-firm rule changes between 15 and 23 October alone. If you have to remember the rule mid-session, you'll break it on a busy day.</p>
 <p>The fix is a risk layer that reads the room, the stop and the firm's limits before every order. That is the calculation inside <a href="{{SITE}}/#work"><strong>Project Vector</strong></a>, my automated NQ and ES system, which enforces daily loss limits and trailing drawdown on its own. It is also the job of <strong>Project Vault</strong>, the futures risk console I built for live position sizing on Nasdaq and gold futures. Size comes from the floor, every time, without a spreadsheet. If you want the same for your own strategy or firm, that is the <a href="{{SITE}}/#services">fintech and algorithmic trading work</a> I take on.</p>
 
 {{FAQ}}

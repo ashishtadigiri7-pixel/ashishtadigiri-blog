@@ -118,6 +118,13 @@ def art(pillar):
 <line x1="540" y1="190" x2="540" y2="250" stroke="#eef1fa" stroke-width="1" stroke-dasharray="2 4"/>
 <text x="530" y="226" text-anchor="end" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">ROOM</text>
 <circle cx="540" cy="190" r="5" fill="#eef1fa"/></svg>'''
+    if pillar == "ai":
+        tiers = [("T0 · READ", "#3ddc97", 70), ("T1 · WRITE", "#19c3ff", 130), ("T2 · APPROVE", "#ffc46b", 190), ("T3 · NEVER", "#ff6b81", 250)]
+        nodes = "".join(f'<rect x="300" y="{y-20}" width="230" height="40" rx="10" fill="{c}" fill-opacity=".1" stroke="{c}" stroke-opacity=".6"/><text x="318" y="{y+4}" font-family="Martian Mono, monospace" font-size="12" letter-spacing="1.5" fill="{c}">{t}</text><path d="M150 160 C 220 160, 230 {y}, 300 {y}" fill="none" stroke="{c}" stroke-opacity=".5" stroke-width="1.5" stroke-dasharray="{"0" if i < 3 else "4 5"}"/>' for i, (t, c, y) in enumerate(tiers))
+        return f'''<svg viewBox="0 0 580 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g stroke="rgba(255,255,255,.05)">{"".join(f'<line x1="{x}" y1="0" x2="{x}" y2="340"/>' for x in range(0, 580, 40))}</g>{nodes}
+<circle cx="110" cy="160" r="42" fill="#0b0d16" stroke="url(#ag)" stroke-width="2"/><defs><linearGradient id="ag" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
+<text x="110" y="166" text-anchor="middle" font-family="Sora, sans-serif" font-weight="600" font-size="18" fill="#eef1fa">AGENT</text></svg>'''
     return '<svg viewBox="0 0 580 340" aria-hidden="true"></svg>'
 
 def card(p, planned=False):
@@ -216,6 +223,19 @@ def calc_component():
 </div>
 <p class="note">Educational calculator. It sizes from the room you enter and does not know your firm's intraday rules; check your dashboard before trading.</p>'''
 
+def planner_component():
+    rows = [("read_timesheets",0,0,0,0),("read_rate_card",0,0,0,0),("create_invoice_draft",1,1,0,0),("render_invoice_pdf",1,1,0,0),
+            ("email_invoice_to_client",1,0,1,0),("mark_invoice_paid",1,0,0,0),("issue_refund",1,0,1,1),("delete_client_record",1,0,0,1)]
+    import json as _j
+    return f"""<div class="planner" data-planner data-example='{_j.dumps(rows)}'>
+<div class="calc-head"><span class="lbl">Agent permission planner</span>
+<div class="acts-sm"><button class="chip" type="button" data-act="add">Add tool</button><button class="chip" type="button" data-act="reset">Reset example</button><button class="chip" type="button" data-act="copy">Copy policy</button></div></div>
+<div class="tiers-sum" aria-live="polite"><div data-t="0"><b>0</b><span>Tier 0 · runs alone</span></div><div data-t="1"><b>0</b><span>Tier 1 · runs alone, logged</span></div><div data-t="2"><b>0</b><span>Tier 2 · needs approval</span></div><div data-t="3"><b>0</b><span>Tier 3 · agent never holds</span></div></div>
+<div class="tablewrap pl-wrap"><table class="data pl"><thead><tr><th>Tool</th><th>Writes data?</th><th>Undo in 5 min?</th><th>Leaves company?</th><th>Money, keys, delete?</th><th>Tier</th><th><span class="sr">Remove</span></th></tr></thead><tbody></tbody></table></div>
+<p class="pl-note" id="pl-note"></p>
+</div>
+<p class="note">Rule: money, credentials, deletion or permission changes are Tier 3; read-only is Tier 0; anything that leaves the company or takes over 5 minutes to undo is Tier 2; everything else is Tier 1.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -232,6 +252,7 @@ def doc(head_html, body_html, full=True):
 def build_post(p):
     body = open(os.path.join(HERE, "posts", p["slug"] + ".html")).read()
     body = body.replace("{{CALC}}", calc_component() if "calc" in p.get("components", []) else "")
+    body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
     body = body.replace("{{SITE}}", SITE if PREVIEW else "")
     faq = p.get("faq", [])
@@ -256,7 +277,8 @@ def build_post(p):
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]} if faq else None
     extra = (f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>' if faq_ld else "") + f'<script type="application/ld+json">{json.dumps(ld)}</script><script type="application/ld+json">{json.dumps(crumbs_ld)}</script><meta property="og:type" content="article"><meta property="article:published_time" content="{p["date"]}"><meta property="article:author" content="Ashish Tadigiri">'
     toc = "".join(f'<li><a href="#{i}">{esc(t)}</a></li>' for i, t in p["toc"])
-    sources = "".join(f'<li><a href="{u}" target="_blank" rel="noopener">{esc(t)}</a></li>' for t, u in p["sources"])
+    ret = f' <span class="ret">· retrieved {p["retrieved"]}</span>' if p.get("retrieved") else ""
+    sources = "".join(f'<li><a href="{u}" target="_blank" rel="noopener">{esc(t)}</a>{ret}</li>' for t, u in p["sources"])
     related = [q for q in posts if q["slug"] != p["slug"]][:2]
     rel_html = "".join(card(q).replace(f'href="{post_href(q["slug"])}"', f'href="{post_href(q["slug"], True)}"') for q in related)
     status_note = '<span class="status" style="padding:4px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.14)">Draft preview</span>' if p.get("status") != "live" else ""

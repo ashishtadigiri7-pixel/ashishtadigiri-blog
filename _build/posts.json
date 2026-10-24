@@ -104,16 +104,115 @@
           "Is Lucid's 50% consistency add-on worth paying for?",
           "Work out your best-day share: your largest day divided by net profit over your last 20 trading days. Under 40%, the add-on buys nothing. Between 40% and 50%, price it against the extra days you would trade. Over 50%, a daily stop-win fixes the problem better than the add-on."
         ]
-      ]
+      ],
+      "retrieved": "24 Oct 2026"
     },
     {
-      "slug": "ai-agents-insider-threat-permissions",
+      "slug": "ai-agent-permissions-microsoft-insider",
       "status": "draft",
       "date": "2026-10-30",
-      "title": "Microsoft says treat AI agents like insiders. Here is the permission model I would put on yours.",
-      "excerpt": "Microsoft's new guidance: every agent gets its own identity, starts with zero permissions and needs a human for high-impact actions. A 4-tier model you can apply to your own agent.",
+      "title": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.",
+      "title_html": "Microsoft says treat AI agents as insiders. Give yours <span class=\"grad\">four permission tiers.</span>",
+      "dek": "Microsoft's new guidance says every agent needs its own identity, zero standing access and a human for high-impact actions. A two-question rule sorts your agent's tools into four tiers, worked through on an invoicing agent.",
+      "excerpt": "Microsoft says every AI agent needs its own identity, zero standing access and human approval for high-impact actions. A four-tier model and planner to apply it.",
       "pillar": "ai",
-      "read": 7
+      "read": 7,
+      "keyword": "AI agent permissions",
+      "keywords": [
+        "least privilege for AI agents",
+        "AI agents insider threat",
+        "Microsoft agentic insider",
+        "OWASP excessive agency",
+        "human approval for AI agents",
+        "n8n agent security"
+      ],
+      "seo_title": "AI Agent Permissions: 4 Tiers After Microsoft's Warning",
+      "meta": "Microsoft says treat AI agents as insiders. Sort your agent's tools into four permission tiers with a two-question rule, a worked example and a planner.",
+      "toc": [
+        [
+          "what-happened",
+          "What Microsoft said"
+        ],
+        [
+          "why-it-matters",
+          "Why it matters beyond Microsoft"
+        ],
+        [
+          "four-tiers",
+          "The four-tier model"
+        ],
+        [
+          "worked-example",
+          "Worked example: invoicing agent"
+        ],
+        [
+          "controls",
+          "Making the tiers stick"
+        ],
+        [
+          "before-launch",
+          "Audit before launch"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "planner"
+      ],
+      "faq": [
+        [
+          "What did Microsoft say about AI agents being insiders?",
+          "On 19 October 2026, Microsoft Security argued that companies should treat AI agents as insiders rather than trusted tools. Its guidance: give each agent its own identity, start it with no permissions, grant access only for the current task and require verified human approval for higher-impact actions."
+        ],
+        [
+          "How do I apply least privilege to an AI agent?",
+          "List every tool the agent can call and give it a separate API key or service account. Grant read and reversible draft access only, make credentials expire when the task ends, and keep payment, deletion and credential permissions on a key the agent never holds."
+        ],
+        [
+          "Which AI agent actions should need human approval?",
+          "Anything that leaves your company or can't be undone within about five minutes: customer emails, publishing, changes customers can see, and edits to financial records. Refunds, payments, deleting records and changing permissions shouldn't be on the agent's key at all."
+        ],
+        [
+          "What is OWASP Excessive Agency?",
+          "Excessive Agency is entry LLM06 in OWASP's 2025 Top 10 for LLM applications. It covers damage caused when an AI system has functions it doesn't need, more permissions than its task requires, or the autonomy to take high-impact actions without approval."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Shipping an AI agent?",
+        "heading": "Get its permissions right before it goes live.",
+        "body": "I build custom AI agents, RAG assistants and automation pipelines, and I audit existing ones: which tools they hold, which credentials they use, and which actions need a person.",
+        "bullets": [
+          "Permission audits mapped to the four tiers, with fixes in order of risk",
+          "Agents built with scoped keys, approval steps and logs from day one",
+          "Fixed price, agreed before any work starts. NDA available."
+        ],
+        "secondary": [
+          "See Project Aegis",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "Microsoft (Hayete Gallot), Official Microsoft Blog: Securing the agentic insider, 19 Oct 2026",
+          "https://blogs.microsoft.com/blog/2026/10/19/securing-the-agentic-insider/"
+        ],
+        [
+          "Microsoft Security Blog (Nadim Abdo): Agents are your newest insiders, 19 Oct 2026",
+          "https://www.microsoft.com/en-us/security/blog/2026/10/19/agents-are-your-newest-insiders-security-must-move-at-their-speed/"
+        ],
+        [
+          "TechCrunch: Microsoft says AI agents are like insider threats, 19 Oct 2026",
+          "https://techcrunch.com/2026/10/19/microsoft-says-ai-agents-are-like-insider-threats-as-frontier-models-cant-be-trusted/"
+        ],
+        [
+          "OWASP Top 10 for LLM Applications 2025: LLM06 Excessive Agency",
+          "https://owasp.github.io/www-project-top-10-for-large-language-model-applications/2_0_vulns/LLM06_ExcessiveAgency.html"
+        ]
+      ],
+      "retrieved": "24 Oct 2026",
+      "disclaimer": "This note summarises public guidance from Microsoft and OWASP as of 24 October 2026. It is general technical guidance, not legal or compliance advice. The invoicing agent is a hypothetical example."
     }
   ],
   "planned": [

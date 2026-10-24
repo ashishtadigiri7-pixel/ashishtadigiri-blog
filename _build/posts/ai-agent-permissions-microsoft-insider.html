@@ -1,0 +1,101 @@
+<p class="lede">On 19 October 2026, Microsoft told enterprises to treat AI agents as insiders. Give each agent its own identity, start it with zero permissions, and make a person approve anything high-impact. That advice fits a five-person company running one n8n agent as well as it fits a bank. The hard part is deciding which actions count as high-impact, so this note gives you a four-tier model and a planner to sort your own agent's tools in ten minutes.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>Microsoft's October 2026 guidance: one identity per agent, no standing permissions, human approval for higher-impact actions (Microsoft Security Blog).</li>
+    <li>Sort every tool with two questions: can you undo it within 5 minutes, and does it leave your company or move money?</li>
+    <li>Take money, credential and delete permissions off the agent's key. Put an approval step in front of anything customers see.</li>
+  </ul>
+</div>
+
+<h2 id="what-happened"><span class="no">01</span>What did Microsoft say about AI agents?</h2>
+<p>In October 2026, Microsoft published two posts on the same day arguing that companies should govern AI agents the way they govern staff with system access. Hayete Gallot, who leads Microsoft Security, wrote that agents "are agentic insiders" and shouldn't be trusted by default. A second post, from Nadim Abdo, who runs identity and network access, listed the controls:</p>
+<ul>
+  <li>Every agent gets its own identity, separate from the person who launched it.</li>
+  <li>Agents start with no permissions and receive only what the approved task needs, for as long as it needs them.</li>
+  <li>Higher-impact actions can require verified human approval.</li>
+  <li>Defender's local agent discovery now recognises 60 agent types, including Claude Code, OpenAI Codex and GitHub Copilot.</li>
+</ul>
+<p>TechCrunch reported that Satya Nadella had already argued earlier in October for monitoring systems that the AI labs don't control. Guardian Agents, the agents that would watch other agents, appear in Microsoft's post as a proposed category. Microsoft gave no release date for them, so treat this as guidance you can apply now with the tools you already have.</p>
+
+<h2 id="why-it-matters"><span class="no">02</span>Why does this matter if you don't use Microsoft?</h2>
+<p>OWASP reached the same conclusion from the attacker's side. Its 2025 Top 10 for LLM applications lists <strong>Excessive Agency (LLM06)</strong> and traces it to three causes. The agent has functions it doesn't need, those functions hold more access than the task requires, or the agent takes high-impact actions without approval. OWASP notes the trigger can be a hallucination, an ambiguous instruction, or text an attacker planted in content the agent reads.</p>
+<p>Your model provider can't set these limits for you. The permissions live in your n8n credentials, your API keys and your database roles, and you control all three. A line in the system prompt asking the agent not to issue refunds is a request the model can ignore. Removing the refund scope from its API key is a control it can't get around. Microsoft's post makes the same point: put deterministic controls around a non-deterministic model.</p>
+
+<h2 id="four-tiers"><span class="no">03</span>The four-tier model for AI agent permissions</h2>
+<p>List every tool your agent can call, then sort each one with this rule. It takes two questions and gives you the control to apply.</p>
+<div class="formula" data-plain="Money, credentials, deletion or permission changes -> Tier 3 | Read-only -> Tier 0 | Leaves the company, or can't be undone within 5 minutes -> Tier 2 | Everything else -> Tier 1"><button class="copy" type="button">Copy</button><span class="k">money, credentials, deletion, permissions</span> → Tier 3<br><span class="k">read-only</span> → Tier 0<br><span class="k">leaves the company, or undo takes over 5 min</span> → Tier 2<br><span class="k">everything else</span> → Tier 1</div>
+<figure class="chart">
+  <svg viewBox="0 0 640 300" role="img" aria-label="Four-tier model for AI agent permissions: Tier 0 read runs alone; Tier 1 reversible internal writes run alone with logs and rate limits; Tier 2 external or hard-to-undo actions need human approval; Tier 3 money, credentials, deletion and permission changes are never held by the agent.">
+    <defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
+    <g font-family="Martian Mono, monospace" font-size="11" letter-spacing="1">
+      <rect x="0" y="6" width="640" height="62" rx="12" fill="rgba(61,220,151,.08)" stroke="rgba(61,220,151,.35)"/>
+      <text x="20" y="32" fill="#3ddc97">TIER 0 · READ</text><text x="20" y="54" fill="#8790a6">Reads only what the task needs</text>
+      <text x="620" y="43" text-anchor="end" fill="#eef1fa">RUNS ALONE · LOGGED</text>
+      <rect x="0" y="78" width="640" height="62" rx="12" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.35)"/>
+      <text x="20" y="104" fill="#19c3ff">TIER 1 · REVERSIBLE WRITE</text><text x="20" y="126" fill="#8790a6">Drafts and internal records</text>
+      <text x="620" y="115" text-anchor="end" fill="#eef1fa">RUNS ALONE · RATE-LIMITED</text>
+      <rect x="0" y="150" width="640" height="62" rx="12" fill="rgba(255,196,107,.08)" stroke="rgba(255,196,107,.4)"/>
+      <text x="20" y="176" fill="#ffc46b">TIER 2 · EXTERNAL / HARD TO UNDO</text><text x="20" y="198" fill="#8790a6">Emails, publishing, customer data</text>
+      <text x="620" y="187" text-anchor="end" fill="#eef1fa">PERSON APPROVES EACH ACTION</text>
+      <rect x="0" y="222" width="640" height="62" rx="12" fill="rgba(255,107,129,.08)" stroke="rgba(255,107,129,.4)"/>
+      <text x="20" y="248" fill="#ff6b81">TIER 3 · MONEY, KEYS, DELETE</text><text x="20" y="270" fill="#8790a6">Refunds, credentials, roles</text>
+      <text x="620" y="259" text-anchor="end" fill="#eef1fa">AGENT NEVER HOLDS IT</text>
+    </g>
+  </svg>
+  <figcaption>The four tiers, from the actions an agent runs alone to the permissions it never holds.</figcaption>
+</figure>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Tier</th><th>Covers</th><th>Control</th></tr></thead>
+  <tbody>
+    <tr><td>0 · Read</td><td>Reading the records the task needs</td><td>Runs alone. Scoped to those records. Logged.</td></tr>
+    <tr><td>1 · Reversible write</td><td>Drafts, internal notes, files you can restore</td><td>Runs alone. Logged, rate-limited, undo path tested.</td></tr>
+    <tr><td>2 · External or hard to undo</td><td>Customer emails, publishing, data customers see</td><td>Waits for a person to approve that specific action.</td></tr>
+    <tr><td>3 · Money, keys, deletion</td><td>Refunds, payments, API keys, deleting records, role changes</td><td>The agent never holds the permission. A person does it.</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The 5-minute line is a rule of thumb. It's about how long a person takes to spot a bad action in a log and reverse it. If reversing takes longer, treat the action as permanent and move it up a tier.</p>
+
+<h2 id="worked-example"><span class="no">04</span>Worked example: an invoicing agent</h2>
+<p>Take a hypothetical invoicing agent sitting on a billing system like the one in Project Scribe, my document and invoicing platform. It reads timesheets, drafts invoices, renders PDFs and emails clients. Run its eight tools through the rule:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Tool</th><th>Writes?</th><th>Undo in 5 min?</th><th>Leaves company?</th><th>Money / keys / delete?</th><th>Tier</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">read_timesheets</td><td>No</td><td>n/a</td><td>No</td><td>No</td><td>0</td></tr>
+    <tr><td class="mono">read_rate_card</td><td>No</td><td>n/a</td><td>No</td><td>No</td><td>0</td></tr>
+    <tr><td class="mono">create_invoice_draft</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>1</td></tr>
+    <tr><td class="mono">render_invoice_pdf</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>1</td></tr>
+    <tr><td class="mono">email_invoice_to_client</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>2</td></tr>
+    <tr><td class="mono">mark_invoice_paid</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>2</td></tr>
+    <tr><td class="mono">issue_refund</td><td>Yes</td><td>No</td><td>Yes</td><td>Yes</td><td class="down">3</td></tr>
+    <tr><td class="mono">delete_client_record</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td class="down">3</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The agent runs four of its eight tools on its own, asks before two, and never holds the last two. In practice that means two keys. The agent gets a key that can read and draft. Refunds and deletions sit on a separate key that only your finance person's session can use, so a poisoned email in the inbox can't trigger either of them.</p>
+<p>Sort your own agent's tools here. The planner opens with the invoicing example; edit the rows or add your own.</p>
+
+{{PLANNER}}
+
+<h2 id="controls"><span class="no">05</span>How do you make the tiers stick?</h2>
+<p>Microsoft and OWASP list overlapping controls. These six cover both, and you can set them up in n8n, Make or your own code without new software:</p>
+<ol>
+  <li><strong>One identity per agent.</strong> Give each agent its own service account or API key, never a person's login, so its actions show up as its own in your logs.</li>
+  <li><strong>Short-lived, task-scoped credentials.</strong> Issue tokens that expire when the task ends. Microsoft's post calls this dynamic, time-bound permissions.</li>
+  <li><strong>Approval inside the flow.</strong> Tier 2 actions pause and post the recipient, amount and content to Slack or email with Approve and Reject buttons. In n8n, a Wait step does this.</li>
+  <li><strong>One gateway for every tool call.</strong> Route calls through a single function that checks the tier and writes a log line. OWASP calls this complete mediation.</li>
+  <li><strong>Rate limits.</strong> Cap Tier 1 and 2 calls per hour. For an invoicing agent, start at 20 outbound emails an hour and adjust from the logs.</li>
+  <li><strong>A kill switch you have tested.</strong> One flag that revokes the agent's key. Flip it once before launch so you know it works.</li>
+</ol>
+
+<h2 id="before-launch"><span class="no">06</span>Audit the agent like any other software</h2>
+<p>When I audited a desktop trading app for a private client (<a href="{{SITE}}/#work">Project Aegis</a>), the review covered the installer, the runtime and every dependency, then fixed what it found. An agent deserves the same review before it touches customer data: which tools it can call, which credentials it holds, and who approves what. The tier table above is the first page of that review.</p>
+<p>If you're building an agent or already running one, this is the <a href="{{SITE}}/#services">AI agent and automation work</a> I take on, from the first build to a permissions audit of an existing setup.</p>
+
+{{FAQ}}
+
+{{CTA}}
