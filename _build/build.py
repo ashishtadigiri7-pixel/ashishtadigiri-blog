@@ -107,17 +107,17 @@ def art(pillar):
     if pillar == "prop":
         pts = [(40,120),(90,96),(130,110),(180,70),(220,88),(270,60),(310,104),(350,132),(400,150),(440,138),(490,176),(540,190)]
         path = "M" + " L".join(f"{x},{y}" for x, y in pts)
-        return f'''<svg viewBox="0 0 580 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        return f'''<svg viewBox="0 0 580 340" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
 <defs><linearGradient id="fa" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient>
 <linearGradient id="ff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#19c3ff" stop-opacity=".22"/><stop offset="1" stop-color="#19c3ff" stop-opacity="0"/></linearGradient></defs>
 <g stroke="rgba(255,255,255,.06)">{"".join(f'<line x1="0" y1="{y}" x2="580" y2="{y}"/>' for y in range(40, 340, 40))}</g>
 <path d="{path} L540,340 L40,340 Z" fill="url(#ff)"/>
 <path d="{path}" fill="none" stroke="url(#fa)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <line x1="0" y1="250" x2="580" y2="250" stroke="#ff6b81" stroke-width="1.5" stroke-dasharray="6 6"/>
-<text x="20" y="242" font-family="Martian Mono, monospace" font-size="11" fill="#ff6b81" letter-spacing="1.5">FLOOR · $97,000</text>
-<line x1="540" y1="190" x2="540" y2="250" stroke="#eef1fa" stroke-width="1" stroke-dasharray="2 4"/>
-<text x="530" y="226" text-anchor="end" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">ROOM</text>
-<circle cx="540" cy="190" r="5" fill="#eef1fa"/></svg>'''
+<text x="24" y="274" font-family="Martian Mono, monospace" font-size="11" fill="#ff6b81" letter-spacing="1.5">FLOOR · $97,000</text>
+<line x1="400" y1="150" x2="400" y2="250" stroke="#eef1fa" stroke-width="1" stroke-dasharray="2 4"/>
+<text x="390" y="206" text-anchor="end" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">ROOM</text>
+<circle cx="400" cy="150" r="5" fill="#eef1fa"/></svg>'''
     if pillar == "ai":
         tiers = [("T0 · READ", "#3ddc97", 70), ("T1 · WRITE", "#19c3ff", 130), ("T2 · APPROVE", "#ffc46b", 190), ("T3 · NEVER", "#ff6b81", 250)]
         nodes = "".join(f'<rect x="300" y="{y-20}" width="230" height="40" rx="10" fill="{c}" fill-opacity=".1" stroke="{c}" stroke-opacity=".6"/><text x="318" y="{y+4}" font-family="Martian Mono, monospace" font-size="12" letter-spacing="1.5" fill="{c}">{t}</text><path d="M150 160 C 220 160, 230 {y}, 300 {y}" fill="none" stroke="{c}" stroke-opacity=".5" stroke-width="1.5" stroke-dasharray="{"0" if i < 3 else "4 5"}"/>' for i, (t, c, y) in enumerate(tiers))
