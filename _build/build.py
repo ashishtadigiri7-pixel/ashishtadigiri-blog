@@ -125,6 +125,26 @@ def art(pillar):
 <g stroke="rgba(255,255,255,.05)">{"".join(f'<line x1="{x}" y1="0" x2="{x}" y2="340"/>' for x in range(0, 580, 40))}</g>{nodes}
 <circle cx="110" cy="160" r="42" fill="#0b0d16" stroke="url(#ag)" stroke-width="2"/><defs><linearGradient id="ag" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
 <text x="110" y="166" text-anchor="middle" font-family="Sora, sans-serif" font-weight="600" font-size="18" fill="#eef1fa">AGENT</text></svg>'''
+    if pillar == "lab":
+        import random
+        rnd = random.Random(7)
+        paths = []
+        for k in range(9):
+            y, pts = 190.0, []
+            for i in range(0, 581, 20):
+                pts.append(f"{i},{y:.0f}"); y += rnd.uniform(-14, 13) if i < 300 else rnd.uniform(-9, 11)
+            paths.append(f'<path d="M{" L".join(pts)}" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/>')
+        y, pts = 190.0, []
+        for i in range(0, 581, 20):
+            pts.append(f"{i},{y:.0f}"); y += -9 if i < 300 else rnd.uniform(-3, 9)
+        best = f'<path d="M{" L".join(pts)}" fill="none" stroke="url(#la)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+        return f'''<svg viewBox="0 0 580 340" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
+<defs><linearGradient id="la" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
+<g stroke="rgba(255,255,255,.06)">{"".join(f'<line x1="0" y1="{yy}" x2="580" y2="{yy}"/>' for yy in range(40, 340, 40))}</g>
+<rect x="300" y="0" width="280" height="340" fill="rgba(25,195,255,.05)"/><line x1="300" y1="20" x2="300" y2="320" stroke="#ffc46b" stroke-opacity=".7" stroke-dasharray="3 6"/>
+{"".join(paths)}{best}
+<text x="24" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">IN-SAMPLE</text>
+<text x="316" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#ffc46b" letter-spacing="1.5">UNSEEN DATA</text></svg>'''
     return '<svg viewBox="0 0 580 340" aria-hidden="true"></svg>'
 
 def card(p, planned=False):
@@ -236,6 +256,36 @@ def planner_component():
 </div>
 <p class="note">Rule: money, credentials, deletion or permission changes are Tier 3; read-only is Tier 0; anything that leaves the company or takes over 5 minutes to undo is Tier 2; everything else is Tier 1.</p>"""
 
+def btcheck_component():
+    def f(i, label, v, step="1"):
+        return f'<div class="field"><label for="{i}">{label}</label><input id="{i}" type="number" inputmode="decimal" min="0" step="{step}" value="{v}"></div>'
+    inst = [("MNQ · $0.50", 0.5), ("MES · $1.25", 1.25), ("MGC · $1", 1), ("NQ · $5", 5), ("ES · $12.50", 12.5), ("GC · $10", 10)]
+    iopts = "".join(f'<option value="{v}">{n}</option>' for n, v in inst)
+    return f"""<div class="calc" data-btcheck>
+<div class="calc-head"><span class="lbl">Backtest trust check</span><div class="acts-sm"><button class="chip" type="button" data-act="ex">Load worked example</button></div></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2">{f("b-n","Variations tried",240)}{f("b-y","In-sample years",4,"0.5")}</div>
+<div class="row2">{f("b-sr","In-sample Sharpe (annual)",1.6,"0.05")}{f("b-oos","Out-of-sample Sharpe",0.7,"0.05")}</div>
+<div class="row2">{f("b-t","In-sample trades",610)}{f("b-m","Avg net trade, 1 contract ($)",15.2,"0.1")}</div>
+<div class="row2">{f("b-sd","Std dev per trade ($)",118)}{f("b-c","Commission + fees, round turn ($)",1.5,"0.05")}</div>
+<div class="row2"><div class="field"><label for="b-inst">Instrument · tick value</label><select id="b-inst">{iopts}</select></div>{f("b-sl","Slippage, ticks per side",1,"0.5")}</div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Numeric checks passed</span>
+<div class="big"><span class="v" id="b-out">2 / 4</span><span class="u">checks 2 to 5</span></div>
+<div class="meter" title="Share of the four numeric checks passed"><i id="b-meter"></i></div>
+<ul class="lines">
+<li>Costs at 2× slippage <b id="b-r2">$14.20 · 4.1× cost</b></li>
+<li>Trade t-stat <b id="b-r3">3.18</b></li>
+<li>Luck hurdle Sharpe <b id="b-r4">1.41 · DSR 65%</b></li>
+<li>Out-of-sample ÷ in-sample <b id="b-r5">44%</b></li>
+</ul>
+<div class="verdict" id="b-verdict"></div>
+</div></div>
+</div>
+<p class="note">Pass marks: net trade at double slippage still 2× your round-turn cost; t-stat 2 or more; deflated Sharpe (DSR) 95% or more; out-of-sample Sharpe at least 50% of in-sample. The luck hurdle assumes independent variations, normal daily returns and no real skill. Nothing you enter leaves your browser.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -253,6 +303,7 @@ def build_post(p):
     body = open(os.path.join(HERE, "posts", p["slug"] + ".html")).read()
     body = body.replace("{{CALC}}", calc_component() if "calc" in p.get("components", []) else "")
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
+    body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
     body = body.replace("{{SITE}}", SITE if PREVIEW else "")
     faq = p.get("faq", [])

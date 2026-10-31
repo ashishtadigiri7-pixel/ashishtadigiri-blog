@@ -301,3 +301,10 @@ table.pl td{padding:8px}
 .who .mk{display:inline-grid;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;text-transform:none;color:#05060b}
 .pl-hint{display:none;margin:0;padding:10px 16px 0;font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 @media (max-width:700px){.pl-hint{display:block}}
+/* backtest trust check */
+[data-btcheck] .big .v{font-size:clamp(44px,6vw,64px)}
+[data-btcheck] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-btcheck] .lines b.ok{color:var(--up)}
+[data-btcheck] .lines b.no{color:var(--down)}
+.heat{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:600px){.heat{grid-template-columns:1fr}}

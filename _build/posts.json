@@ -1,6 +1,121 @@
 {
   "posts": [
     {
+      "slug": "backtest-checklist",
+      "status": "live",
+      "date": "2026-10-31",
+      "title": "CME just logged its busiest Q3 ever. Run this 7-point backtest checklist before you trust yours.",
+      "title_html": "CME just logged its busiest Q3 ever. Run this <span class=\"grad\">7-point backtest checklist</span> before you trust yours.",
+      "dek": "Record volume means your strategy now trades a market its backtest never saw. Seven checks with pass marks, a worked MNQ example, and the Sharpe ratio you need once you count every variation you tried.",
+      "excerpt": "Seven backtest checks with pass marks, a worked MNQ example and a calculator that shows the Sharpe you need after counting every variation you tested.",
+      "pillar": "lab",
+      "read": 8,
+      "keyword": "backtest checklist",
+      "keywords": [
+        "backtest overfitting",
+        "deflated Sharpe ratio calculator",
+        "how many trades for a valid backtest",
+        "walk-forward efficiency",
+        "out-of-sample testing",
+        "CME record volume Q3 2026"
+      ],
+      "seo_title": "Backtest Checklist: 7 Checks Before You Trade It Live",
+      "meta": "A 7-point backtest checklist with pass marks, a worked MNQ example and a calculator for the Sharpe you need after counting every variation you tried.",
+      "toc": [
+        [
+          "cme-record",
+          "What CME's record quarter means"
+        ],
+        [
+          "checklist",
+          "The 7-point backtest checklist"
+        ],
+        [
+          "worked-example",
+          "Worked example: MNQ"
+        ],
+        [
+          "how-many-variations",
+          "How many variations can you afford?"
+        ],
+        [
+          "plateau-regimes",
+          "Plateaus and regime splits"
+        ],
+        [
+          "build-it-in",
+          "Build the checks into the engine"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "btcheck"
+      ],
+      "faq": [
+        [
+          "What should a backtest checklist include?",
+          "Seven tests, run in order: no future data (truncation test), costs that survive doubled slippage, enough trades for a t-stat of 2, a deflated Sharpe ratio of 95% after counting every variation, out-of-sample Sharpe at least half of in-sample, a parameter plateau, and profit in both volatility regimes without the best 1% of trades."
+        ],
+        [
+          "How many trades do you need for a valid backtest?",
+          "Enough for the t-stat of your average net trade to reach 2: trades needed = (2 × standard deviation per trade ÷ average net trade) squared. With a $15.20 average and $118 standard deviation, that is about 241 trades. A wider spread or a thinner edge needs more."
+        ],
+        [
+          "What is the deflated Sharpe ratio?",
+          "The deflated Sharpe ratio, from Bailey and López de Prado (2014), is the probability that a strategy's Sharpe ratio beats the best result luck would produce across all the variations you tested. After 240 variations on 4 years of data, luck alone gives an expected best annual Sharpe of about 1.41."
+        ],
+        [
+          "What is a good out-of-sample Sharpe compared with in-sample?",
+          "A common rule of thumb, stated in TradeStation's walk-forward optimiser documentation for annualised returns, is 50% or more of the in-sample figure. Applied to Sharpe, an in-sample 1.60 needs at least 0.80 on unseen data. Below that, most of the in-sample result likely came from fitting."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Have a strategy you want tested properly?",
+        "heading": "Get the seven checks run before real money runs them.",
+        "body": "I build backtesting and research engines, and turn discretionary trading ideas into rules a machine can run: rules, backtest, walk-forward, then live.",
+        "bullets": [
+          "Backtest reviews against all seven checks, with the numbers behind each verdict",
+          "Research engines like Project Quant Lab that log every variation and test survivors on unseen data",
+          "Fixed price, agreed before any code. NDA available."
+        ],
+        "secondary": [
+          "See Project Quant Lab",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "CME Group: third-quarter 2026 results (Form 8-K, exhibit 99.1), 21 Oct 2026",
+          "https://www.sec.gov/Archives/edgar/data/0001156375/000115637526000065/exhibit9919302026.htm"
+        ],
+        [
+          "CME Group: Brazilian real futures set new daily volume record following election, 27 Oct 2026",
+          "https://www.cmegroup.com/media-room/press-releases/2026/10/27/cme_group_brazilianrealfuturessetnewdailyvolumerecordfollowingel.html"
+        ],
+        [
+          "CME Group: Micro E-mini Nasdaq-100 contract specifications",
+          "https://cmegroup.com/trading/equity-index/us-index/micro-e-mini-nasdaq-100_contractSpecs_futures.html"
+        ],
+        [
+          "Bailey and López de Prado (2014): The Deflated Sharpe Ratio, Journal of Portfolio Management",
+          "https://papers.ssrn.com/abstract=2460551"
+        ],
+        [
+          "Lo (2002): The Statistics of Sharpe Ratios, Financial Analysts Journal",
+          "https://rpc.cfainstitute.org/research/financial-analysts-journal/2002/the-statistics-of-sharpe-ratios"
+        ],
+        [
+          "TradeStation Walk-Forward Optimizer: walk-forward efficiency",
+          "https://help.tradestation.com/09_01/tswfo/topics/walk-forward_summary_out-of-sample.htm"
+        ]
+      ],
+      "retrieved": "29 Oct 2026",
+      "disclaimer": "Educational content, not financial advice. The MNQ strategy, its figures and the parameter grids are hypothetical examples, not results from a real strategy or backtest. The $1.50 commission is an assumption; use your broker's. CME figures are from CME Group's own releases of 21 and 27 October 2026. Pass marks for checks 2, 6 and 7 are rules of thumb."
+    },
+    {
       "slug": "bulenox-drawdown-lucid-consistency-rule",
       "status": "live",
       "date": "2026-10-24",
@@ -216,11 +331,6 @@
     }
   ],
   "planned": [
-    {
-      "title": "The 7 checks I run before trusting any backtest",
-      "pillar": "lab",
-      "excerpt": "Out-of-sample splits, walk-forward windows and the drawdown test most backtests skip."
-    },
     {
       "title": "A 25,000-post site went from C to A on PageSpeed. The 5 changes.",
       "pillar": "web",

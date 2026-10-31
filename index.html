@@ -323,8 +323,15 @@ table.pl td{padding:8px}
 .who .mk{display:inline-grid;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;text-transform:none;color:#05060b}
 .pl-hint{display:none;margin:0;padding:10px 16px 0;font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 @media (max-width:700px){.pl-hint{display:block}}
+/* backtest trust check */
+[data-btcheck] .big .v{font-size:clamp(44px,6vw,64px)}
+[data-btcheck] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-btcheck] .lines b.ok{color:var(--up)}
+[data-btcheck] .lines b.no{color:var(--down)}
+.heat{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:600px){.heat{grid-template-columns:1fr}}
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Blog", "name": "Lab notes \u00b7 Ashish Tadigiri", "url": "https://ashishtadigiri.com/blog/", "description": "Lab notes from Ashish Tadigiri: this week's news in AI agents, algorithmic trading, prop firms, fintech and web performance, with the method and numbers to act on it.", "author": {"@id": "https://ashishtadigiri.com/#ashish"}, "publisher": {"@id": "https://ashishtadigiri.com/#org"}, "blogPost": [{"@type": "BlogPosting", "headline": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.", "url": "https://ashishtadigiri.com/blog/bulenox-drawdown-lucid-consistency-rule/", "datePublished": "2026-10-24"}, {"@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "url": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "datePublished": "2026-10-24"}]}</script><meta property="og:type" content="website">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Blog", "name": "Lab notes \u00b7 Ashish Tadigiri", "url": "https://ashishtadigiri.com/blog/", "description": "Lab notes from Ashish Tadigiri: this week's news in AI agents, algorithmic trading, prop firms, fintech and web performance, with the method and numbers to act on it.", "author": {"@id": "https://ashishtadigiri.com/#ashish"}, "publisher": {"@id": "https://ashishtadigiri.com/#org"}, "blogPost": [{"@type": "BlogPosting", "headline": "CME just logged its busiest Q3 ever. Run this 7-point backtest checklist before you trust yours.", "url": "https://ashishtadigiri.com/blog/backtest-checklist/", "datePublished": "2026-10-31"}, {"@type": "BlogPosting", "headline": "Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.", "url": "https://ashishtadigiri.com/blog/bulenox-drawdown-lucid-consistency-rule/", "datePublished": "2026-10-24"}, {"@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "url": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "datePublished": "2026-10-24"}]}</script><meta property="og:type" content="website">
 </head>
 <body>
 <div class="prog" aria-hidden="true"></div><div class="glow" aria-hidden="true"></div>
@@ -343,25 +350,21 @@ table.pl td{padding:8px}
 <span class="lbl">Blog · Lab notes</span>
 <h1>The news, then<br><span class="grad">what to do about it.</span></h1>
 <p>Twice a week I take one development in AI agents, algorithmic trading, prop firms, fintech or the web, and turn it into a method you can apply: the numbers, the formula and the decision rule. No jargon, no fluff.</p>
-<div class="hero-meta"><span><b>Tue &amp; Fri</b> · new notes</span><span><b>2</b> published</span><span>By <b>Ashish Tadigiri</b></span></div>
+<div class="hero-meta"><span><b>Tue &amp; Fri</b> · new notes</span><span><b>3</b> published</span><span>By <b>Ashish Tadigiri</b></span></div>
 </div></section>
 <div class="wrap">
-<div class="tools"><div class="chips" role="group" aria-label="Filter by topic"><button class="chip" type="button" data-f="all" aria-pressed="true">All<span class="n">2</span></button><button class="chip" type="button" data-f="prop" aria-pressed="false">Prop firms<span class="n">1</span></button><button class="chip" type="button" data-f="ai" aria-pressed="false">AI agents<span class="n">1</span></button></div>
+<div class="tools"><div class="chips" role="group" aria-label="Filter by topic"><button class="chip" type="button" data-f="all" aria-pressed="true">All<span class="n">3</span></button><button class="chip" type="button" data-f="prop" aria-pressed="false">Prop firms<span class="n">1</span></button><button class="chip" type="button" data-f="ai" aria-pressed="false">AI agents<span class="n">1</span></button><button class="chip" type="button" data-f="lab" aria-pressed="false">Algo & quant<span class="n">1</span></button></div>
 <label class="search" for="q"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search notes" autocomplete="off"></label></div>
-<a class="feat spot" data-pillar="prop" href="/blog/bulenox-drawdown-lucid-consistency-rule/"><div class="feat-art"><svg viewBox="0 0 580 340" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
-<defs><linearGradient id="fa" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient>
-<linearGradient id="ff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#19c3ff" stop-opacity=".22"/><stop offset="1" stop-color="#19c3ff" stop-opacity="0"/></linearGradient></defs>
+<a class="feat spot" data-pillar="lab" href="/blog/backtest-checklist/"><div class="feat-art"><svg viewBox="0 0 580 340" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
+<defs><linearGradient id="la" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
 <g stroke="rgba(255,255,255,.06)"><line x1="0" y1="40" x2="580" y2="40"/><line x1="0" y1="80" x2="580" y2="80"/><line x1="0" y1="120" x2="580" y2="120"/><line x1="0" y1="160" x2="580" y2="160"/><line x1="0" y1="200" x2="580" y2="200"/><line x1="0" y1="240" x2="580" y2="240"/><line x1="0" y1="280" x2="580" y2="280"/><line x1="0" y1="320" x2="580" y2="320"/></g>
-<path d="M40,120 L90,96 L130,110 L180,70 L220,88 L270,60 L310,104 L350,132 L400,150 L440,138 L490,176 L540,190 L540,340 L40,340 Z" fill="url(#ff)"/>
-<path d="M40,120 L90,96 L130,110 L180,70 L220,88 L270,60 L310,104 L350,132 L400,150 L440,138 L490,176 L540,190" fill="none" stroke="url(#fa)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-<line x1="0" y1="250" x2="580" y2="250" stroke="#ff6b81" stroke-width="1.5" stroke-dasharray="6 6"/>
-<text x="24" y="274" font-family="Martian Mono, monospace" font-size="11" fill="#ff6b81" letter-spacing="1.5">FLOOR · $97,000</text>
-<line x1="400" y1="150" x2="400" y2="250" stroke="#eef1fa" stroke-width="1" stroke-dasharray="2 4"/>
-<text x="390" y="206" text-anchor="end" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">ROOM</text>
-<circle cx="400" cy="150" r="5" fill="#eef1fa"/></svg></div>
-<div class="feat-body"><span class="tag" data-p="prop">Latest · Prop firms</span><h2>Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.</h2><p>Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.</p>
-<div class="facts"><span><b>24 Oct 2026</b></span><span>6 min read</span></div><span class="btn btn-g" style="width:max-content">Read the note <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
-<div class="grid"><a class="card spot" data-pillar="ai" href="/blog/ai-agent-permissions-microsoft-insider/"><span class="tag" data-p="ai">AI agents</span><h3>Microsoft says treat AI agents as insiders. Give yours four permission tiers.</h3><p>Microsoft says every AI agent needs its own identity, zero standing access and human approval for high-impact actions. A four-tier model and planner to apply it.</p><div class="foot"><span>24 Oct 2026</span><span>7 min read</span></div></a><div class="empty" hidden>No notes match that yet. Try another topic or clear the search.</div></div>
+<rect x="300" y="0" width="280" height="340" fill="rgba(25,195,255,.05)"/><line x1="300" y1="20" x2="300" y2="320" stroke="#ffc46b" stroke-opacity=".7" stroke-dasharray="3 6"/>
+<path d="M0,190 L20,185 L40,175 L60,178 L80,166 L100,167 L120,163 L140,150 L160,150 L180,137 L200,135 L220,123 L240,111 L260,108 L280,117 L300,106 L320,102 L340,105 L360,115 L380,118 L400,117 L420,127 L440,119 L460,127 L480,124 L500,118 L520,111 L540,108 L560,116 L580,110" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,193 L40,189 L60,190 L80,178 L100,165 L120,157 L140,161 L160,159 L180,153 L200,155 L220,153 L240,147 L260,155 L280,160 L300,152 L320,155 L340,156 L360,165 L380,170 L400,167 L420,178 L440,171 L460,171 L480,177 L500,171 L520,172 L540,163 L560,168 L580,174" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,200 L40,194 L60,199 L80,201 L100,203 L120,201 L140,210 L160,221 L180,220 L200,224 L220,211 L240,216 L260,220 L280,233 L300,241 L320,238 L340,236 L360,241 L380,232 L400,232 L420,227 L440,220 L460,212 L480,219 L500,212 L520,208 L540,207 L560,215 L580,208" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,191 L40,201 L60,209 L80,218 L100,212 L120,209 L140,205 L160,214 L180,226 L200,216 L220,207 L240,199 L260,192 L280,191 L300,193 L320,189 L340,180 L360,179 L380,178 L400,180 L420,190 L440,195 L460,196 L480,200 L500,204 L520,196 L540,205 L560,212 L580,220" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,187 L40,183 L60,172 L80,175 L100,163 L120,151 L140,142 L160,133 L180,128 L200,115 L220,101 L240,91 L260,80 L280,76 L300,63 L320,71 L340,75 L360,68 L380,65 L400,62 L420,61 L440,54 L460,62 L480,73 L500,73 L520,74 L540,67 L560,60 L580,58" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,198 L40,189 L60,175 L80,187 L100,187 L120,177 L140,178 L160,165 L180,165 L200,177 L220,187 L240,191 L260,184 L280,180 L300,171 L320,177 L340,179 L360,186 L380,183 L400,179 L420,186 L440,197 L460,205 L480,212 L500,219 L520,225 L540,220 L560,222 L580,220" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,177 L40,170 L60,163 L80,168 L100,180 L120,178 L140,189 L160,202 L180,214 L200,210 L220,201 L240,194 L260,185 L280,176 L300,179 L320,188 L340,196 L360,197 L380,201 L400,208 L420,200 L440,205 L460,214 L480,220 L500,226 L520,227 L540,222 L560,228 L580,226" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,202 L40,199 L60,196 L80,207 L100,213 L120,203 L140,193 L160,183 L180,193 L200,201 L220,191 L240,199 L260,212 L280,216 L300,211 L320,213 L340,207 L360,198 L380,208 L400,212 L420,214 L440,224 L460,223 L480,232 L500,239 L520,234 L540,231 L560,227 L580,223" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,183 L40,180 L60,170 L80,180 L100,176 L120,174 L140,176 L160,187 L180,184 L200,195 L220,194 L240,195 L260,195 L280,181 L300,179 L320,174 L340,165 L360,172 L380,166 L400,167 L420,172 L440,174 L460,172 L480,173 L500,175 L520,182 L540,175 L560,177 L580,173" fill="none" stroke="rgba(174,182,202,.22)" stroke-width="1.5"/><path d="M0,190 L20,181 L40,172 L60,163 L80,154 L100,145 L120,136 L140,127 L160,118 L180,109 L200,100 L220,91 L240,82 L260,73 L280,64 L300,55 L320,61 L340,64 L360,68 L380,74 L400,82 L420,84 L440,89 L460,92 L480,95 L500,100 L520,103 L540,106 L560,109 L580,117" fill="none" stroke="url(#la)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="24" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">IN-SAMPLE</text>
+<text x="316" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#ffc46b" letter-spacing="1.5">UNSEEN DATA</text></svg></div>
+<div class="feat-body"><span class="tag" data-p="lab">Latest · Algo & quant</span><h2>CME just logged its busiest Q3 ever. Run this 7-point backtest checklist before you trust yours.</h2><p>Seven backtest checks with pass marks, a worked MNQ example and a calculator that shows the Sharpe you need after counting every variation you tested.</p>
+<div class="facts"><span><b>31 Oct 2026</b></span><span>8 min read</span></div><span class="btn btn-g" style="width:max-content">Read the note <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
+<div class="grid"><a class="card spot" data-pillar="prop" href="/blog/bulenox-drawdown-lucid-consistency-rule/"><span class="tag" data-p="prop">Prop firms</span><h3>Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.</h3><p>Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.</p><div class="foot"><span>24 Oct 2026</span><span>6 min read</span></div></a><a class="card spot" data-pillar="ai" href="/blog/ai-agent-permissions-microsoft-insider/"><span class="tag" data-p="ai">AI agents</span><h3>Microsoft says treat AI agents as insiders. Give yours four permission tiers.</h3><p>Microsoft says every AI agent needs its own identity, zero standing access and human approval for high-impact actions. A four-tier model and planner to apply it.</p><div class="foot"><span>24 Oct 2026</span><span>7 min read</span></div></a><div class="empty" hidden>No notes match that yet. Try another topic or clear the search.</div></div>
 <section class="nl-box spot"><div><span class="lbl">Have a problem like this?</span><h2>Get a free plan in 24 hours.</h2><p>Tell me what you want to build, fix or automate. You get the approach, the timeline and a fixed price, from me directly.</p></div>
 <a class="btn btn-p" href="/#contact">Get your free project plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></section>
 </div>
@@ -408,7 +411,7 @@ table.pl td{padding:8px}
   d.querySelectorAll('.formula .copy').forEach(function(b){b.addEventListener('click',function(){copyText(b.parentNode.getAttribute('data-plain'),'Formula copied')})});
 
   // index filters + search
-  var chips=[].slice.call(d.querySelectorAll('.chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
+  var chips=[].slice.call(d.querySelectorAll('.chips .chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
   if(chips.length){
     var cur='all';
     function apply(){var term=(q&&q.value||'').trim().toLowerCase();var shown=0;
@@ -445,6 +448,43 @@ table.pl td{padding:8px}
       var pol={agent:'my-agent',rule:'tier3=money/keys/delete; tier0=read-only; tier2=external or undo>5min; tier1=other',tools:rows.map(function(r){var t=tier(r);return {tool:r[0],tier:t,control:['auto','auto+log+ratelimit','human_approval','not_granted'][t]}})};
       copyText(JSON.stringify(pol,null,2),'Policy copied')});
     load();
+  });
+
+  // backtest trust check
+  d.querySelectorAll('[data-btcheck]').forEach(function(bc){
+    var $=function(id){return bc.querySelector('#'+id)}, ids=['b-n','b-y','b-sr','b-oos','b-t','b-m','b-sd','b-c','b-sl'];
+    var EX=[240,4,1.6,0.7,610,15.2,118,1.5,1];
+    function ninv(p){var a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924],b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857],c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878],e=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742],q,r;
+      if(p<0.02425){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      if(p>1-0.02425){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)}
+    function ncdf(x){var t=1/(1+0.2316419*Math.abs(x)),y=t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));var p=1-Math.exp(-x*x/2)/Math.sqrt(2*Math.PI)*y;return x>=0?p:1-p}
+    function hurdle(N){if(N<=1)return 0;var g=0.5772156649;return (1-g)*ninv(1-1/N)+g*ninv(1-1/(N*Math.E))}
+    function money(n){return (n<0?'−$':'$')+Math.abs(n).toFixed(2)}
+    function mark(el,ok,txt){el.textContent=txt+(ok?' · pass':' · fail');el.className=ok?'ok':'no'}
+    function run(){
+      var v=ids.map(function(i){return +$(i).value||0}),N=Math.max(1,Math.round(v[0])),Y=v[1],SR=v[2],OOS=v[3],T=v[4],M=v[5],SD=v[6],C=v[7],SL=v[8],tick=+$('b-inst').value;
+      var slip=SL*tick*2, sNet=M-slip, sCost=C+2*slip, ratio=sCost>0?sNet/sCost:(sNet>0?99:0);
+      var ok2=ratio>=2, t=SD>0&&T>0?M/SD*Math.sqrt(T):0, ok3=t>=2;
+      var q=252, Tn=Math.max(2,q*Y), sr=SR/Math.sqrt(q), sr0=hurdle(N)/Math.sqrt(Tn), z=(sr-sr0)*Math.sqrt(Tn-1)/Math.sqrt(1+0.5*sr*sr), dsr=Y>0?ncdf(z):0, ok4=dsr>=0.95;
+      var wfe=SR>0?OOS/SR:0, ok5=wfe>=0.5;
+      mark($('b-r2'),ok2,money(sNet)+' · '+ratio.toFixed(1)+'× cost');
+      mark($('b-r3'),ok3,t.toFixed(2));
+      mark($('b-r4'),ok4,(Y>0?(hurdle(N)/Math.sqrt(Y)).toFixed(2):'–')+' · DSR '+Math.round(dsr*100)+'%');
+      mark($('b-r5'),ok5,Math.round(wfe*100)+'%');
+      var n=[ok2,ok3,ok4,ok5].filter(Boolean).length;
+      $('b-out').textContent=n+' / 4'; $('b-meter').style.width=(n*25)+'%';
+      var vd=$('b-verdict'), msg;
+      if(!ok2)msg='Check 2 fails: with slippage doubled, each trade nets '+money(sNet)+' against '+money(sCost)+' of cost. The edge lives in your fill assumption. Re-test with realistic fills before anything else.';
+      else if(!ok3)msg='Check 3 fails: a t-stat of '+t.toFixed(2)+' means '+Math.round(T)+' trades cannot separate this edge from noise. You need about '+Math.ceil(Math.pow(2*SD/Math.max(M,0.01),2))+' trades at this average and spread.';
+      else if(!ok4)msg='Check 4 fails: '+N+' variations over '+Y+' years can produce a Sharpe of '+(hurdle(N)/Math.sqrt(Y)).toFixed(2)+' from luck alone, so your '+SR.toFixed(2)+' has a '+Math.round(dsr*100)+'% chance of being real skill. Cut the variations or add years of data.';
+      else if(!ok5)msg='Check 5 fails: unseen data kept '+Math.round(wfe*100)+'% of the in-sample Sharpe. Below 50%, most of the in-sample result was fitted to noise.';
+      else msg='All four numeric checks pass. Run checks 1, 6 and 7 by hand before you trade it with real money.';
+      vd.className='verdict'+(n<4?' warn':''); vd.textContent=msg;
+    }
+    ids.concat(['b-inst']).forEach(function(i){$(i).addEventListener('input',run)});
+    bc.querySelector('[data-act="ex"]').addEventListener('click',function(){ids.forEach(function(i,k){$(i).value=EX[k]});$('b-inst').selectedIndex=0;run()});
+    run();
   });
 
   // calculators

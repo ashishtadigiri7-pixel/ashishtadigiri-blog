@@ -323,6 +323,13 @@ table.pl td{padding:8px}
 .who .mk{display:inline-grid;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;text-transform:none;color:#05060b}
 .pl-hint{display:none;margin:0;padding:10px 16px 0;font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 @media (max-width:700px){.pl-hint{display:block}}
+/* backtest trust check */
+[data-btcheck] .big .v{font-size:clamp(44px,6vw,64px)}
+[data-btcheck] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-btcheck] .lines b.ok{color:var(--up)}
+[data-btcheck] .lines b.no{color:var(--down)}
+.heat{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:600px){.heat{grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What did Microsoft say about AI agents being insiders?", "acceptedAnswer": {"@type": "Answer", "text": "On 19 October 2026, Microsoft Security argued that companies should treat AI agents as insiders rather than trusted tools. Its guidance: give each agent its own identity, start it with no permissions, grant access only for the current task and require verified human approval for higher-impact actions."}}, {"@type": "Question", "name": "How do I apply least privilege to an AI agent?", "acceptedAnswer": {"@type": "Answer", "text": "List every tool the agent can call and give it a separate API key or service account. Grant read and reversible draft access only, make credentials expire when the task ends, and keep payment, deletion and credential permissions on a key the agent never holds."}}, {"@type": "Question", "name": "Which AI agent actions should need human approval?", "acceptedAnswer": {"@type": "Answer", "text": "Anything that leaves your company or can't be undone within about five minutes: customer emails, publishing, changes customers can see, and edits to financial records. Refunds, payments, deleting records and changing permissions shouldn't be on the agent's key at all."}}, {"@type": "Question", "name": "What is OWASP Excessive Agency?", "acceptedAnswer": {"@type": "Answer", "text": "Excessive Agency is entry LLM06 in OWASP's 2025 Top 10 for LLM applications. It covers damage caused when an AI system has functions it doesn't need, more permissions than its task requires, or the autonomy to take high-impact actions without approval."}}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "description": "Microsoft says treat AI agents as insiders. Sort your agent's tools into four permission tiers with a two-question rule, a worked example and a planner.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "mainEntityOfPage": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/", "image": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/og.png", "author": {"@type": "Person", "@id": "https://ashishtadigiri.com/#ashish", "name": "Ashish Tadigiri", "url": "https://ashishtadigiri.com/story/"}, "publisher": {"@type": "Organization", "@id": "https://ashishtadigiri.com/#org", "name": "Ashish Infotech & Finance Solutions", "logo": {"@type": "ImageObject", "url": "https://ashishtadigiri.com/assets/img/icon-512.png"}}, "articleSection": "AI agents", "inLanguage": "en-GB", "keywords": "AI agent permissions, least privilege for AI agents, AI agents insider threat, Microsoft agentic insider, OWASP excessive agency, human approval for AI agents, n8n agent security"}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ashishtadigiri.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://ashishtadigiri.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Microsoft says treat AI agents as insiders. Give yours four permission tiers.", "item": "https://ashishtadigiri.com/blog/ai-agent-permissions-microsoft-insider/"}]}</script><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-24"><meta property="article:author" content="Ashish Tadigiri">
 </head>
@@ -475,7 +482,7 @@ table.pl td{padding:8px}
 <div class="mini-cta spot"><span class="lbl">Free project plan</span><p>Send me the problem. A plan, timeline and fixed price within 24 hours.</p><a class="btn btn-p" style="width:100%" href="/#contact">Get my plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
 </aside>
 </div>
-<section class="related"><div class="wrap"><span class="lbl">Keep reading</span><h2>More lab notes</h2><div class="grid"><a class="card spot" data-pillar="prop" href="/blog/bulenox-drawdown-lucid-consistency-rule/"><span class="tag" data-p="prop">Prop firms</span><h3>Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.</h3><p>Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.</p><div class="foot"><span>24 Oct 2026</span><span>6 min read</span></div></a></div></div></section>
+<section class="related"><div class="wrap"><span class="lbl">Keep reading</span><h2>More lab notes</h2><div class="grid"><a class="card spot" data-pillar="lab" href="/blog/backtest-checklist/"><span class="tag" data-p="lab">Algo & quant</span><h3>CME just logged its busiest Q3 ever. Run this 7-point backtest checklist before you trust yours.</h3><p>Seven backtest checks with pass marks, a worked MNQ example and a calculator that shows the Sharpe you need after counting every variation you tested.</p><div class="foot"><span>31 Oct 2026</span><span>8 min read</span></div></a><a class="card spot" data-pillar="prop" href="/blog/bulenox-drawdown-lucid-consistency-rule/"><span class="tag" data-p="prop">Prop firms</span><h3>Bulenox cut its 100K drawdown by $1,000. Re-size before your next trade.</h3><p>Bulenox cut Momentum drawdowns and Lucid moved consistency to 40%. The sizing formula, a daily stop-win rule and a calculator to re-size tonight.</p><div class="foot"><span>24 Oct 2026</span><span>6 min read</span></div></a></div></div></section>
 </main>
 <footer class="ftr"><div class="wrap"><div class="brand"><img src="/assets/img/at-holo-160.webp" width="160" height="90" alt="AT monogram"><span class="copy-r">© 2026 Ashish Infotech &amp; Finance Solutions. All rights reserved.</span></div>
 <span class="hubs">HYD · DXB · AUS</span><div class="soc"><a class="icon-btn" href="https://www.linkedin.com/in/ashishtadigiri/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a><a class="icon-btn" href="https://x.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a><a class="icon-btn" href="https://www.instagram.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></a></div></div></footer><div class="toast" role="status" aria-live="polite"></div>
@@ -519,7 +526,7 @@ table.pl td{padding:8px}
   d.querySelectorAll('.formula .copy').forEach(function(b){b.addEventListener('click',function(){copyText(b.parentNode.getAttribute('data-plain'),'Formula copied')})});
 
   // index filters + search
-  var chips=[].slice.call(d.querySelectorAll('.chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
+  var chips=[].slice.call(d.querySelectorAll('.chips .chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
   if(chips.length){
     var cur='all';
     function apply(){var term=(q&&q.value||'').trim().toLowerCase();var shown=0;
@@ -556,6 +563,43 @@ table.pl td{padding:8px}
       var pol={agent:'my-agent',rule:'tier3=money/keys/delete; tier0=read-only; tier2=external or undo>5min; tier1=other',tools:rows.map(function(r){var t=tier(r);return {tool:r[0],tier:t,control:['auto','auto+log+ratelimit','human_approval','not_granted'][t]}})};
       copyText(JSON.stringify(pol,null,2),'Policy copied')});
     load();
+  });
+
+  // backtest trust check
+  d.querySelectorAll('[data-btcheck]').forEach(function(bc){
+    var $=function(id){return bc.querySelector('#'+id)}, ids=['b-n','b-y','b-sr','b-oos','b-t','b-m','b-sd','b-c','b-sl'];
+    var EX=[240,4,1.6,0.7,610,15.2,118,1.5,1];
+    function ninv(p){var a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924],b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857],c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878],e=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742],q,r;
+      if(p<0.02425){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      if(p>1-0.02425){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)}
+    function ncdf(x){var t=1/(1+0.2316419*Math.abs(x)),y=t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));var p=1-Math.exp(-x*x/2)/Math.sqrt(2*Math.PI)*y;return x>=0?p:1-p}
+    function hurdle(N){if(N<=1)return 0;var g=0.5772156649;return (1-g)*ninv(1-1/N)+g*ninv(1-1/(N*Math.E))}
+    function money(n){return (n<0?'−$':'$')+Math.abs(n).toFixed(2)}
+    function mark(el,ok,txt){el.textContent=txt+(ok?' · pass':' · fail');el.className=ok?'ok':'no'}
+    function run(){
+      var v=ids.map(function(i){return +$(i).value||0}),N=Math.max(1,Math.round(v[0])),Y=v[1],SR=v[2],OOS=v[3],T=v[4],M=v[5],SD=v[6],C=v[7],SL=v[8],tick=+$('b-inst').value;
+      var slip=SL*tick*2, sNet=M-slip, sCost=C+2*slip, ratio=sCost>0?sNet/sCost:(sNet>0?99:0);
+      var ok2=ratio>=2, t=SD>0&&T>0?M/SD*Math.sqrt(T):0, ok3=t>=2;
+      var q=252, Tn=Math.max(2,q*Y), sr=SR/Math.sqrt(q), sr0=hurdle(N)/Math.sqrt(Tn), z=(sr-sr0)*Math.sqrt(Tn-1)/Math.sqrt(1+0.5*sr*sr), dsr=Y>0?ncdf(z):0, ok4=dsr>=0.95;
+      var wfe=SR>0?OOS/SR:0, ok5=wfe>=0.5;
+      mark($('b-r2'),ok2,money(sNet)+' · '+ratio.toFixed(1)+'× cost');
+      mark($('b-r3'),ok3,t.toFixed(2));
+      mark($('b-r4'),ok4,(Y>0?(hurdle(N)/Math.sqrt(Y)).toFixed(2):'–')+' · DSR '+Math.round(dsr*100)+'%');
+      mark($('b-r5'),ok5,Math.round(wfe*100)+'%');
+      var n=[ok2,ok3,ok4,ok5].filter(Boolean).length;
+      $('b-out').textContent=n+' / 4'; $('b-meter').style.width=(n*25)+'%';
+      var vd=$('b-verdict'), msg;
+      if(!ok2)msg='Check 2 fails: with slippage doubled, each trade nets '+money(sNet)+' against '+money(sCost)+' of cost. The edge lives in your fill assumption. Re-test with realistic fills before anything else.';
+      else if(!ok3)msg='Check 3 fails: a t-stat of '+t.toFixed(2)+' means '+Math.round(T)+' trades cannot separate this edge from noise. You need about '+Math.ceil(Math.pow(2*SD/Math.max(M,0.01),2))+' trades at this average and spread.';
+      else if(!ok4)msg='Check 4 fails: '+N+' variations over '+Y+' years can produce a Sharpe of '+(hurdle(N)/Math.sqrt(Y)).toFixed(2)+' from luck alone, so your '+SR.toFixed(2)+' has a '+Math.round(dsr*100)+'% chance of being real skill. Cut the variations or add years of data.';
+      else if(!ok5)msg='Check 5 fails: unseen data kept '+Math.round(wfe*100)+'% of the in-sample Sharpe. Below 50%, most of the in-sample result was fitted to noise.';
+      else msg='All four numeric checks pass. Run checks 1, 6 and 7 by hand before you trade it with real money.';
+      vd.className='verdict'+(n<4?' warn':''); vd.textContent=msg;
+    }
+    ids.concat(['b-inst']).forEach(function(i){$(i).addEventListener('input',run)});
+    bc.querySelector('[data-act="ex"]').addEventListener('click',function(){ids.forEach(function(i,k){$(i).value=EX[k]});$('b-inst').selectedIndex=0;run()});
+    run();
   });
 
   // calculators
