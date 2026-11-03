@@ -28,6 +28,12 @@ How the twice-weekly blog is produced and published. Read this first in every sc
 5. The site's main menu, root sitemap and robots.txt already include the blog. Don't edit root files.
 6. Google Search Console: the domain property `sc-domain:ashishtadigiri.com` is verified, and `/blog/sitemap.xml` was submitted on 24 Oct 2026, so Google finds new posts from the sitemap. Cloud runs can't reach Search Console, so in the live-link message remind Ash he can paste the new URL into Search Console's URL Inspection and click Request indexing to speed it up (optional).
 
+## LinkedIn (standing rule from Ash, 2 Nov 2026: every blog post also goes on LinkedIn)
+- In each drafting run, also write a 150–400-word LinkedIn text post from the blog post (rules in project docs 01 and 03: claim hook on line 1, the method with worked numbers, no link in the body, 0–2 hashtags) and a 1080×1350 code-drawn image in the blog's style. Score it against 04 and show it with the blog preview.
+- Schedule it with LinkedIn's own scheduler in Ash's Chrome (already signed in) for **18:30 IST on the blog's publish day**. Never enter a password; if LinkedIn is logged out, tell Ash.
+- At 18:45 IST, once the blog URL is confirmed live, add the blog link as the first comment on that LinkedIn post.
+- If Ash says "hold", cancel the blog publish, the LinkedIn post and the link comment together.
+
 ## Editorial rules (summary)
 - One real news item from the last 7 days in Ash's fields, cited to primary sources, turned into a method the reader can apply (formula, worked example, decision rule, checklist or tool).
 - Rotate pillars; never reuse a primary keyword (check posts.json).

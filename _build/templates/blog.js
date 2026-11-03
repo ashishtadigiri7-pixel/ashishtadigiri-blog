@@ -77,6 +77,36 @@
     load();
   });
 
+  // ranking drop triage
+  d.querySelectorAll('[data-triage]').forEach(function(tr){
+    var $=function(id){return tr.querySelector('#'+id)}, ids=['t-c0','t-c1','t-i0','t-i1','t-p0','t-p1','t-fold'], ma=0;
+    var EX={'ex-a':[12400,9300,410000,395000,8.1,8.4,35],'ex-b':[12400,8060,410000,287000,7.9,12.6,30]};
+    var segs=[].slice.call(tr.querySelectorAll('[data-seg="ma"] button'));
+    function pct(n,dp){return (n*100).toFixed(dp==null?0:dp)+'%'}
+    function run(){
+      var v=ids.map(function(i){return +$(i).value||0}), C0=v[0],C1=v[1],I0=v[2],I1=v[3],P0=v[4],P1=v[5],F=v[6];
+      var dc=C0>0?C1/C0-1:0, ctr0=I0>0?C0/I0:0, ctr1=I1>0?C1/I1:0, dp=P1-P0, si=0;
+      if(C0>0&&C1>0&&I0>0&&I1>0&&C1<C0){si=Math.log(I1/I0)/Math.log(C1/C0);si=Math.max(0,Math.min(1,si))}
+      $('t-dc').textContent=(dc>0?'+':dc<0?'−':'')+Math.abs(dc*100).toFixed(1)+'%';
+      $('t-si').textContent=pct(si); $('t-sc').textContent=pct(1-si);
+      $('t-ctr').textContent=pct(ctr0,2)+' → '+pct(ctr1,2);
+      $('t-dp').textContent=Math.abs(dp).toFixed(1)+(dp>0?' lower':dp<0?' higher':'');
+      $('t-meter').style.width=Math.round(si*100)+'%';
+      var out=$('t-out'), vd=$('t-verdict'), warn=false, title, msg;
+      if(ma){title='Fix the report';warn=true;msg='A manual action or security issue explains the drop on its own. Follow the fix Google lists in that report, then request a review.'}
+      else if(!(C0>0)||dc>-0.10){title='Noise';msg='Clicks moved less than 10%. Leave the pages alone and compare the same windows again in 7 days.'}
+      else if(F>=60){title='Page or template';warn=true;msg=Math.round(F)+'% of the lost clicks sit in one folder. Inspect three of its lost URLs, then check that folder’s last deploy for noindex, canonical or redirect changes.'}
+      else if(si<0.5){title='Results page';msg='CTR carries '+pct(1-si)+' of the drop and Google still shows you. Check your top 20 queries for new AI Overviews or rich results, then rewrite titles and snippets.'}
+      else if(dp<3){title='Demand';msg='Impressions carry '+pct(si)+' of the drop but top queries held their places. Open the 16-month view and Google Trends before you change anything.'}
+      else{title='Ranking loss';warn=true;msg='Impressions carry '+pct(si)+' of the drop and top queries lost '+dp.toFixed(1)+' places. Check Crawl stats and Page indexing first. If both are clean, log the date against the October spikes and re-check two weeks after volatility settles.'}
+      out.textContent=title; vd.className='verdict'+(warn?' warn':''); vd.textContent=msg;
+    }
+    ids.forEach(function(i){$(i).addEventListener('input',run)});
+    segs.forEach(function(b){b.addEventListener('click',function(){ma=+b.getAttribute('data-v');segs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});run()})});
+    [].forEach.call(tr.querySelectorAll('[data-act^="ex-"]'),function(b){b.addEventListener('click',function(){var e=EX[b.getAttribute('data-act')];ids.forEach(function(i,k){$(i).value=e[k]});ma=0;segs.forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-v')==='0'?'true':'false')});run()})});
+    run();
+  });
+
   // backtest trust check
   d.querySelectorAll('[data-btcheck]').forEach(function(bc){
     var $=function(id){return bc.querySelector('#'+id)}, ids=['b-n','b-y','b-sr','b-oos','b-t','b-m','b-sd','b-c','b-sl'];

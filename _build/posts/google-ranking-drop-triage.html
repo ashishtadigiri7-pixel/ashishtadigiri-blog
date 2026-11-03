@@ -1,0 +1,111 @@
+<p class="lede">Rank trackers spiked four times in twelve days this October: on the 16th, on the 20th and 21st, on the 24th, and hardest on the 27th. As of 1 November, Google had confirmed none of it. If you saw a Google ranking drop in that window, an announcement may never come to tell you whether the cause is Google or your own site. Search Console already holds the answer. This note gives you a 10-minute triage, a formula that splits a click drop into its parts, and a tool that returns the next step.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>Google's last confirmed change is the September 2026 spam update, which ran from 24 September to 8 October. Its Search Status Dashboard shows no incident since.</li>
+    <li>Clicks = impressions × CTR. Work out which of the two fell before you touch a page: each points to a different fix.</li>
+    <li>Rule out manual actions, security issues and a single broken folder first. Treat a drop as algorithmic only once those checks come back clean.</li>
+  </ul>
+</div>
+
+<h2 id="what-happened"><span class="no">01</span>Was there a Google update in October 2026?</h2>
+<p>Not one Google has confirmed. The September 2026 spam update started on 24 September and finished on 8 October. On 1 November, Google's Search Status Dashboard still listed no ranking incident for the weeks since.</p>
+<p>Search Engine Roundtable has logged four bursts of unconfirmed volatility across 15 tracking tools, including Semrush, Sistrix, Mozcast and AccuRanker:</p>
+<ul>
+  <li><strong>16 October:</strong> a spike in tools and forum chatter.</li>
+  <li><strong>20 and 21 October:</strong> a second wave. Glenn Gabe reported two sites in one niche that dropped out of results, even for their own brand names, and surged back on the evening of 16 October.</li>
+  <li><strong>24 October:</strong> a third wave, which Barry Schwartz said was "released Friday and into Saturday".</li>
+  <li><strong>27 October:</strong> the largest spike of the month, with Semrush at 9.4. Two days later Schwartz wrote that volatility "continues to get more heated by the day". Google still had not confirmed anything.</li>
+</ul>
+<p>The same reports carry a warning about the tools themselves. Gabe found Ahrefs, Semrush and Sistrix disagreeing on when one drop happened, and said the trackers "are not picking up the entire picture". Your tracker's chart is the weakest evidence you have this month. Run the triage on Search Console, which reports Google's own data for your site.</p>
+
+<h2 id="split"><span class="no">02</span>Search Console traffic drop: impressions or CTR?</h2>
+<p>Every Search Console click comes from an impression and a click-through rate. A drop in clicks therefore has two possible sources: Google showed you less (impressions), or people clicked less when it did (CTR). Logarithms split the change into two shares that add up to 100%:</p>
+<div class="formula" data-plain="Impression share of the drop = ln(impressions after / impressions before) / ln(clicks after / clicks before). CTR share = 100% - impression share."><button class="copy" type="button">Copy</button><span class="k">impression share</span> = ln(I<sub>after</sub> ÷ I<sub>before</sub>) ÷ ln(C<sub>after</sub> ÷ C<sub>before</sub>)<br><span class="k">CTR share</span> = 100% − impression share</div>
+<p>Compare two windows of the same length that start on the same weekday. For a first read today, use 9 to 15 October (after the spam update, before the first spike) against 23 to 29 October. Both run Friday to Thursday. The second window holds the 24 and 27 October spikes, so run it again on 30 October to 5 November once that data lands.</p>
+<p><strong>Worked example (hypothetical site).</strong> Search Console shows 12,400 clicks and 410,000 impressions for the first window, then 9,300 clicks and 395,000 impressions for the second.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Metric</th><th>9–15 Oct</th><th>23–29 Oct</th><th>Change</th></tr></thead>
+  <tbody>
+    <tr><td>Clicks</td><td>12,400</td><td>9,300</td><td class="down">−25.0%</td></tr>
+    <tr><td>Impressions</td><td>410,000</td><td>395,000</td><td class="down">−3.7%</td></tr>
+    <tr><td>CTR</td><td>3.02%</td><td>2.35%</td><td class="down">−0.67 pts</td></tr>
+    <tr><td>Average position</td><td>8.1</td><td>8.4</td><td>0.3 places lower</td></tr>
+  </tbody>
+</table>
+</div>
+<p>ln(395,000 ÷ 410,000) = −0.037. ln(9,300 ÷ 12,400) = −0.288. Impressions explain 0.037 ÷ 0.288 = <strong>13%</strong> of the drop and CTR explains <strong>87%</strong>. Google still shows this site almost as often and at almost the same position. Fewer people click, so the fix lies in the results page, and a content rewrite won't touch it.</p>
+<p>Change two inputs and the answer flips. If clicks fall to 8,060 and impressions to 287,000, with position on top queries sliding from 7.9 to 12.6, impressions explain 83% of the drop. That site lost visibility, and the next question is whether Google or the site caused it.</p>
+
+<h2 id="triage"><span class="no">03</span>The 10-minute Google ranking drop triage</h2>
+<p>Run these in order and stop at the first check that finds something. The order matters: the early checks have one clear fix, while the last one means waiting.</p>
+<figure class="chart wide">
+  <svg viewBox="0 0 640 400" role="img" aria-label="Google ranking drop triage decision tree: check manual actions and security issues first, then whether one folder holds most of the lost clicks, then whether impressions or CTR caused the drop, then whether position fell by three or more places, ending in five diagnoses: fix the report, page or template problem, results-page change, demand change, or ranking loss.">
+    <g font-family="Martian Mono, monospace" font-size="11" letter-spacing="0.5">
+      <rect x="0" y="4" width="400" height="44" rx="10" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.4)"/>
+      <text x="16" y="31" fill="#eef1fa">1 · Manual action or security issue?</text>
+      <path d="M400 26 H440" stroke="#ff6b81" stroke-width="1.5"/><text x="404" y="20" fill="#ff6b81" font-size="10">YES</text>
+      <rect x="440" y="4" width="200" height="44" rx="10" fill="rgba(255,107,129,.08)" stroke="rgba(255,107,129,.45)"/>
+      <text x="456" y="31" fill="#ff6b81">FIX THE REPORT</text>
+      <path d="M40 48 V82" stroke="#8790a6" stroke-width="1.5"/><text x="48" y="70" fill="#8790a6" font-size="10">NO</text>
+      <rect x="0" y="82" width="400" height="44" rx="10" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.4)"/>
+      <text x="16" y="109" fill="#eef1fa">2 · One folder holds 60%+ of lost clicks?</text>
+      <path d="M400 104 H440" stroke="#ffc46b" stroke-width="1.5"/><text x="404" y="98" fill="#ffc46b" font-size="10">YES</text>
+      <rect x="440" y="82" width="200" height="44" rx="10" fill="rgba(255,196,107,.08)" stroke="rgba(255,196,107,.45)"/>
+      <text x="456" y="109" fill="#ffc46b">PAGE / TEMPLATE</text>
+      <path d="M40 126 V160" stroke="#8790a6" stroke-width="1.5"/><text x="48" y="148" fill="#8790a6" font-size="10">NO</text>
+      <rect x="0" y="160" width="400" height="44" rx="10" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.4)"/>
+      <text x="16" y="187" fill="#eef1fa">3 · Impressions cause 50%+ of the drop?</text>
+      <path d="M400 182 H440" stroke="#19c3ff" stroke-width="1.5"/><text x="404" y="176" fill="#19c3ff" font-size="10">NO</text>
+      <rect x="440" y="160" width="200" height="44" rx="10" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.45)"/>
+      <text x="456" y="187" fill="#19c3ff">RESULTS-PAGE CHANGE</text>
+      <path d="M40 204 V238" stroke="#8790a6" stroke-width="1.5"/><text x="48" y="226" fill="#8790a6" font-size="10">YES</text>
+      <rect x="0" y="238" width="400" height="44" rx="10" fill="rgba(25,195,255,.08)" stroke="rgba(25,195,255,.4)"/>
+      <text x="16" y="265" fill="#eef1fa">4 · Top queries 3+ places lower?</text>
+      <path d="M400 260 H440" stroke="#3ddc97" stroke-width="1.5"/><text x="404" y="254" fill="#3ddc97" font-size="10">NO</text>
+      <rect x="440" y="238" width="200" height="44" rx="10" fill="rgba(61,220,151,.08)" stroke="rgba(61,220,151,.45)"/>
+      <text x="456" y="265" fill="#3ddc97">DEMAND CHANGE</text>
+      <path d="M40 282 V316" stroke="#8790a6" stroke-width="1.5"/><text x="48" y="304" fill="#8790a6" font-size="10">YES</text>
+      <rect x="0" y="316" width="640" height="72" rx="10" fill="rgba(178,60,255,.08)" stroke="rgba(178,60,255,.45)"/>
+      <text x="16" y="343" fill="#c77dff">RANKING LOSS</text>
+      <text x="16" y="368" fill="#8790a6">Check crawl stats and indexing, then compare to update dates</text>
+    </g>
+  </svg>
+  <figcaption>The triage as a decision tree. Stop at the first branch that applies.</figcaption>
+</figure>
+<ol>
+  <li><strong>Manual actions and security issues (1 minute).</strong> Open both reports in Search Console. An entry in either explains the drop on its own, and Google tells you what to fix.</li>
+  <li><strong>Concentration (3 minutes).</strong> In Performance, filter Pages by your main folders (<span class="mono">/blog/</span>, <span class="mono">/products/</span>, <span class="mono">/services/</span>) and compare clicks across the two windows. If one folder holds 60% or more of the lost clicks, look at what changed there: a template deploy, a stray <span class="mono">noindex</span>, a canonical pointing elsewhere, redirects that broke. Google's own guide notes that a page-level problem such as a misplaced noindex causes a slower drop than a site-wide one.</li>
+  <li><strong>The split (2 minutes).</strong> Run the formula above. If CTR carries most of the drop, check your top 20 queries in a private window for new AI Overviews, video blocks or rich results above you, then rewrite titles and snippets for the queries that lost the most clicks.</li>
+  <li><strong>Position on top queries (2 minutes).</strong> Sort Queries by clicks and compare position for your top 20. Ignore the site-wide average: when you lose impressions on deep long-tail queries, the average can improve while traffic falls. If your top queries held their places, demand fell. Open the 16-month view and check whether the same dip happened last October.</li>
+  <li><strong>Technical, then algorithmic (2 minutes).</strong> If top queries lost 3 or more places, open Crawl stats and the Page indexing report. A rise in server errors or in "not indexed" pages on the day of the drop points to your site. Clean reports plus a drop that lines up with 16, 20, 24 or 27 October points to Google.</li>
+</ol>
+
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Pattern in Search Console</th><th>Likely cause</th><th>First move</th></tr></thead>
+  <tbody>
+    <tr><td>Impressions steady, CTR down</td><td>Results-page change</td><td>Rewrite titles and snippets on the queries that lost clicks</td></tr>
+    <tr><td>Impressions down, position steady</td><td>Demand or seasonality</td><td>Check the 16-month view and Google Trends; change nothing yet</td></tr>
+    <tr><td>One folder holds most lost clicks</td><td>Page or template problem</td><td>Inspect three lost URLs; review that folder's last deploy</td></tr>
+    <tr><td>Site-wide position loss, clean technical reports</td><td>Algorithmic</td><td>Log the date, wait for the volatility to settle, then review content</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p>Enter your own two windows below. The tool opens with the hypothetical site from the worked example.</p>
+
+{{TRIAGE}}
+
+<h2 id="what-not-to-do"><span class="no">04</span>Google algorithm update or technical issue: what not to do</h2>
+<p>Google's guide on debugging traffic drops says small changes in position "can happen at any time" and recommends "avoiding making radical changes if your page is already performing well". For a large drop, it says some changes take effect in a few days while others take several months, and that you'll likely want to wait a few weeks before you analyse the site in Search Console again. Four unconfirmed waves in twelve days add a further reason to hold: a page you rewrite on the 22nd can lose and regain ground on the 24th or 27th for reasons unrelated to your edit.</p>
+<p>Write down the date and the numbers from the split today. If position loss lines up with a spike and your technical reports stay clean, compare the same windows again two weeks after the volatility settles. A drop that persists after that is a content and quality question. A drop that recovers on its own needs nothing from you.</p>
+
+<h2 id="site-problem"><span class="no">05</span>When the problem is your site</h2>
+<p>Checks 1, 2 and 5 find problems you can fix this week, and they are the same checks that open a technical audit. In <a href="{{SITE}}/#work">Project Beacon</a>, a 22-point technical SEO audit of a UK council fostering portal, the review found 13 critical issues. In Project Atlas, I took a 25,000-post site from a C to a high A on PageSpeed. If your triage points to your own templates, indexing or speed, that is the <a href="{{SITE}}/#services">web performance and SEO work</a> I take on. If you run an AI agent against your CMS, the <a href="{{SITE}}/blog/ai-agent-permissions-microsoft-insider/">four permission tiers</a> stop it pushing a template change like that on its own.</p>
+
+{{FAQ}}
+
+{{CTA}}

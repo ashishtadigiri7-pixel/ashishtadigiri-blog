@@ -145,6 +145,15 @@ def art(pillar):
 {"".join(paths)}{best}
 <text x="24" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">IN-SAMPLE</text>
 <text x="316" y="300" font-family="Martian Mono, monospace" font-size="11" fill="#ffc46b" letter-spacing="1.5">UNSEEN DATA</text></svg>'''
+    if pillar == "web":
+        pts = [(20,110),(60,104),(100,116),(140,100),(180,108),(220,96),(250,150),(280,132),(310,170),(340,158),(370,176),(400,168),(430,214),(470,196),(510,206),(560,198)]
+        path = "M" + " L".join(f"{x},{y}" for x, y in pts)
+        marks = "".join(f'<line x1="{x}" y1="40" x2="{x}" y2="300" stroke="#ffc46b" stroke-opacity=".55" stroke-dasharray="3 6"/><text x="{x+6}" y="56" font-family="Martian Mono, monospace" font-size="10" fill="#ffc46b" letter-spacing="1">{t}</text>' for x, t in [(236,"16"),(296,"20"),(356,"24"),(416,"27 OCT")])
+        return f'''<svg viewBox="0 0 580 340" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
+<defs><linearGradient id="wa" x1="0" x2="1"><stop offset="0" stop-color="#19c3ff"/><stop offset="1" stop-color="#b23cff"/></linearGradient></defs>
+<g stroke="rgba(255,255,255,.06)">{"".join(f'<line x1="0" y1="{y}" x2="580" y2="{y}"/>' for y in range(40, 340, 40))}</g>{marks}
+<path d="{path}" fill="none" stroke="url(#wa)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="24" y="290" font-family="Martian Mono, monospace" font-size="11" fill="#eef1fa" letter-spacing="1.5">CLICKS · UPDATE OR SITE?</text></svg>'''
     return '<svg viewBox="0 0 580 340" aria-hidden="true"></svg>'
 
 def card(p, planned=False):
@@ -286,6 +295,29 @@ def btcheck_component():
 </div>
 <p class="note">Pass marks: net trade at double slippage still 2× your round-turn cost; t-stat 2 or more; deflated Sharpe (DSR) 95% or more; out-of-sample Sharpe at least 50% of in-sample. The luck hurdle assumes independent variations, normal daily returns and no real skill. Nothing you enter leaves your browser.</p>"""
 
+def triage_component():
+    def f(i, label, v, step="1"):
+        return f'<div class="field"><label for="{i}">{label}</label><input id="{i}" type="number" inputmode="decimal" min="0" step="{step}" value="{v}"></div>'
+    return f"""<div class="calc" data-triage>
+<div class="calc-head"><span class="lbl">Ranking drop triage</span><div class="acts-sm"><button class="chip" type="button" data-act="ex-a">Example: CTR drop</button><button class="chip" type="button" data-act="ex-b">Example: ranking loss</button></div></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2">{f("t-c0","Clicks before",12400)}{f("t-c1","Clicks after",9300)}</div>
+<div class="row2">{f("t-i0","Impressions before",410000)}{f("t-i1","Impressions after",395000)}</div>
+<div class="row2">{f("t-p0","Top-query position before",8.1,"0.1")}{f("t-p1","Top-query position after",8.4,"0.1")}</div>
+{f("t-fold","Lost clicks in the worst folder (%)",35)}
+<div class="field"><label>Manual action or security issue?</label><div class="seg" data-seg="ma"><button type="button" data-v="0" aria-pressed="true">No</button><button type="button" data-v="1" aria-pressed="false">Yes</button></div></div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Diagnosis</span>
+<div class="big"><span class="v" id="t-out">Results page</span></div>
+<div class="meter" title="Impression share of the drop"><i id="t-meter"></i></div>
+<ul class="lines"><li>Click change <b id="t-dc">−25.0%</b></li><li>Impression share of the drop <b id="t-si">13%</b></li><li>CTR share of the drop <b id="t-sc">87%</b></li><li>CTR before → after <b id="t-ctr">3.02% → 2.35%</b></li><li>Position change <b id="t-dp">0.3 lower</b></li></ul>
+<div class="verdict" id="t-verdict"></div>
+</div></div>
+</div>
+<p class="note">Rules of thumb: under a 10% click drop is noise; 60% of lost clicks in one folder means a page or template problem; impressions over 50% of the drop with 3+ places lost on top queries means ranking loss. Uses Search Console numbers you enter; nothing leaves your browser.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -304,6 +336,7 @@ def build_post(p):
     body = body.replace("{{CALC}}", calc_component() if "calc" in p.get("components", []) else "")
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
+    body = body.replace("{{TRIAGE}}", triage_component() if "triage" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
     body = body.replace("{{SITE}}", SITE if PREVIEW else "")
     faq = p.get("faq", [])

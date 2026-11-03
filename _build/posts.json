@@ -1,6 +1,117 @@
 {
   "posts": [
     {
+      "slug": "google-ranking-drop-triage",
+      "status": "live",
+      "date": "2026-11-03",
+      "title": "Four unconfirmed Google spikes in 12 days. Triage your ranking drop in 10 minutes.",
+      "title_html": "Four unconfirmed Google spikes in 12 days. Triage your ranking drop in <span class=\"grad\">10 minutes.</span>",
+      "dek": "Rank trackers spiked on 16, 20, 24 and 27 October and Google confirmed none of it. Split your click drop into impressions and CTR, run five Search Console checks in order, and know whether to fix your site or wait.",
+      "excerpt": "Four unconfirmed Google spikes in October. A formula that splits a click drop into impressions and CTR, a five-check triage and a tool that gives the next step.",
+      "pillar": "web",
+      "read": 7,
+      "keyword": "Google ranking drop",
+      "keywords": [
+        "unconfirmed Google update October 2026",
+        "Google algorithm update or technical issue",
+        "Search Console traffic drop",
+        "clicks dropped but impressions stayed the same",
+        "September 2026 spam update",
+        "Google ranking volatility"
+      ],
+      "seo_title": "Google Ranking Drop: Update or Site Problem? 10-Min Triage",
+      "meta": "Google ranking drop after October's unconfirmed spikes? Split clicks into impressions and CTR, run 5 Search Console checks and get the next step.",
+      "toc": [
+        [
+          "what-happened",
+          "Was there a Google update in October?"
+        ],
+        [
+          "split",
+          "Split the drop: impressions or CTR?"
+        ],
+        [
+          "triage",
+          "The 10-minute triage"
+        ],
+        [
+          "what-not-to-do",
+          "What not to do"
+        ],
+        [
+          "site-problem",
+          "When the problem is your site"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "triage"
+      ],
+      "faq": [
+        [
+          "Was there a Google algorithm update in October 2026?",
+          "Not a confirmed one, as of 1 November 2026. Google's last confirmed change was the September 2026 spam update, which ran from 24 September to 8 October. Rank trackers reported unconfirmed volatility on 16, 20 to 21, 24 and 27 October, and Google's Search Status Dashboard lists no incident since."
+        ],
+        [
+          "How do I tell if a ranking drop is an algorithm update or a site problem?",
+          "Check Search Console in order. Manual actions or security issues explain a drop on their own. If one folder holds most of the lost clicks, suspect a template or indexing change. If top queries lost three or more places and Crawl stats and Page indexing look clean, the evidence points to an algorithmic cause."
+        ],
+        [
+          "Why did my clicks drop when impressions stayed the same?",
+          "Clicks equal impressions times CTR, so steady impressions mean your click-through rate fell. Google still shows your pages, but fewer people choose them, often because an AI Overview, video block or rich result now sits above you. Rewrite titles and snippets for the queries that lost the most clicks."
+        ],
+        [
+          "How long should I wait after a Google ranking drop before changing pages?",
+          "Google says some changes take effect in a few days and others take several months, and suggests waiting a few weeks before analysing the site in Search Console again. Log the date and numbers now, then compare the same windows two weeks after the volatility settles."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Lost traffic and the triage points at your site?",
+        "heading": "Find the cause before you rewrite a page.",
+        "body": "I run technical SEO audits and performance fixes for content sites, local businesses and public-sector portals: indexing, templates, redirects, Core Web Vitals and the Search Console data behind them.",
+        "bullets": [
+          "A full technical audit with every issue ranked by impact, like the 22-point Project Beacon review",
+          "Speed and template fixes shipped, as on the 25,000-post Project Atlas site",
+          "Fixed price, agreed before any work starts. NDA available."
+        ],
+        "secondary": [
+          "See Project Atlas",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "Google Search Status Dashboard (no ranking incident listed, checked 1 Nov 2026)",
+          "https://status.search.google.com/"
+        ],
+        [
+          "Google Search Central: Debugging drops in Google Search traffic",
+          "https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops"
+        ],
+        [
+          "Search Engine Roundtable: Google search ranking volatility and chatter spike, 16 Oct 2026",
+          "https://www.seroundtable.com/google-search-ranking-volatility-chatter-42317.html"
+        ],
+        [
+          "Search Engine Roundtable: ranking volatility and chatter heats up 20 and 21 October, 21 Oct 2026",
+          "https://www.seroundtable.com/google-search-ranking-volatility-42347.html"
+        ],
+        [
+          "Search Engine Roundtable: Google search ranking volatility heated 24 October, 25 Oct 2026",
+          "https://www.seroundtable.com/google-search-ranking-volatility-heated-42373.html"
+        ],
+        [
+          "Search Engine Roundtable: unconfirmed Google search ranking update, 27 Oct 2026 (updated 29 Oct)",
+          "https://www.seroundtable.com/google-search-ranking-volatility-42379.html"
+        ]
+      ],
+      "retrieved": "2 Nov 2026",
+      "disclaimer": "Update dates are as listed on Google's Search Status Dashboard and reported by Search Engine Roundtable up to 29 October 2026; Google had not confirmed any October update when this was checked on 1 November 2026. The site in the worked examples is hypothetical. The thresholds in the triage are rules of thumb, not Google guidance."
+    },
+    {
       "slug": "backtest-checklist",
       "status": "live",
       "date": "2026-10-31",

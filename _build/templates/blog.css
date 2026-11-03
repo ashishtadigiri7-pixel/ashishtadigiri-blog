@@ -308,3 +308,7 @@ table.pl td{padding:8px}
 [data-btcheck] .lines b.no{color:var(--down)}
 .heat{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media (max-width:600px){.heat{grid-template-columns:1fr}}
+/* ranking drop triage */
+[data-triage] .big .v{font-size:clamp(32px,5vw,44px);letter-spacing:-.03em}
+[data-triage] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+@media (max-width:600px){.chart.wide{overflow-x:auto}.chart.wide svg{min-width:560px}}
