@@ -21,12 +21,12 @@ How the twice-weekly blog is produced and published. Read this first in every sc
 - **Drafts stay out of GitHub until approved** (the repo is public): keep the draft fragment and posts.json change local; commit only at publish time.
 
 ## Publishing
-1. Set the post `status` to `live` and `date` to the publish date. Run the production build.
+1. Set the post `status` to `live` and `date` to the publish date. **Internal link (mandatory):** add one natural, descriptive link to the new post from the most relevant older live post (edit its `_build/posts/<slug>.html`; never change an old slug or title). Prefer an older post that nothing else links to yet. Run the production build.
 2. Commit (author "Ashish Tadigiri" <ashishtadigiri7@gmail.com>) and push to `main`.
 3. Hostinger MCP: `hosting_git_deploy-website-repository` with username `u925201857`, domain `ashishtadigiri.com`, repository_url `https://github.com/ashishtadigiri7-pixel/ashishtadigiri-blog.git`, branch `main`, directory `blog`.
 4. Verify with WebFetch that `https://ashishtadigiri.com/blog/<slug>/` shows the new title, then tell Ash it is live with the link.
 5. The site's main menu, root sitemap and robots.txt already include the blog. Don't edit root files.
-6. Google Search Console: the domain property `sc-domain:ashishtadigiri.com` is verified, and `/blog/sitemap.xml` was submitted on 24 Oct 2026, so Google finds new posts from the sitemap. Cloud runs can't reach Search Console, so in the live-link message remind Ash he can paste the new URL into Search Console's URL Inspection and click Request indexing to speed it up (optional).
+6. **Google Search Console (mandatory, added 3 Nov 2026):** domain property `sc-domain:ashishtadigiri.com`, used through Ash's signed-in Chrome (chrome-browser skill, new tab, close it after). (a) Sitemaps page (`https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3Aashishtadigiri.com`): resubmit `https://ashishtadigiri.com/blog/sitemap.xml` and check "Sitemap submitted successfully". (b) Use the "Inspect any URL" box at the top for the new post URL, then click Request indexing and confirm "Indexing requested". (c) Inspect each older blog post too; for any that is not indexed, request indexing. Report each post's status to Ash in the live-link message. If Search Console shows a sign-in page, never enter a password: tell Ash.
 
 ## LinkedIn (standing rule from Ash, 2 Nov 2026: every blog post also goes on LinkedIn)
 - In each drafting run, also write a 150–400-word LinkedIn text post from the blog post (rules in project docs 01 and 03: claim hook on line 1, the method with worked numbers, no link in the body, 0–2 hashtags) and a 1080×1350 code-drawn image in the blog's style. Score it against 04 and show it with the blog preview.
