@@ -1,6 +1,121 @@
 {
   "posts": [
     {
+      "slug": "deprecated-mcp-servers",
+      "status": "live",
+      "date": "2026-11-06",
+      "title": "Your AI agent may be installing MCP servers nobody patches. Audit yours in 10 minutes.",
+      "title_html": "Your AI agent may be installing MCP servers nobody patches. <span class=\"grad\">Audit yours in 10 minutes.</span>",
+      "dek": "Glow found agents picking deprecated MCP servers from memory in 98% of the sessions it studied. Find them with one command, decide each one with a five-row rule, and let the checker read your config.",
+      "excerpt": "Agents keep installing archived MCP servers with unpatched flaws. A 10-minute audit, a decision rule per server and a checker that reads your config.",
+      "pillar": "ai",
+      "read": 7,
+      "keyword": "deprecated MCP servers",
+      "keywords": [
+        "MCPhantom",
+        "MCP server security audit",
+        "@modelcontextprotocol/server-github deprecated",
+        "AI coding agent MCP risk",
+        "MCP config checker",
+        "archived MCP reference servers"
+      ],
+      "seo_title": "Deprecated MCP Servers: Find and Replace Yours in 10 Minutes",
+      "meta": "Deprecated MCP servers keep getting installed by AI agents. Find them with one command, apply a rule to each and check your config in the browser.",
+      "toc": [
+        [
+          "what-happened",
+          "What MCPhantom found"
+        ],
+        [
+          "which-packages",
+          "Which packages are deprecated?"
+        ],
+        [
+          "audit",
+          "The 10-minute audit"
+        ],
+        [
+          "decide",
+          "What to do with each server"
+        ],
+        [
+          "worked-example",
+          "Worked example: six servers"
+        ],
+        [
+          "own-it",
+          "Make MCP part of your inventory"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "mcpcheck"
+      ],
+      "faq": [
+        [
+          "Which MCP servers are deprecated?",
+          "On 5 November 2026 the npm registry marked 11 official @modelcontextprotocol packages as deprecated, including server-github, server-puppeteer, server-postgres, server-slack and server-gdrive. The Python servers mcp-server-sqlite and mcp-server-sentry are archived too. Filesystem, Memory, Sequential Thinking, Everything, Git, Fetch and Time remain active."
+        ],
+        [
+          "What is MCPhantom?",
+          "MCPhantom is the name security firm Glow gave, in November 2026, to AI coding agents installing deprecated MCP servers from their training data. In 98% of the sessions it studied, the agent chose the outdated package itself. Glow found four high-severity flaws in those servers that will not be patched."
+        ],
+        [
+          "How do I check if an MCP server package is deprecated?",
+          "Run npm view followed by the package name and the word deprecated, for example npm view @modelcontextprotocol/server-github deprecated. The registry prints the deprecation notice if there is one and nothing if the package is current. For Python servers, check the last release date on PyPI and the project's repository."
+        ],
+        [
+          "What should replace the deprecated GitHub MCP server?",
+          "GitHub maintains its own MCP server in the github/github-mcp-server repository, available as a remote server or the ghcr.io/github/github-mcp-server container. Switch to it, give it a token scoped to the repositories the agent needs, and keep that token in an environment variable rather than the config file."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Running AI agents on your machines?",
+        "heading": "Know what your agents installed before an attacker does.",
+        "body": "I build AI agents and automation pipelines, and I audit existing ones: the MCP servers and tools they run, the credentials they hold, and which actions need a person.",
+        "bullets": [
+          "An MCP and permissions audit with every server mapped to a keep, replace or remove decision",
+          "Agents built with pinned servers, scoped tokens and approval steps from day one",
+          "Fixed price, agreed before any work starts. NDA available."
+        ],
+        "secondary": [
+          "See Project Aegis",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "Help Net Security: AI coding agents are installing MCP servers that will never be patched, 3 Nov 2026",
+          "https://helpnetsecurity.com/2026/11/03/mcphantom-deprecated-mcp-servers"
+        ],
+        [
+          "Glow: MCPhantom, AI coding agents are installing vulnerable deprecated MCP servers from training data",
+          "https://www.glow.io/blogs/mcphantom-ai-coding-agents-are-installing-vulnerable-deprecated-mcp-servers-from-training-data"
+        ],
+        [
+          "Model Context Protocol: servers-archived repository",
+          "https://github.com/modelcontextprotocol/servers-archived"
+        ],
+        [
+          "Model Context Protocol: servers repository (active reference servers)",
+          "https://github.com/modelcontextprotocol/servers"
+        ],
+        [
+          "npm registry: @modelcontextprotocol/server-github (deprecation notice)",
+          "https://www.npmjs.com/package/@modelcontextprotocol/server-github"
+        ],
+        [
+          "GitHub: github-mcp-server, GitHub's official MCP server",
+          "https://github.com/github/github-mcp-server"
+        ]
+      ],
+      "retrieved": "5 Nov 2026",
+      "disclaimer": "Package statuses come from the npm registry and PyPI as queried on 5 November 2026 and can change. Glow's figures are as reported by Help Net Security on 3 November 2026. The developer config in the worked example is hypothetical. This is a defensive audit guide; it does not reproduce any exploit."
+    },
+    {
       "slug": "google-ranking-drop-triage",
       "status": "live",
       "date": "2026-11-03",

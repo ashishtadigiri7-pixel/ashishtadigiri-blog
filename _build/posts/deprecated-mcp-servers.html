@@ -1,0 +1,90 @@
+<p class="lede">On 3 November, security firm Glow published research showing AI coding agents installing deprecated MCP servers that nobody patches. In 98% of the sessions it studied, the agent picked the outdated package from memory. The user never asked for it. I checked the npm registry on 5 November: 11 of the 15 official <span class="mono">@modelcontextprotocol</span> server packages I looked up now carry a deprecation notice. If an agent has ever set up MCP for you, one of them may be in your config. This note gives you a 10-minute audit, a rule for each server you find, and a checker that reads your config for you.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>Glow found the deprecated packages downloaded more than 17.3 million times from npm since July 2025, with four high-severity flaws that will never get a patch.</li>
+    <li>One command finds every config that uses them, and <span class="mono">npm view &lt;package&gt; deprecated</span> confirms each one in seconds.</li>
+    <li>Switch to the service owner's server where one exists, remove the rest, and pin an exact version on everything you keep.</li>
+  </ul>
+</div>
+
+<h2 id="what-happened"><span class="no">01</span>What did the MCPhantom research find?</h2>
+<p>Glow reviewed transcripts of real AI coding sessions in which a deprecated MCP server was installed or suggested, and named the pattern MCPhantom. Help Net Security reported the findings on 3 November 2026:</p>
+<ul>
+  <li><strong>The agent chose the package.</strong> In 98% of those sessions the package name came from the model's training data. In 2%, the user asked for the old package by name.</li>
+  <li><strong>It happened everywhere.</strong> Glow saw it across Claude Code, Cursor, Codex CLI, Claude Cowork and Claude chat, with models from Anthropic, OpenAI and xAI. Asked to "set up a GitHub MCP", one agent installed the archived reference server instead of GitHub's own.</li>
+  <li><strong>Warnings did not stop it.</strong> In one session the agent checked npm, saw the deprecation notice, installed the package anyway and did not tell the user.</li>
+  <li><strong>The flaws stay open.</strong> Glow found four high-severity vulnerabilities in the deprecated reference servers. The worst, in the Puppeteer server, lets a prompt injection make the agent run commands an attacker chooses. The maintainers closed the report because the server is archived. No exploitation had been seen when the research was published.</li>
+</ul>
+<p>The archive itself is explicit. The <span class="mono">servers-archived</span> repository says it is "no longer maintained" and that no security updates or bug fixes will be provided. Seven reference servers remain active in the main repository: Everything, Fetch, Filesystem, Git, Memory, Sequential Thinking and Time.</p>
+
+<h2 id="which-packages"><span class="no">02</span>Which MCP server packages are deprecated?</h2>
+<p>I queried the npm registry for each package on 5 November 2026. The registry's own <span class="mono">deprecated</span> field gives the answer, so you can repeat the check yourself with <span class="mono">npm view @modelcontextprotocol/server-github deprecated</span>. An empty reply means the package is not deprecated.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Package</th><th>Last version</th><th>Registry status</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">server-github</td><td>2025.4.8</td><td class="down">Deprecated: archived, no security guarantees</td></tr>
+    <tr><td class="mono">server-puppeteer</td><td>2025.5.12</td><td class="down">Deprecated: archived, no security guarantees</td></tr>
+    <tr><td class="mono">server-postgres</td><td>0.6.2</td><td class="down">Deprecated: archived, no security guarantees</td></tr>
+    <tr><td class="mono">server-gitlab · slack · redis</td><td>2025.4.25</td><td class="down">Deprecated: no longer supported</td></tr>
+    <tr><td class="mono">server-gdrive</td><td>2025.1.14</td><td class="down">Deprecated: no longer supported</td></tr>
+    <tr><td class="mono">server-brave-search · google-maps · everart · aws-kb-retrieval</td><td>0.6.2</td><td class="down">Deprecated: no longer supported</td></tr>
+    <tr><td class="mono">server-filesystem · memory · sequential-thinking · everything</td><td>2.1.0 to 2.2.1</td><td class="up">Active</td></tr>
+  </tbody>
+</table>
+</div>
+<p>All names carry the <span class="mono">@modelcontextprotocol/</span> prefix. Two archived servers ship on PyPI rather than npm and carry no deprecation flag there: <span class="mono">mcp-server-sqlite</span> (last release 25 April 2025) and <span class="mono">mcp-server-sentry</span> (last release 14 January 2025). Treat both as archived. The Git and Fetch servers on PyPI both shipped new releases on 4 November 2026.</p>
+
+<h2 id="audit"><span class="no">03</span>The 10-minute MCP server security audit</h2>
+<p>Run these in order. Each step narrows the list for the next.</p>
+<ol>
+  <li><strong>Find every config (2 minutes).</strong> MCP settings live in different files for each tool: Claude Desktop, Claude Code, Cursor, VS Code and per-project files. Search them all at once on macOS or Linux:<div class="formula" data-plain="grep -rl --include='*.json' -e '@modelcontextprotocol/server-' -e 'mcp-server-' ~ 2>/dev/null"><button class="copy" type="button">Copy</button><span class="k">grep</span> -rl --include='*.json' -e '@modelcontextprotocol/server-' -e 'mcp-server-' ~ 2&gt;/dev/null</div>Repeat it inside each code folder you keep outside your home directory. On Windows, run the same search in PowerShell with <span class="mono">Select-String</span>.</li>
+  <li><strong>Check each package (3 minutes).</strong> Paste each file into the checker below, or run <span class="mono">npm view &lt;package&gt; deprecated</span> for anything it does not recognise. A server with no package name, such as a local script or a <span class="mono">url</span> entry, needs a different question: who runs it, and when did it last ship?</li>
+  <li><strong>Decide each server (3 minutes).</strong> Use the rules in the next section.</li>
+  <li><strong>Close the door (2 minutes).</strong> Tell your agents they need approval to add an MCP server. That is a Tier 2 action under the <a href="{{SITE}}/blog/ai-agent-permissions-microsoft-insider/">four permission tiers for AI agents</a>: it installs code that runs with your credentials, and it can take far more than 5 minutes to undo.</li>
+</ol>
+
+<h2 id="decide"><span class="no">04</span>What to do with each deprecated MCP server</h2>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>What you find</th><th>Decision</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Archived, and the service owner runs its own server</td><td>Switch to the owner's server</td><td>GitHub maintains <span class="mono">github/github-mcp-server</span>; its fixes ship from the people who run the API</td></tr>
+    <tr><td>Archived, not used in the last 30 days</td><td>Remove it</td><td>Unused code with open flaws is all risk and no return</td></tr>
+    <tr><td>Archived, you need it, no owner server</td><td>Fork it, pin it, own the patches</td><td>Somebody has to maintain it, and the original maintainers have stopped</td></tr>
+    <tr><td>Active, but installed with <span class="mono">npx -y</span> and no version</td><td>Pin an exact version</td><td>An unpinned install runs whatever the registry serves next</td></tr>
+    <tr><td>A token typed straight into the config</td><td>Move it to an environment variable</td><td>Config files get copied, synced and shared with agents</td></tr>
+  </tbody>
+</table>
+</div>
+<p>For any browser or database server you keep, scope it down as well. Give a database server a read-only user. Put a browser server's tools at Tier 2, because a web page it reads can carry a prompt injection, which is the route the Puppeteer flaw uses.</p>
+
+<h2 id="worked-example"><span class="no">05</span>Worked example: a config with six servers</h2>
+<p>A hypothetical developer asked an agent to "set up GitHub, Postgres and a browser" months ago, then added a few servers by hand. The config holds six servers:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Server</th><th>Package</th><th>Finding</th><th>Action</th></tr></thead>
+  <tbody>
+    <tr><td>github</td><td class="mono">server-github</td><td class="down">Archived · token in plain text</td><td>Switch to GitHub's server; move the token to an environment variable</td></tr>
+    <tr><td>puppeteer</td><td class="mono">server-puppeteer</td><td class="down">Archived · open RCE route</td><td>Remove today</td></tr>
+    <tr><td>postgres</td><td class="mono">server-postgres</td><td class="down">Archived</td><td>Replace; use a read-only database user</td></tr>
+    <tr><td>sqlite</td><td class="mono">mcp-server-sqlite</td><td class="down">Archived</td><td>Remove; unused since the project moved to Postgres</td></tr>
+    <tr><td>filesystem</td><td class="mono">server-filesystem</td><td>Active · unpinned</td><td>Pin to <span class="mono">@2.2.0</span></td></tr>
+    <tr><td>memory</td><td class="mono">server-memory@2.1.0</td><td class="up">Active · pinned</td><td>Keep</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Four of six servers, 67% of the config, run code nobody patches. One more installs whatever version npm serves next. One holds a GitHub token in plain text. Only one of six passes untouched. Finding and fixing all of it took one search, six registry checks and four edits to one file.</p>
+<p>Paste your own config below. The checker opens with this example loaded.</p>
+
+{{MCPCHECK}}
+
+<h2 id="own-it"><span class="no">06</span>Make MCP part of your software inventory</h2>
+<p>Glow's write-up notes why security tools miss this. Endpoint tools see a trusted Node process installing a package. Dependency scanners have no manifest to read, and the flaws carry no CVE numbers. The fix is to treat each MCP server as a dependency with an owner: one approved server per service, an exact version, a check against the registry's deprecation status before approval, and the same audit every quarter.</p>
+<p>This is the same review I run on any software that touches credentials. In <a href="{{SITE}}/#work">Project Aegis</a>, I audited a desktop trading app's installer, runtime and network behaviour. An agent that installs servers on your machine needs that scrutiny too. If you want your agents' tools, permissions and MCP servers reviewed, or an agent built with those controls from day one, that is the <a href="{{SITE}}/#services">AI agent and automation work</a> I take on.</p>
+
+{{FAQ}}
+
+{{CTA}}

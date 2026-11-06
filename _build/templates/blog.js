@@ -77,6 +77,48 @@
     load();
   });
 
+  // MCP config checker
+  d.querySelectorAll('[data-mcpcheck]').forEach(function(mc){
+    var ta=mc.querySelector('#mc-in'), sample=ta.value, rows=mc.querySelector('#mc-rows'), out=mc.querySelector('#mc-out'), vd=mc.querySelector('#mc-verdict'), meter=mc.querySelector('#mc-meter');
+    var NPM={'github':'Switch to GitHub’s own server (github/github-mcp-server)','gitlab':'Remove, or move to a maintained GitLab server you vet','puppeteer':'Remove; if you need a browser tool, vet a maintained one and put it at Tier 2','slack':'Remove, or move to a maintained Slack server you vet','postgres':'Replace; give any database server a read-only user','redis':'Remove, or move to a maintained Redis server you vet','brave-search':'Remove, or move to a maintained search server you vet','google-maps':'Remove, or move to a maintained Maps server you vet','gdrive':'Remove, or move to a maintained Drive server you vet','everart':'Remove','aws-kb-retrieval':'Remove, or move to a maintained AWS server you vet'};
+    var PY={'mcp-server-sqlite':'Remove if unused; otherwise replace with a maintained server','mcp-server-sentry':'Remove, or move to a maintained Sentry server you vet'};
+    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+    function run(){
+      var txt=ta.value.trim(), cfg;
+      rows.innerHTML=''; meter.style.width='0%';
+      if(!txt){out.textContent='Paste a config';vd.className='verdict';vd.textContent='Paste the JSON from your MCP config file, or load the worked example.';return}
+      try{cfg=JSON.parse(txt)}catch(e){out.textContent='Not valid JSON';vd.className='verdict warn';vd.textContent='The text does not parse as JSON. Copy the whole file, including the outer braces.';return}
+      var srv=cfg.mcpServers||cfg.servers||(cfg.mcp&&cfg.mcp.servers)||{}, names=Object.keys(srv), arch=0, unpinned=0, secrets=0, html='';
+      if(!names.length){out.textContent='No servers found';vd.className='verdict';vd.textContent='Looked for an "mcpServers" or "servers" object and found none.';return}
+      names.forEach(function(n){
+        var s=srv[n]||{}, parts=[s.command||''].concat(s.args||[]), line=parts.join(' '), pkg='', status='Maintained', cls='up', step='Keep; check it again next quarter';
+        var m=line.match(/@modelcontextprotocol\/server-([a-z0-9-]+)(@[\w.\-]+)?/), p=line.match(/\b(mcp-server-[a-z0-9-]+)(==[\w.]+)?/);
+        if(s.url&&!s.command){pkg=s.url;status='Remote';cls='';step='Confirm the service owner runs this endpoint'}
+        else if(m){pkg='@modelcontextprotocol/server-'+m[1]+(m[2]||'');
+          if(NPM[m[1]]){status='Archived';cls='down';step=NPM[m[1]];arch++}
+          else if(!m[2]&&/npx/.test(line)){status='Unpinned';cls='';step='Pin an exact version, e.g. '+'server-'+m[1]+'@x.y.z';unpinned++}}
+        else if(p){pkg=p[1]+(p[2]||'');
+          if(PY[p[1]]){status='Archived';cls='down';step=PY[p[1]];arch++}
+          else if(!p[2]){status='Unpinned';cls='';step='Pin an exact version, e.g. '+p[1]+'==x.y.z';unpinned++}}
+        else{pkg=line||'(unknown)';status='Check owner';cls='';step='Confirm who maintains it and when it last shipped'}
+        var env=s.env||{}, leak=Object.keys(env).filter(function(k){var v=String(env[k]||'');return /TOKEN|KEY|SECRET|PASSWORD|PAT/i.test(k)&&v&&!/^\$\{/.test(v)});
+        if(leak.length){secrets++;step+='. Move '+leak.join(', ')+' to an environment variable'}
+        html+='<tr><td>'+esc(n)+'</td><td class="mono">'+esc((function(x){x=x.replace('@modelcontextprotocol/','');return x.length>40?x.slice(0,39)+'…':x})(pkg))+'</td><td class="'+cls+'">'+status+(leak.length?' · secret':'')+'</td><td>'+esc(step)+'</td></tr>';
+      });
+      rows.innerHTML=html; meter.style.width=Math.round(arch/names.length*100)+'%';
+      out.textContent=arch+' of '+names.length+' archived';
+      var msg=[]; if(arch)msg.push(arch+' server'+(arch>1?'s':'')+' run code nobody patches. Replace or remove '+(arch>1?'them':'it')+' first.');
+      if(unpinned)msg.push(unpinned+' unpinned install'+(unpinned>1?'s':'')+' will pull whatever version npm or PyPI serves next.');
+      if(secrets)msg.push(secrets+' server'+(secrets>1?'s hold':' holds')+' a secret in plain text in the config.');
+      if(!msg.length)msg.push('No archived packages, unpinned installs or plain-text secrets found. Re-run this after any agent adds a server.');
+      vd.className='verdict'+(arch||secrets?' warn':''); vd.textContent=msg.join(' ');
+    }
+    ta.addEventListener('input',run);
+    mc.querySelector('[data-act="ex"]').addEventListener('click',function(){ta.value=sample;run()});
+    mc.querySelector('[data-act="clear"]').addEventListener('click',function(){ta.value='';run();ta.focus()});
+    run();
+  });
+
   // ranking drop triage
   d.querySelectorAll('[data-triage]').forEach(function(tr){
     var $=function(id){return tr.querySelector('#'+id)}, ids=['t-c0','t-c1','t-i0','t-i1','t-p0','t-p1','t-fold'], ma=0;

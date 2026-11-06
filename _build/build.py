@@ -318,6 +318,32 @@ def triage_component():
 </div>
 <p class="note">Rules of thumb: under a 10% click drop is noise; 60% of lost clicks in one folder means a page or template problem; impressions over 50% of the drop with 3+ places lost on top queries means ranking loss. Uses Search Console numbers you enter; nothing leaves your browser.</p>"""
 
+def mcpcheck_component():
+    sample = """{
+  "mcpServers": {
+    "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"],
+                "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_xxxxxxxxxxxxxxxx" } },
+    "puppeteer": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-puppeteer"] },
+    "postgres": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/app"] },
+    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/me/projects"] },
+    "memory": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-memory@2.1.0"] },
+    "sqlite": { "command": "uvx", "args": ["mcp-server-sqlite", "--db-path", "app.db"] }
+  }
+}"""
+    return f"""<div class="calc" data-mcpcheck>
+<div class="calc-head"><span class="lbl">MCP config checker</span><div class="acts-sm"><button class="chip" type="button" data-act="ex">Load worked example</button><button class="chip" type="button" data-act="clear">Clear</button></div></div>
+<div class="mc-body">
+<div class="field"><label for="mc-in">Paste your MCP config (JSON)</label><textarea id="mc-in" spellcheck="false" rows="12">{esc(sample)}</textarea></div>
+<div class="out" aria-live="polite">
+<span class="lbl">Result</span>
+<div class="big"><span class="v" id="mc-out">4 of 6 archived</span></div>
+<div class="meter" title="Share of servers that are archived"><i id="mc-meter"></i></div>
+<div class="tablewrap"><table class="data mc"><thead><tr><th>Server</th><th>Package</th><th>Status</th><th>Next step</th></tr></thead><tbody id="mc-rows"></tbody></table></div>
+<div class="verdict" id="mc-verdict"></div>
+</div></div>
+</div>
+<p class="note">Checks package names against the 11 npm packages marked deprecated on the registry and the 2 archived Python servers (sqlite, sentry) as of 5 November 2026, flags unpinned npx installs and secrets typed straight into the config. It runs in your browser; nothing you paste leaves the page. Delete real tokens before you paste if you prefer.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -337,6 +363,7 @@ def build_post(p):
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
     body = body.replace("{{TRIAGE}}", triage_component() if "triage" in p.get("components", []) else "")
+    body = body.replace("{{MCPCHECK}}", mcpcheck_component() if "mcpcheck" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
     body = body.replace("{{SITE}}", SITE if PREVIEW else "")
     faq = p.get("faq", [])
