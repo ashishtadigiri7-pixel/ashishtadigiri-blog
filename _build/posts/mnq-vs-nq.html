@@ -1,0 +1,77 @@
+<p class="lede">On 3 November, CME Group reported a record October: 30 million contracts a day, up 15% on last year. Among its equity-index highlights: <strong>Micro E-mini Nasdaq-100 futures (MNQ), at 2.9 million contracts a day, up 74%</strong>. Micro contracts now make up half of all CME equity-index volume. More traders size in micros, and many keep doing it long after their account outgrows them. This note settles MNQ vs NQ with one rule: when to stay in micros, when to switch to the mini, and why the best answer is often both at once.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>MNQ is exactly one tenth of NQ: $2 per index point against $20. Same index, same prices, same stop.</li>
+    <li>Size the trade in micros first, then swap every full block of 10 MNQ for 1 NQ. Risk stays identical; you pay one commission instead of ten.</li>
+    <li>The swap only pays if one NQ round turn costs less than ten MNQ round turns at your broker. The calculator below checks it with your own fees.</li>
+  </ul>
+</div>
+
+<h2 id="what-cme-reported"><span class="no">01</span>What CME reported for October 2026</h2>
+<p>All figures are average daily volume (ADV) from CME Group's press release of 3 November 2026.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Line</th><th class="num">October 2026 ADV</th><th class="num">Year on year</th></tr></thead>
+  <tbody>
+    <tr><td>All CME Group products</td><td class="num">30 million</td><td class="num up">+15%</td></tr>
+    <tr><td>Equity index futures and options</td><td class="num">8.8 million</td><td class="num up">+15%</td></tr>
+    <tr><td>Micro E-mini Nasdaq-100 futures (MNQ)</td><td class="num">2.9 million</td><td class="num up">+74%</td></tr>
+    <tr><td>All Micro E-mini equity index futures and options</td><td class="num">4.4 million</td><td class="num">50% of equity index ADV</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Micro volume growing that fast means a lot of new accounts are sizing in MNQ. It also means a lot of growing accounts are still clicking 15, 30 or 100 micros when a mix of minis and micros would carry the same risk with far fewer fills.</p>
+
+<h2 id="the-difference"><span class="no">02</span>MNQ vs NQ: the only real difference is size</h2>
+<p>CME's contract specifications put MNQ at <strong>$2 times the Nasdaq-100 index</strong>, with a minimum move of 0.25 points, so one tick is worth $0.50. CME also states that every Micro E-mini is one tenth the size of its E-mini counterpart, which puts NQ at <strong>$20 per point</strong>. Both track the same index. A 30-point stop is a 30-point stop on either.</p>
+<p>What changes is the step size of your risk. At a 30-point stop, each MNQ risks $60 and each NQ risks $600. With NQ alone you can only risk $600, $1,200, $1,800 and so on. If your budget per trade is $1,000, one NQ uses 60% of it and two NQ would break it. Ten MNQ risk exactly what one NQ risks, so micros let you land within $60 of the budget.</p>
+
+<h2 id="split-rule"><span class="no">03</span>The split rule: minis for the bulk, micros for the rest</h2>
+<p>You don't have to pick one. Size the trade in micros, then hand every full block of ten to a single mini:</p>
+<div class="formula" data-plain="NQ = floor(risk budget / (stop x 20)); MNQ = floor((risk budget - NQ x stop x 20) / (stop x 2))"><button class="copy" type="button">Copy</button><span class="k">NQ</span> = floor(risk budget ÷ (stop × $20))<br><span class="k">MNQ</span> = floor((risk budget − NQ × stop × $20) ÷ (stop × $2))</div>
+<p>Your risk budget per trade is the dollar loss you accept if the stop is hit. On a prop account, take it from the distance to your floor, as in the <a href="{{SITE}}/blog/bulenox-drawdown-lucid-consistency-rule/">prop firm position sizing formula</a>. On a personal account, it is the share of the account you risk per trade.</p>
+<p>The split always carries the same risk as the all-micro size, because ten MNQ equal one NQ point for point. The only thing that changes is the number of contracts you pay commission on.</p>
+
+<h2 id="worked-example"><span class="no">04</span>Worked example: three accounts, one 30-point stop</h2>
+<p>Fees differ by broker and plan, so the costs here are <strong>hypothetical</strong>: $1.00 all-in per MNQ round turn and $4.00 per NQ round turn. Put your own into the calculator.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Risk budget</th><th class="num">All MNQ</th><th class="num">All NQ</th><th class="num">Split</th><th class="num">Cost: all MNQ</th><th class="num">Cost: split</th></tr></thead>
+  <tbody>
+    <tr><td>$450</td><td class="num">7 ($420)</td><td class="num down">0 ($0)</td><td class="num">7 MNQ</td><td class="num">$7</td><td class="num">$7</td></tr>
+    <tr><td>$1,000</td><td class="num">16 ($960)</td><td class="num">1 ($600)</td><td class="num">1 NQ + 6 MNQ</td><td class="num">$16</td><td class="num up">$10</td></tr>
+    <tr><td>$6,500</td><td class="num">108 ($6,480)</td><td class="num">10 ($6,000)</td><td class="num">10 NQ + 8 MNQ</td><td class="num">$108</td><td class="num up">$48</td></tr>
+  </tbody>
+</table>
+</div>
+<p>At $450 the budget doesn't cover one NQ, so micros are the only way in. At $1,000 the split saves $6 a trade. At $6,500 it saves <strong>$60 a trade</strong>: 20 trades a month is $1,200 a month in fees for exactly the same risk. Fewer orders also means fewer partial fills to manage when the market moves fast.</p>
+<p>The check behind it: each NQ in the split replaces ten MNQ, so the split saves <strong>10 × MNQ cost − NQ cost</strong> per NQ. With the hypothetical fees that is $10 − $4 = $6 per NQ. If your broker charged $10 or more for an NQ round turn at the same $1.00 micro rate, the saving would be zero and staying in micros would cost you nothing.</p>
+
+<div class="box">
+  <h4>Decision rule</h4>
+  <ul>
+    <li><strong>Budget under one NQ's risk</strong> (budget &lt; stop × $20): trade MNQ only.</li>
+    <li><strong>NQ round turn costs 10× the MNQ round turn or more:</strong> stay in MNQ. Same risk, finer steps, no saving to chase.</li>
+    <li><strong>Otherwise:</strong> use the split. Re-run it whenever the stop or the budget changes.</li>
+  </ul>
+</div>
+
+<p>Run your own numbers. The calculator opens with the $1,000 row loaded:</p>
+
+{{SPLIT}}
+
+<h2 id="stay-micro"><span class="no">05</span>When to stay all-micro even with a big budget</h2>
+<ul>
+  <li><strong>You scale out in thirds or quarters.</strong> One NQ can't be split into three exits. If your plan takes partial profits, keep enough MNQ in the mix to cover each exit.</li>
+  <li><strong>Your prop firm counts contracts its own way.</strong> Some firms set separate caps for minis and micros, or count them at a ratio. Check your account's contract limit before you mix the two.</li>
+  <li><strong>Your stop is wide.</strong> At a 100-point stop one NQ risks $2,000. Most budgets under that are micro-only by the rule above, whatever the account size.</li>
+</ul>
+
+<h2 id="in-code"><span class="no">06</span>Put the split into your sizing, not your head</h2>
+<p>Working this out by hand before every order is where mistakes creep in. A sizing tool should take the budget, the stop and the fees, and return the contracts ready to send. That is what <a href="{{SITE}}/#work">Project Vault</a> does: the futures risk console I built for live position sizing on Nasdaq and gold futures. If you want the same for your own trading or your firm's traders, that is the <a href="{{SITE}}/#services">fintech and algorithmic trading work</a> I take on. Sizing only protects an edge that is real, so run the <a href="{{SITE}}/blog/backtest-checklist/">7-point backtest checklist</a> first.</p>
+
+{{FAQ}}
+
+{{CTA}}

@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MNQ vs NQ: When to Switch, and the Split That Cuts Your Fees</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="MNQ vs NQ: one rule for when to trade micros, when the mini, and how a mix of both keeps the same risk at lower fees. Worked example and calculator.">
+<link rel="canonical" href="https://ashishtadigiri.com/blog/mnq-vs-nq/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05060B">
+<meta name="author" content="Ashish Tadigiri">
+<meta property="og:site_name" content="Ashish Tadigiri">
+<meta property="og:title" content="Micros are now half of CME&#x27;s index futures volume. MNQ vs NQ: when to switch.">
+<meta property="og:description" content="MNQ vs NQ: one rule for when to trade micros, when the mini, and how a mix of both keeps the same risk at lower fees. Worked example and calculator.">
+<meta property="og:url" content="https://ashishtadigiri.com/blog/mnq-vs-nq/">
+<meta property="og:image" content="https://ashishtadigiri.com/blog/mnq-vs-nq/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ashishtadigiri">
+<meta name="twitter:title" content="Micros are now half of CME&#x27;s index futures volume. MNQ vs NQ: when to switch."><meta name="twitter:description" content="MNQ vs NQ: one rule for when to trade micros, when the mini, and how a mix of both keeps the same risk at lower fees. Worked example and calculator."><meta name="twitter:image" content="https://ashishtadigiri.com/blog/mnq-vs-nq/og.png">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="alternate" type="application/rss+xml" title="Ashish Tadigiri · Lab notes" href="/blog/feed.xml">
+<link rel="preload" href="/assets/fonts/sora-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><style>@font-face{font-family:"Sora";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/sora-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Sora";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/sora-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Sora";font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/sora-latin-700-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-400-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-500-normal.woff2) format("woff2")}@font-face{font-family:"Instrument Sans";font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/instrument-sans-latin-600-normal.woff2) format("woff2")}@font-face{font-family:"Martian Mono";font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/martian-mono-latin-400-normal.woff2) format("woff2")}@font-face{font-family:"Martian Mono";font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/martian-mono-latin-500-normal.woff2) format("woff2")}</style>
+<style>/* Layout concept: the site's dark glass shell (sticky blurred header, noise, cyan→violet glow) wrapped around a 68ch reading column with a sticky contents rail. */
+:root{
+  --bg:#05060b; --surface:#0b0d16; --surface-2:#10131f; --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --fg:#eef1fa; --fg-2:#c9d0e0; --muted:#aeb6ca; --dim:#8790a6; --faint:#6f7890;
+  --cyan:#19c3ff; --blue:#2f7bff; --violet:#b23cff; --lilac:#c77dff;
+  --up:#3ddc97; --down:#ff6b81;
+  --fd:"Sora",system-ui,sans-serif; --fb:"Instrument Sans",system-ui,sans-serif; --fm:"Martian Mono",ui-monospace,monospace;
+  --grad:linear-gradient(90deg,#19c3ff,#2f7bff,#b23cff);
+  --maxw:1240px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--fb);font-size:17px;line-height:1.65;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+img{max-width:100%;height:auto}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+@media (max-width:600px){.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* atmosphere */
+.noise{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40;opacity:.06;mix-blend-mode:overlay}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(25,195,255,.10),rgba(178,60,255,.05) 40%,transparent 70%);transform:translate3d(-999px,-999px,0);transition:opacity .4s;opacity:0}
+@media (pointer:fine){.glow{opacity:1}}
+.prog{position:fixed;left:0;top:env(safe-area-inset-top,0px);height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--grad);z-index:70;box-shadow:0 0 12px rgba(25,195,255,.6)}
+
+/* type helpers */
+.grad{background:linear-gradient(90deg,#19c3ff,#2f7bff,#b23cff,#2f7bff,#19c3ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.lbl{display:inline-flex;align-items:center;gap:12px;font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lbl::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--grad);box-shadow:0 0 10px rgba(25,195,255,.6)}
+.mono{font-family:var(--fm)}
+
+/* header (mirrors the main site) */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(5,6,11,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line)}
+.nav{max-width:var(--maxw);margin:0 auto;padding:14px max(24px,env(safe-area-inset-right,0px)) 14px max(24px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--fg)}
+.brand img{height:34px;width:auto}
+.mk{display:inline-grid;place-items:center;width:42px;height:34px;border-radius:9px;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;color:#05060b;background:var(--grad);box-shadow:0 0 18px rgba(25,195,255,.35)}
+.brand-name{font-family:var(--fd);font-weight:600;font-size:14px;letter-spacing:.2em}
+.links{display:flex;align-items:center;gap:34px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.nl{position:relative;color:var(--muted);text-decoration:none;padding:12px 0}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:1px;background:var(--grad);transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.nl:hover,.nl[aria-current]{color:var(--fg)}
+.nl:hover::after,.nl[aria-current]::after{transform:scaleX(1);transform-origin:left}
+.btn{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 20px;border-radius:999px;text-decoration:none;font-weight:600;font-size:14px;font-family:var(--fb);border:0;cursor:pointer;transition:box-shadow .3s,color .3s,transform .3s}
+.btn svg{transition:transform .3s}
+.btn:hover svg{transform:translateX(3px)}
+.btn-p{background:var(--cyan);color:#05060b}
+.btn-p::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.btn-p:hover::after{transform:translateX(120%)}
+.btn-p:hover{box-shadow:0 0 0 1px var(--cyan),0 10px 40px rgba(25,195,255,.5)}
+.btn-g{background:transparent;color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line-2)}
+.btn-g:hover{color:var(--fg);box-shadow:inset 0 0 0 1px var(--cyan),0 0 24px rgba(25,195,255,.2)}
+.menu-btn{display:none;position:relative;width:46px;height:46px;flex-shrink:0;border-radius:50%;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--fg);cursor:pointer;padding:0}
+.menu-btn i{position:absolute;left:14px;right:14px;top:50%;height:2px;margin-top:-1px;border-radius:2px;background:currentColor;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.menu-btn i:nth-child(1){transform:translateY(-4px)}.menu-btn i:nth-child(2){transform:translateY(4px)}
+.menu-open .menu-btn i:nth-child(1){transform:rotate(45deg)}.menu-open .menu-btn i:nth-child(2){transform:rotate(-45deg)}
+.mnav{position:fixed;inset:0;z-index:45;background:rgba(5,6,11,.97);backdrop-filter:blur(18px);display:flex;flex-direction:column;justify-content:center;gap:4px;padding:110px max(28px,env(safe-area-inset-right,0px)) 40px max(28px,env(safe-area-inset-left,0px));opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.menu-open .mnav{opacity:1;visibility:visible}
+.mlink{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-family:var(--fd);font-size:30px;font-weight:600;letter-spacing:-.03em;color:var(--fg);text-decoration:none}
+.mlink[aria-current]{color:var(--cyan)}
+@media (max-width:960px){.links,.nav>.btn-p{display:none}.menu-btn{display:block}}
+
+/* blog index */
+.hero{position:relative;padding:88px 0 40px;overflow:hidden}
+.hero h1{font-family:var(--fd);font-weight:600;font-size:clamp(44px,7.4vw,96px);line-height:.98;letter-spacing:-.045em;margin:18px 0 20px;text-wrap:balance}
+.hero p{max-width:60ch;color:var(--muted);font-size:18px;margin:0}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.hero-meta b{color:var(--fg);font-weight:500}
+.tools{position:sticky;top:calc(env(safe-area-inset-top,0px) + 73px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:14px 0;background:linear-gradient(var(--bg) 70%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--muted);cursor:pointer;transition:all .25s}
+.chip:hover{color:var(--fg);border-color:rgba(25,195,255,.5)}
+.chip[aria-pressed="true"]{color:#05060b;background:var(--cyan);border-color:var(--cyan)}
+.chip .n{opacity:.6;margin-left:6px}
+.search{display:flex;align-items:center;gap:10px;min-width:min(100%,260px);padding:0 16px;height:42px;border-radius:999px;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--dim)}
+.search:focus-within{border-color:var(--cyan)}
+.search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--fg);font:inherit;font-size:15px}
+.feat{position:relative;display:grid;grid-template-columns:1.15fr 1fr;gap:0;margin:22px 0 28px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:inherit;isolation:isolate}
+.feat:hover{border-color:rgba(25,195,255,.35)}
+.feat-art{position:relative;min-height:340px;background:radial-gradient(120% 90% at 20% 10%,rgba(25,195,255,.22),transparent 55%),radial-gradient(100% 90% at 90% 90%,rgba(178,60,255,.25),transparent 55%),#070912;overflow:hidden}
+.feat-art svg{position:absolute;inset:0;width:100%;height:100%}
+.feat-body{padding:40px;display:flex;flex-direction:column;gap:16px;justify-content:center;min-width:0}
+.feat-body h2{font-family:var(--fd);font-weight:600;font-size:clamp(26px,3vw,38px);line-height:1.12;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.feat-body p{color:var(--muted);margin:0}
+@media (max-width:860px){.feat{grid-template-columns:1fr}.feat-art{min-height:220px}.feat-body{padding:26px}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:20px;padding-bottom:40px}
+.card{position:relative;display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:20px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:inherit;overflow:hidden;isolation:isolate;transition:border-color .3s,transform .4s cubic-bezier(.16,1,.3,1)}
+.spot::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(420px circle at var(--mx,50%) var(--my,-20%),rgba(25,195,255,.12),transparent 45%);opacity:0;transition:opacity .3s}
+.spot:hover::before{opacity:1}
+a.card:hover{border-color:rgba(25,195,255,.35);transform:translateY(-3px)}
+.card h3{font-family:var(--fd);font-weight:600;font-size:21px;line-height:1.25;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.card p{margin:0;color:var(--muted);font-size:15.5px}
+.card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.card.is-planned{border-style:dashed;background:transparent}
+.card.is-planned h3{color:var(--fg-2)}
+.tag{display:inline-flex;align-items:center;gap:8px;width:max-content;font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.tag[data-p="ai"]{color:var(--lilac)}.tag[data-p="lab"]{color:#5c9bff}.tag[data-p="web"]{color:var(--up)}.tag[data-p="founder"]{color:#ffc46b}
+.status{padding:4px 9px;border-radius:999px;border:1px solid var(--line-2);color:var(--muted)}
+.empty{grid-column:1/-1;padding:48px 24px;text-align:center;color:var(--dim);border:1px dashed var(--line-2);border-radius:20px}
+.nl-box{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin:20px 0 80px;padding:34px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(120deg,rgba(25,195,255,.08),rgba(178,60,255,.08))}
+.nl-box h2{font-family:var(--fd);font-weight:600;font-size:28px;letter-spacing:-.03em;margin:8px 0 6px;line-height:1.15}
+.nl-box p{margin:0;color:var(--muted)}
+@media (max-width:760px){.nl-box{grid-template-columns:1fr;padding:24px}}
+
+/* post */
+.post-hero{position:relative;padding:64px 0 36px;overflow:hidden}
+.crumbs{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.crumbs a{text-decoration:none;color:var(--muted)}.crumbs a:hover{color:var(--cyan)}
+.post-hero h1{font-family:var(--fd);font-weight:600;font-size:clamp(34px,5.2vw,64px);line-height:1.04;letter-spacing:-.042em;margin:22px 0 18px;max-width:20ch;text-wrap:balance}
+.dek{font-size:clamp(18px,2vw,21px);color:var(--fg-2);max-width:62ch;margin:0}
+.byline{display:flex;flex-wrap:wrap;align-items:center;gap:14px 28px;margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
+.who{display:flex;align-items:center;gap:12px}
+.who b{display:block;font-family:var(--fd);font-weight:600;font-size:15px;letter-spacing:-.01em}
+.who span{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.facts b{color:var(--fg-2);font-weight:500}
+.share{margin-left:auto;display:flex;gap:8px}
+.icon-btn{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid var(--line-2);background:rgba(11,13,22,.7);color:var(--fg-2);cursor:pointer;text-decoration:none;transition:all .25s}
+.icon-btn:hover{color:var(--fg);border-color:var(--cyan);box-shadow:0 0 18px rgba(25,195,255,.25)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:72px;align-items:start;padding-bottom:40px}
+@media (max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}.rail{display:none}}
+.prose{max-width:70ch;min-width:0}
+.prose>*+*{margin-top:1.15em}
+.prose h2{font-family:var(--fd);font-weight:600;font-size:clamp(25px,2.6vw,32px);line-height:1.15;letter-spacing:-.03em;margin-top:2.2em;text-wrap:balance;display:flex;gap:14px;align-items:baseline}
+.prose h2 .no{font-family:var(--fm);font-size:13px;font-weight:500;letter-spacing:.06em;color:var(--cyan);flex-shrink:0}
+.prose h3{font-family:var(--fd);font-weight:600;font-size:20px;letter-spacing:-.02em;margin-top:1.8em}
+.prose p,.prose li{color:var(--fg-2)}
+.prose strong{color:var(--fg);font-weight:600}
+.prose a{color:var(--cyan);text-decoration:underline;text-decoration-color:rgba(25,195,255,.35);text-underline-offset:3px}
+.prose a:hover{text-decoration-color:var(--cyan)}
+.prose ul,.prose ol{padding-left:1.2em}
+.prose li+li{margin-top:.45em}
+.prose li::marker{color:var(--cyan)}
+.lede{font-size:19px;color:var(--fg)!important}
+.box{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:24px 26px}
+.box h4{margin:0 0 12px;font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.box ol,.box ul{margin:0}
+.formula{position:relative;padding:22px 24px;border-radius:16px;background:#070912;border:1px solid rgba(25,195,255,.25);font-family:var(--fm);font-size:clamp(13px,1.6vw,15px);line-height:1.7;color:var(--fg);overflow-x:auto;box-shadow:0 0 40px rgba(25,195,255,.06) inset}
+.formula .k{color:var(--cyan)}.formula .c{color:var(--dim)}
+.copy{position:absolute;top:10px;right:10px;font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--muted);cursor:pointer}
+.copy:hover{color:var(--fg);border-color:var(--cyan)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table.data{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+table.data th{text-align:left;font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:14px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+table.data td{padding:13px 16px;border-bottom:1px solid var(--line);color:var(--fg-2);white-space:nowrap}
+table.data tr:last-child td{border-bottom:0}
+table.data td.num,table.data th.num{text-align:right}
+table.data .down{color:var(--down)}table.data .up{color:var(--up)}
+table.data tbody tr:hover td{background:rgba(25,195,255,.04)}
+.note{font-size:14px;color:var(--dim)!important}
+figure{margin:0}
+figure.chart{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px 22px 16px}
+figure.chart svg{display:block;width:100%;height:auto}
+figcaption{margin-top:10px;font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--dim)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--fm);font-size:11px;letter-spacing:.06em;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+.pull{border-left:2px solid transparent;border-image:var(--grad) 1;padding:4px 0 4px 22px;font-family:var(--fd);font-weight:500;font-size:clamp(20px,2.2vw,25px);line-height:1.35;letter-spacing:-.02em;color:var(--fg)!important}
+
+/* calculator */
+.calc{border-radius:22px;border:1px solid rgba(25,195,255,.28);background:radial-gradient(120% 120% at 0% 0%,rgba(25,195,255,.08),transparent 50%),radial-gradient(120% 120% at 100% 100%,rgba(178,60,255,.08),transparent 50%),var(--surface);overflow:hidden}
+.calc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.calc-head .lbl{color:var(--fg)}
+.tabs{display:flex;gap:4px;padding:4px;border-radius:999px;background:#070912;border:1px solid var(--line)}
+.tab{font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:999px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--cyan);color:#05060b}
+.calc-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+@media (max-width:720px){.calc-body{grid-template-columns:1fr}}
+.inputs{display:grid;gap:14px;padding:22px;border-right:1px solid var(--line);align-content:start}
+@media (max-width:720px){.inputs{border-right:0;border-bottom:1px solid var(--line)}}
+.field{display:grid;gap:6px}
+.field label{font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.field input,.field select{width:100%;height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line-2);background:#070912;color:var(--fg);font:inherit;font-size:15px;font-variant-numeric:tabular-nums}
+.field input:focus,.field select:focus{outline:0;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(25,195,255,.15)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;height:44px;border-radius:12px;border:1px solid var(--line-2);background:#070912;color:var(--muted);font-family:var(--fm);font-size:12px;cursor:pointer}
+.seg button[aria-pressed="true"]{border-color:var(--cyan);color:var(--fg);box-shadow:0 0 0 3px rgba(25,195,255,.15)}
+.out{padding:22px;display:grid;gap:16px;align-content:start}
+.big{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.big .v{font-family:var(--fd);font-weight:600;font-size:64px;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.big .u{font-family:var(--fm);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meter{height:10px;border-radius:999px;background:#070912;border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;border-radius:inherit;background:var(--grad);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.lines{display:grid;gap:8px;margin:0;padding:0;list-style:none;font-size:14.5px}
+.lines li{display:flex;justify-content:space-between;gap:16px;padding-bottom:8px;border-bottom:1px dashed var(--line);color:var(--muted)}
+.lines li b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.verdict{padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;background:rgba(25,195,255,.07);border:1px solid rgba(25,195,255,.2);color:var(--fg-2)}
+.verdict.warn{background:rgba(255,107,129,.07);border-color:rgba(255,107,129,.3)}
+
+/* cta, author, sources */
+.cta{position:relative;overflow:hidden;margin-top:2.4em;padding:36px;border-radius:24px;border:1px solid rgba(25,195,255,.3);background:radial-gradient(90% 120% at 100% 0%,rgba(178,60,255,.22),transparent 60%),radial-gradient(90% 120% at 0% 100%,rgba(25,195,255,.16),transparent 60%),var(--surface)}
+.cta h3{font-family:var(--fd);font-weight:600;font-size:clamp(26px,3vw,34px);line-height:1.1;letter-spacing:-.035em;margin:12px 0 10px!important;color:var(--fg)}
+.cta p{color:var(--fg-2);max-width:56ch}
+.cta ul{list-style:none;padding:0;display:grid;gap:8px;margin:16px 0 22px}
+.cta li{display:flex;gap:10px;color:var(--fg-2);font-size:15.5px}
+.cta li::before{content:"";flex-shrink:0;margin-top:9px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.cta .acts{display:flex;flex-wrap:wrap;gap:10px}
+.author{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;margin-top:2.4em;padding:24px;border-radius:20px;border:1px solid var(--line);background:var(--surface)}
+.author .mk{width:56px;height:46px;font-size:19px;border-radius:12px}
+.author b{font-family:var(--fd);font-weight:600;font-size:17px}
+.author p{margin:6px 0 0;font-size:15px;color:var(--muted)!important}
+.sources{font-size:14.5px}
+.sources li{color:var(--muted)!important}
+.disc{font-size:13.5px;color:var(--faint)!important;border-top:1px solid var(--line);padding-top:18px}
+
+/* rail */
+.rail{position:sticky;top:110px;display:grid;gap:22px}
+.toc{border-left:1px solid var(--line);padding-left:18px}
+.toc h4{margin:0 0 12px;font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.toc a{position:relative;display:block;padding:6px 0;font-size:14px;line-height:1.4;color:var(--dim);text-decoration:none;transition:color .25s}
+.toc a::before{content:"";position:absolute;left:-19px;top:6px;bottom:6px;width:1px;background:var(--grad);transform:scaleY(0);transition:transform .35s}
+.toc a:hover{color:var(--fg)}
+.toc a.on{color:var(--fg)}.toc a.on::before{transform:scaleY(1)}
+.mini-cta{padding:20px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.mini-cta p{margin:8px 0 14px;font-size:14px;color:var(--muted)}
+.related{padding:20px 0 90px;border-top:1px solid var(--line)}
+.related h2{font-family:var(--fd);font-weight:600;font-size:28px;letter-spacing:-.03em;margin:26px 0 20px}
+
+/* footer */
+.ftr{border-top:1px solid var(--line);padding-block:34px}
+.ftr .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px}
+.ftr .copy-r{font-size:13px;color:var(--dim)}
+.ftr .hubs{font-family:var(--fm);font-size:11px;letter-spacing:.1em;color:var(--faint)}
+.soc{display:flex;gap:8px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;padding:10px 18px;border-radius:999px;background:var(--fg);color:#05060b;font-size:14px;font-weight:600;z-index:80;transition:all .35s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.glow{display:none}}
+
+/* FAQ accordion */
+.faq{display:grid;gap:10px}
+.qa{border:1px solid var(--line);border-radius:16px;background:var(--surface);transition:border-color .3s}
+.qa[open]{border-color:rgba(25,195,255,.3)}
+.qa summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;font-family:var(--fd);font-weight:600;font-size:17px;letter-spacing:-.015em;color:var(--fg)}
+.qa summary::-webkit-details-marker{display:none}
+.pm{position:relative;flex-shrink:0;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2)}
+.pm::before,.pm::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:1.5px;margin-top:-.75px;background:var(--cyan);transition:transform .3s}
+.pm::after{transform:rotate(90deg)}
+.qa[open] .pm::after{transform:rotate(0)}
+.qa p{margin:0;padding:0 20px 18px;color:var(--fg-2)}
+
+/* planner */
+.planner{border-radius:22px;border:1px solid rgba(178,60,255,.3);background:radial-gradient(120% 120% at 100% 0%,rgba(178,60,255,.1),transparent 50%),var(--surface);overflow:hidden}
+.acts-sm{display:flex;flex-wrap:wrap;gap:6px}
+.acts-sm .chip{padding:7px 12px;font-size:10.5px}
+.tiers-sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.tiers-sum>div{background:var(--surface);padding:14px 16px;display:grid;gap:2px}
+.tiers-sum b{font-family:var(--fd);font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.tiers-sum span{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.tiers-sum [data-t="0"] b{color:var(--up)}.tiers-sum [data-t="1"] b{color:var(--cyan)}.tiers-sum [data-t="2"] b{color:#ffc46b}.tiers-sum [data-t="3"] b{color:var(--down)}
+@media (max-width:640px){.tiers-sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pl-wrap{border:0;border-radius:0;background:transparent}
+table.pl td{padding:8px 12px}
+.pl-name{width:100%;min-width:170px;height:36px;padding:0 10px;border-radius:9px;border:1px solid var(--line-2);background:#070912;color:var(--fg);font-family:var(--fm);font-size:12.5px}
+.pl-name:focus{outline:0;border-color:var(--cyan)}
+.tg{position:relative;display:inline-flex;align-items:center;cursor:pointer}
+.tg input{position:absolute;opacity:0;width:1px;height:1px}
+.tg span{display:inline-block;min-width:46px;text-align:center;padding:6px 10px;border-radius:999px;border:1px solid var(--line-2);font-family:var(--fm);font-size:11px;color:var(--muted);transition:all .2s}
+.tg input:checked+span{border-color:var(--cyan);color:var(--fg);background:rgba(25,195,255,.12)}
+.tg input:focus-visible+span{outline:2px solid var(--cyan);outline-offset:2px}
+.tg input:disabled+span{opacity:.35;cursor:not-allowed}
+.tier{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-family:var(--fd);font-weight:700;font-size:14px;color:#05060b}
+.tier.t0{background:var(--up)}.tier.t1{background:var(--cyan)}.tier.t2{background:#ffc46b}.tier.t3{background:var(--down)}
+.rm{width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);background:transparent;color:var(--dim);cursor:pointer;font-size:16px;line-height:1}
+.rm:hover{color:var(--down);border-color:var(--down)}
+.pl-note{margin:0;padding:16px 22px;border-top:1px solid var(--line);font-size:15px;color:var(--fg-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.ret{color:var(--faint);font-size:13px}
+
+/* buttons inside article content keep button styling (overrides .prose a) */
+.prose a.btn{text-decoration:none}
+.prose a.btn-p,.prose a.btn-p:hover{color:#05060b}
+.prose a.btn-g{color:var(--fg-2)}
+.prose a.btn-g:hover{color:var(--fg)}
+
+/* tables wrap text instead of forcing sideways scroll */
+table.data th,table.data td{white-space:normal;vertical-align:middle}
+table.data th{line-height:1.4}
+table.data td.num,table.data th.num{white-space:nowrap}
+table.data td.mono{white-space:nowrap;font-size:13px}
+/* planner fits the article column on desktop */
+table.pl{table-layout:fixed;min-width:640px}
+table.pl col.c-name{width:31%}table.pl col.c-q{width:13%}table.pl col.c-t{width:8%}table.pl col.c-x{width:9%}
+table.pl th{padding:12px 8px;font-size:10px;letter-spacing:.06em}
+table.pl th:first-child,table.pl td:first-child{padding-left:16px}
+table.pl td{padding:8px}
+.pl-name{min-width:0;width:100%;text-overflow:ellipsis}
+.tg span{min-width:40px;padding:5px 8px;font-size:10.5px}
+.tiers-sum span{line-height:1.35}
+
+/* keep absolutely positioned helpers (screen-reader labels, hidden inputs) inside scroll areas */
+.tablewrap,.planner,.calc{position:relative}
+
+/* AT badge inside the byline keeps its own type (overrides .who span) */
+.who .mk{display:inline-grid;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:-.02em;text-transform:none;color:#05060b}
+.pl-hint{display:none;margin:0;padding:10px 16px 0;font-family:var(--fm);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+@media (max-width:700px){.pl-hint{display:block}}
+/* backtest trust check */
+[data-btcheck] .big .v{font-size:clamp(44px,6vw,64px)}
+[data-btcheck] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-btcheck] .lines b.ok{color:var(--up)}
+[data-btcheck] .lines b.no{color:var(--down)}
+.heat{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:600px){.heat{grid-template-columns:1fr}}
+/* ranking drop triage */
+[data-triage] .big .v{font-size:clamp(32px,5vw,44px);letter-spacing:-.03em}
+[data-triage] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+@media (max-width:600px){.chart.wide{overflow-x:auto}.chart.wide svg{min-width:560px}}
+/* MCP config checker */
+[data-mcpcheck] .mc-body{display:grid;grid-template-columns:1fr;gap:18px;padding:20px}
+[data-mcpcheck] textarea{width:100%;min-height:260px;padding:14px;border-radius:12px;border:1px solid var(--line-2);background:#070912;color:var(--fg);font-family:var(--fm);font-size:12.5px;line-height:1.6;resize:vertical;white-space:pre;overflow:auto}
+[data-mcpcheck] textarea:focus{outline:0;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(25,195,255,.15)}
+[data-mcpcheck] .big .v{font-size:clamp(30px,5vw,42px);letter-spacing:-.03em}
+[data-mcpcheck] table.mc td{white-space:normal;vertical-align:top;font-size:14px}
+[data-mcpcheck] table.mc td.mono{font-family:var(--fm);font-size:12px;word-break:break-all}
+[data-mcpcheck] table.mc td:first-child{white-space:nowrap}
+@media (max-width:600px){[data-mcpcheck] .mc-body{padding:14px}[data-mcpcheck] table.mc th:nth-child(2),[data-mcpcheck] table.mc td:nth-child(2){display:none}[data-mcpcheck] table.mc td,[data-mcpcheck] table.mc th{padding:10px 10px}}
+@media (max-width:600px){[data-mcpcheck] table.mc{min-width:0;table-layout:fixed}[data-mcpcheck] table.mc th:nth-child(1){width:27%}[data-mcpcheck] table.mc th:nth-child(3){width:25%}[data-mcpcheck] table.mc td{overflow-wrap:anywhere;font-size:13px}}
+@media (max-width:600px){[data-mcpcheck] table.mc th:nth-child(1){width:28%}[data-mcpcheck] table.mc th:nth-child(3){width:30%}[data-mcpcheck] table.mc td:nth-child(3){overflow-wrap:normal;font-size:12.5px}}
+/* MNQ / NQ split calculator */
+[data-split] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-split] .big .v{font-size:clamp(30px,5vw,40px);letter-spacing:-.03em}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the difference between MNQ and NQ?", "acceptedAnswer": {"@type": "Answer", "text": "MNQ, the Micro E-mini Nasdaq-100 future, is one tenth the size of NQ, the E-mini Nasdaq-100. MNQ is worth $2 per index point and NQ $20 per point. Both track the same index at the same prices, so a stop of a given number of points is the same on either; only the dollar risk per contract differs."}}, {"@type": "Question", "name": "When should I switch from MNQ to NQ?", "acceptedAnswer": {"@type": "Answer", "text": "Switch once your risk budget per trade covers at least one NQ at your stop, which is the stop in points times $20, and one NQ round turn costs less than ten MNQ round turns at your broker. Below that budget, or when the NQ costs ten times the micro or more, stay in MNQ."}}, {"@type": "Question", "name": "Can I trade NQ and MNQ at the same time?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Size the trade in micros, then replace every full block of ten MNQ with one NQ. The split carries the same risk as the all-micro size, because ten MNQ equal one NQ point for point, and you pay commission on fewer contracts. Check your prop firm's contract caps before mixing."}}, {"@type": "Question", "name": "How much did MNQ volume grow in October 2026?", "acceptedAnswer": {"@type": "Answer", "text": "CME Group reported Micro E-mini Nasdaq-100 futures average daily volume of 2.9 million contracts in October 2026, up 74% year on year. All Micro E-mini equity index futures and options averaged 4.4 million contracts a day, half of CME's equity index volume."}}]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Micros are now half of CME's index futures volume. MNQ vs NQ: when to switch.", "description": "MNQ vs NQ: one rule for when to trade micros, when the mini, and how a mix of both keeps the same risk at lower fees. Worked example and calculator.", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "mainEntityOfPage": "https://ashishtadigiri.com/blog/mnq-vs-nq/", "image": "https://ashishtadigiri.com/blog/mnq-vs-nq/og.png", "author": {"@type": "Person", "@id": "https://ashishtadigiri.com/#ashish", "name": "Ashish Tadigiri", "url": "https://ashishtadigiri.com/story/"}, "publisher": {"@type": "Organization", "@id": "https://ashishtadigiri.com/#org", "name": "Ashish Infotech & Finance Solutions", "logo": {"@type": "ImageObject", "url": "https://ashishtadigiri.com/assets/img/icon-512.png"}}, "articleSection": "Algo & quant", "inLanguage": "en-GB", "keywords": "MNQ vs NQ, micro Nasdaq futures, MNQ position size, when to switch from MNQ to NQ, Micro E-mini Nasdaq-100, NQ point value, futures commission cost micros"}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://ashishtadigiri.com/"}, {"@type": "ListItem", "position": 2, "name": "Blog", "item": "https://ashishtadigiri.com/blog/"}, {"@type": "ListItem", "position": 3, "name": "Micros are now half of CME's index futures volume. MNQ vs NQ: when to switch.", "item": "https://ashishtadigiri.com/blog/mnq-vs-nq/"}]}</script><meta property="og:type" content="article"><meta property="article:published_time" content="2026-11-10"><meta property="article:author" content="Ashish Tadigiri">
+</head>
+<body>
+<div class="prog" aria-hidden="true"></div><div class="glow" aria-hidden="true"></div>
+<svg class="noise" aria-hidden="true"><filter id="gn"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#gn)"/></svg>
+<header class="hdr"><nav class="nav" aria-label="Main">
+<a class="brand" href="/"><img src="/assets/img/at-holo-160.webp" width="160" height="90" alt="AT monogram"><span class="brand-name">ASHISH <span class="grad">TADIGIRI</span></span></a>
+<div class="links"><a class="nl" href="/#services">Services</a><a class="nl" href="/#work">Work</a><a class="nl" href="/#process">Process</a><a class="nl" href="/story/">Story</a><a class="nl" href="/blog/" aria-current="page">Blog</a></div>
+<a class="btn btn-p" href="/#contact">Get a free plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><i></i><i></i></button>
+</nav></header>
+<nav class="mnav" id="mobile-menu" aria-label="Mobile"><a class="mlink" href="/#services">Services<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#work">Work<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#process">Process<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/story/">Story<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/blog/" aria-current="page">Blog<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="mlink" href="/#contact">Contact<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+<a class="btn btn-p" style="margin-top:24px;min-height:54px" href="/#contact">Get your free project plan</a></nav>
+<main>
+<section class="post-hero"><div class="orb" style="left:-8%;top:-30%;width:560px;height:560px;background:rgba(25,195,255,.14)"></div><div class="orb" style="right:-10%;top:10%;width:420px;height:420px;background:rgba(178,60,255,.12)"></div>
+<div class="wrap" style="position:relative">
+<div class="crumbs"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span>Algo & quant</span></div>
+<h1>Micros are now half of CME's index futures volume. <span class="grad">MNQ vs NQ: when to switch.</span></h1>
+<p class="dek">MNQ hit 2.9 million contracts a day in October, up 74%. One rule tells you when to stay in micros, when to use the mini, and how mixing both cuts your fees for the same risk.</p>
+<div class="byline">
+<div class="who"><span class="mk" aria-hidden="true">AT</span><div><b>Ashish Tadigiri</b><span>Founder · Ashish Infotech &amp; Finance Solutions</span></div></div>
+<div class="facts"><span><b>10 Nov 2026</b></span><span><b>6 min</b> read</span><span class="tag" data-p="lab">Algo & quant</span></div>
+<div class="share">
+<button class="icon-btn" type="button" data-copy-link="https://ashishtadigiri.com/blog/mnq-vs-nq/" aria-label="Copy link"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg></button>
+<a class="icon-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https://ashishtadigiri.com/blog/mnq-vs-nq/" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a>
+<a class="icon-btn" href="https://x.com/intent/post?url=https://ashishtadigiri.com/blog/mnq-vs-nq/&amp;text=Micros are now half of CME&#x27;s index futures volume. MNQ vs NQ: when to switch." target="_blank" rel="noopener" aria-label="Share on X"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a>
+</div></div></div></section>
+<div class="wrap layout">
+<article class="prose">
+<p class="lede">On 3 November, CME Group reported a record October: 30 million contracts a day, up 15% on last year. Among its equity-index highlights: <strong>Micro E-mini Nasdaq-100 futures (MNQ), at 2.9 million contracts a day, up 74%</strong>. Micro contracts now make up half of all CME equity-index volume. More traders size in micros, and many keep doing it long after their account outgrows them. This note settles MNQ vs NQ with one rule: when to stay in micros, when to switch to the mini, and why the best answer is often both at once.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>MNQ is exactly one tenth of NQ: $2 per index point against $20. Same index, same prices, same stop.</li>
+    <li>Size the trade in micros first, then swap every full block of 10 MNQ for 1 NQ. Risk stays identical; you pay one commission instead of ten.</li>
+    <li>The swap only pays if one NQ round turn costs less than ten MNQ round turns at your broker. The calculator below checks it with your own fees.</li>
+  </ul>
+</div>
+
+<h2 id="what-cme-reported"><span class="no">01</span>What CME reported for October 2026</h2>
+<p>All figures are average daily volume (ADV) from CME Group's press release of 3 November 2026.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Line</th><th class="num">October 2026 ADV</th><th class="num">Year on year</th></tr></thead>
+  <tbody>
+    <tr><td>All CME Group products</td><td class="num">30 million</td><td class="num up">+15%</td></tr>
+    <tr><td>Equity index futures and options</td><td class="num">8.8 million</td><td class="num up">+15%</td></tr>
+    <tr><td>Micro E-mini Nasdaq-100 futures (MNQ)</td><td class="num">2.9 million</td><td class="num up">+74%</td></tr>
+    <tr><td>All Micro E-mini equity index futures and options</td><td class="num">4.4 million</td><td class="num">50% of equity index ADV</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Micro volume growing that fast means a lot of new accounts are sizing in MNQ. It also means a lot of growing accounts are still clicking 15, 30 or 100 micros when a mix of minis and micros would carry the same risk with far fewer fills.</p>
+
+<h2 id="the-difference"><span class="no">02</span>MNQ vs NQ: the only real difference is size</h2>
+<p>CME's contract specifications put MNQ at <strong>$2 times the Nasdaq-100 index</strong>, with a minimum move of 0.25 points, so one tick is worth $0.50. CME also states that every Micro E-mini is one tenth the size of its E-mini counterpart, which puts NQ at <strong>$20 per point</strong>. Both track the same index. A 30-point stop is a 30-point stop on either.</p>
+<p>What changes is the step size of your risk. At a 30-point stop, each MNQ risks $60 and each NQ risks $600. With NQ alone you can only risk $600, $1,200, $1,800 and so on. If your budget per trade is $1,000, one NQ uses 60% of it and two NQ would break it. Ten MNQ risk exactly what one NQ risks, so micros let you land within $60 of the budget.</p>
+
+<h2 id="split-rule"><span class="no">03</span>The split rule: minis for the bulk, micros for the rest</h2>
+<p>You don't have to pick one. Size the trade in micros, then hand every full block of ten to a single mini:</p>
+<div class="formula" data-plain="NQ = floor(risk budget / (stop x 20)); MNQ = floor((risk budget - NQ x stop x 20) / (stop x 2))"><button class="copy" type="button">Copy</button><span class="k">NQ</span> = floor(risk budget ÷ (stop × $20))<br><span class="k">MNQ</span> = floor((risk budget − NQ × stop × $20) ÷ (stop × $2))</div>
+<p>Your risk budget per trade is the dollar loss you accept if the stop is hit. On a prop account, take it from the distance to your floor, as in the <a href="/blog/bulenox-drawdown-lucid-consistency-rule/">prop firm position sizing formula</a>. On a personal account, it is the share of the account you risk per trade.</p>
+<p>The split always carries the same risk as the all-micro size, because ten MNQ equal one NQ point for point. The only thing that changes is the number of contracts you pay commission on.</p>
+
+<h2 id="worked-example"><span class="no">04</span>Worked example: three accounts, one 30-point stop</h2>
+<p>Fees differ by broker and plan, so the costs here are <strong>hypothetical</strong>: $1.00 all-in per MNQ round turn and $4.00 per NQ round turn. Put your own into the calculator.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Risk budget</th><th class="num">All MNQ</th><th class="num">All NQ</th><th class="num">Split</th><th class="num">Cost: all MNQ</th><th class="num">Cost: split</th></tr></thead>
+  <tbody>
+    <tr><td>$450</td><td class="num">7 ($420)</td><td class="num down">0 ($0)</td><td class="num">7 MNQ</td><td class="num">$7</td><td class="num">$7</td></tr>
+    <tr><td>$1,000</td><td class="num">16 ($960)</td><td class="num">1 ($600)</td><td class="num">1 NQ + 6 MNQ</td><td class="num">$16</td><td class="num up">$10</td></tr>
+    <tr><td>$6,500</td><td class="num">108 ($6,480)</td><td class="num">10 ($6,000)</td><td class="num">10 NQ + 8 MNQ</td><td class="num">$108</td><td class="num up">$48</td></tr>
+  </tbody>
+</table>
+</div>
+<p>At $450 the budget doesn't cover one NQ, so micros are the only way in. At $1,000 the split saves $6 a trade. At $6,500 it saves <strong>$60 a trade</strong>: 20 trades a month is $1,200 a month in fees for exactly the same risk. Fewer orders also means fewer partial fills to manage when the market moves fast.</p>
+<p>The check behind it: each NQ in the split replaces ten MNQ, so the split saves <strong>10 × MNQ cost − NQ cost</strong> per NQ. With the hypothetical fees that is $10 − $4 = $6 per NQ. If your broker charged $10 or more for an NQ round turn at the same $1.00 micro rate, the saving would be zero and staying in micros would cost you nothing.</p>
+
+<div class="box">
+  <h4>Decision rule</h4>
+  <ul>
+    <li><strong>Budget under one NQ's risk</strong> (budget &lt; stop × $20): trade MNQ only.</li>
+    <li><strong>NQ round turn costs 10× the MNQ round turn or more:</strong> stay in MNQ. Same risk, finer steps, no saving to chase.</li>
+    <li><strong>Otherwise:</strong> use the split. Re-run it whenever the stop or the budget changes.</li>
+  </ul>
+</div>
+
+<p>Run your own numbers. The calculator opens with the $1,000 row loaded:</p>
+
+<div class="calc" data-split>
+<div class="calc-head"><span class="lbl">MNQ / NQ split calculator</span></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2"><div class="field"><label for="sp-r">Risk budget per trade ($)</label><input id="sp-r" type="number" inputmode="decimal" min="0" step="50" value="1000"></div>
+<div class="field"><label for="sp-s">Stop (points)</label><input id="sp-s" type="number" inputmode="decimal" min="0.25" step="0.25" value="30"></div></div>
+<div class="row2"><div class="field"><label for="sp-cm">MNQ cost per round turn ($)</label><input id="sp-cm" type="number" inputmode="decimal" min="0" step="0.05" value="1.00"></div>
+<div class="field"><label for="sp-cn">NQ cost per round turn ($)</label><input id="sp-cn" type="number" inputmode="decimal" min="0" step="0.05" value="4.00"></div></div>
+<div class="field"><label for="sp-t">Trades per month</label><input id="sp-t" type="number" inputmode="numeric" min="0" step="1" value="20"></div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Send</span>
+<div class="big"><span class="v" id="sp-out">1 NQ + 6 MNQ</span></div>
+<ul class="lines"><li>Risk at the stop <b id="sp-risk">$960 (96%)</b></li><li>All-MNQ size <b id="sp-allm">16 MNQ</b></li><li>All-NQ size <b id="sp-alln">1 NQ ($600, 60%)</b></li><li>Cost a trade, MNQ / split <b id="sp-cost">$16.00 / $10.00</b></li><li>Saving per month <b id="sp-save">$120</b></li></ul>
+<div class="verdict" id="sp-verdict"></div>
+</div></div>
+</div>
+<p class="note">MNQ is $2 per point and NQ $20 per point (CME contract specifications). The default costs are hypothetical: enter your broker's all-in cost per round turn, including commission and exchange fees. Runs in your browser; nothing you enter leaves the page.</p>
+
+<h2 id="stay-micro"><span class="no">05</span>When to stay all-micro even with a big budget</h2>
+<ul>
+  <li><strong>You scale out in thirds or quarters.</strong> One NQ can't be split into three exits. If your plan takes partial profits, keep enough MNQ in the mix to cover each exit.</li>
+  <li><strong>Your prop firm counts contracts its own way.</strong> Some firms set separate caps for minis and micros, or count them at a ratio. Check your account's contract limit before you mix the two.</li>
+  <li><strong>Your stop is wide.</strong> At a 100-point stop one NQ risks $2,000. Most budgets under that are micro-only by the rule above, whatever the account size.</li>
+</ul>
+
+<h2 id="in-code"><span class="no">06</span>Put the split into your sizing, not your head</h2>
+<p>Working this out by hand before every order is where mistakes creep in. A sizing tool should take the budget, the stop and the fees, and return the contracts ready to send. That is what <a href="/#work">Project Vault</a> does: the futures risk console I built for live position sizing on Nasdaq and gold futures. If you want the same for your own trading or your firm's traders, that is the <a href="/#services">fintech and algorithmic trading work</a> I take on. Sizing only protects an edge that is real, so run the <a href="/blog/backtest-checklist/">7-point backtest checklist</a> first.</p>
+
+<h2 id="faq"><span class="no">FAQ</span>Frequently asked questions</h2><div class="faq"><details class="qa" open><summary>What is the difference between MNQ and NQ?<span class="pm" aria-hidden="true"></span></summary><p>MNQ, the Micro E-mini Nasdaq-100 future, is one tenth the size of NQ, the E-mini Nasdaq-100. MNQ is worth $2 per index point and NQ $20 per point. Both track the same index at the same prices, so a stop of a given number of points is the same on either; only the dollar risk per contract differs.</p></details><details class="qa"><summary>When should I switch from MNQ to NQ?<span class="pm" aria-hidden="true"></span></summary><p>Switch once your risk budget per trade covers at least one NQ at your stop, which is the stop in points times $20, and one NQ round turn costs less than ten MNQ round turns at your broker. Below that budget, or when the NQ costs ten times the micro or more, stay in MNQ.</p></details><details class="qa"><summary>Can I trade NQ and MNQ at the same time?<span class="pm" aria-hidden="true"></span></summary><p>Yes. Size the trade in micros, then replace every full block of ten MNQ with one NQ. The split carries the same risk as the all-micro size, because ten MNQ equal one NQ point for point, and you pay commission on fewer contracts. Check your prop firm&#x27;s contract caps before mixing.</p></details><details class="qa"><summary>How much did MNQ volume grow in October 2026?<span class="pm" aria-hidden="true"></span></summary><p>CME Group reported Micro E-mini Nasdaq-100 futures average daily volume of 2.9 million contracts in October 2026, up 74% year on year. All Micro E-mini equity index futures and options averaged 4.4 million contracts a day, half of CME&#x27;s equity index volume.</p></details></div>
+
+<aside class="cta spot" aria-label="Work with Ashish"><span class="lbl">Trading Nasdaq futures or running a prop firm?</span>
+<h3>Size every order from the rules, not by hand.</h3><p>I build position-sizing consoles, risk engines and automated execution for futures traders and prop firms. Budget, stop, fees and firm limits go in once, and every order comes out sized.</p><ul><li>Position-sizing and target/stop consoles for Nasdaq and gold futures</li><li>Risk engines that enforce daily loss limits and drawdown on their own</li><li>Fixed price, agreed before any code. NDA available.</li></ul>
+<p>Tell me what you want to build, fix or automate. Within 24 hours I'll send you a free plan with the approach, timeline and a fixed price.</p>
+<div class="acts"><a class="btn btn-p" href="/#contact">Get your free project plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-g" href="/#work">See Project Vault</a></div></aside>
+
+<div class="author"><span class="mk" aria-hidden="true">AT</span><div><b>Ashish Tadigiri</b><p>Founder of Ashish Infotech &amp; Finance Solutions. I engineer algorithmic trading systems, AI agents and fintech platforms. 250+ projects since 2014, including work for teams at Yahoo, Adobe and Nike.</p></div></div>
+<h3 id="sources">Sources</h3>
+<ol class="sources"><li><a href="https://www.cmegroup.com/media-room/press-releases/2026/11/03/cme_group_reportsrecordoctoberadvof30millioncontractsup15yearove.html" target="_blank" rel="noopener">CME Group: Record October ADV of 30 million contracts, up 15% year over year (3 Nov 2026)</a> <span class="ret">· retrieved 9 Nov 2026</span></li><li><a href="https://cmegroup.com/trading/equity-index/us-index/micro-e-mini-nasdaq-100_contractSpecs_futures.html" target="_blank" rel="noopener">CME Group: Micro E-mini Nasdaq-100 futures contract specifications</a> <span class="ret">· retrieved 9 Nov 2026</span></li><li><a href="https://www.cmegroup.com/education/courses/understanding-micro-futures-contracts-at-cme-group/micro-e-mini-futures/micro-e-mini-equity-index-futures-products-overview" target="_blank" rel="noopener">CME Group: Micro E-mini equity index futures products overview</a> <span class="ret">· retrieved 9 Nov 2026</span></li></ol>
+<p class="disc">Educational content, not financial advice. Volume figures are from CME Group&#x27;s release of 3 November 2026; contract sizes from CME&#x27;s specifications, checked on 9 November 2026. The fees in the worked example and calculator defaults are hypothetical; use your broker&#x27;s actual costs. No affiliate links.</p>
+</article>
+<aside class="rail">
+<nav class="toc" aria-label="Contents"><h4>Contents</h4><ol><li><a href="#what-cme-reported">What CME reported</a></li><li><a href="#the-difference">MNQ vs NQ: the difference</a></li><li><a href="#split-rule">The split rule</a></li><li><a href="#worked-example">Worked example: three accounts</a></li><li><a href="#stay-micro">When to stay all-micro</a></li><li><a href="#in-code">Put it in your sizing</a></li><li><a href="#faq">FAQ</a></li></ol></nav>
+<div class="mini-cta spot"><span class="lbl">Free project plan</span><p>Send me the problem. A plan, timeline and fixed price within 24 hours.</p><a class="btn btn-p" style="width:100%" href="/#contact">Get my plan <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</aside>
+</div>
+<section class="related"><div class="wrap"><span class="lbl">Keep reading</span><h2>More lab notes</h2><div class="grid"><a class="card spot" data-pillar="ai" href="/blog/deprecated-mcp-servers/"><span class="tag" data-p="ai">AI agents</span><h3>Your AI agent may be installing MCP servers nobody patches. Audit yours in 10 minutes.</h3><p>Agents keep installing archived MCP servers with unpatched flaws. A 10-minute audit, a decision rule per server and a checker that reads your config.</p><div class="foot"><span>6 Nov 2026</span><span>7 min read</span></div></a><a class="card spot" data-pillar="web" href="/blog/google-ranking-drop-triage/"><span class="tag" data-p="web">Web & growth</span><h3>Four unconfirmed Google spikes in 12 days. Triage your ranking drop in 10 minutes.</h3><p>Four unconfirmed Google spikes in October. A formula that splits a click drop into impressions and CTR, a five-check triage and a tool that gives the next step.</p><div class="foot"><span>3 Nov 2026</span><span>7 min read</span></div></a></div></div></section>
+</main>
+<footer class="ftr"><div class="wrap"><div class="brand"><img src="/assets/img/at-holo-160.webp" width="160" height="90" alt="AT monogram"><span class="copy-r">© 2026 Ashish Infotech &amp; Finance Solutions. All rights reserved.</span></div>
+<span class="hubs">HYD · DXB · AUS</span><div class="soc"><a class="icon-btn" href="https://www.linkedin.com/in/ashishtadigiri/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></a><a class="icon-btn" href="https://x.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a><a class="icon-btn" href="https://www.instagram.com/ashishtadigiri" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></a></div></div></footer><div class="toast" role="status" aria-live="polite"></div>
+<script>(function(){
+  var d=document, root=d.documentElement;
+  function toast(msg){var t=d.querySelector('.toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show')},1800)}
+
+  // mobile menu
+  var mb=d.querySelector('.menu-btn');
+  if(mb){mb.addEventListener('click',function(){var o=root.classList.toggle('menu-open');mb.setAttribute('aria-expanded',o?'true':'false')});
+    d.querySelectorAll('.mlink').forEach(function(a){a.addEventListener('click',function(){root.classList.remove('menu-open');mb.setAttribute('aria-expanded','false')})})}
+
+  // cursor glow + card spotlight
+  var g=d.querySelector('.glow');
+  if(g&&matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var x=-999,y=-999,cx=x,cy=y;
+    addEventListener('pointermove',function(e){x=e.clientX;y=e.clientY;if(cx<-900){cx=x;cy=y}},{passive:true});
+    (function loop(){cx+=(x-cx)*.12;cy+=(y-cy)*.12;g.style.transform='translate3d('+cx+'px,'+cy+'px,0)';requestAnimationFrame(loop)})();
+  }
+  d.querySelectorAll('.spot').forEach(function(el){el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')})});
+
+  // reading progress
+  var prog=d.querySelector('.prog'), art=d.querySelector('.prose');
+  if(prog&&art){var upd=function(){var r=art.getBoundingClientRect();var h=r.height-innerHeight*.6;var p=Math.min(1,Math.max(0,-r.top/(h>0?h:1)));prog.style.transform='scaleX('+p+')'};addEventListener('scroll',upd,{passive:true});upd()}
+
+  // contents scrollspy
+  var tocLinks=[].slice.call(d.querySelectorAll('.toc a'));
+  if(tocLinks.length&&'IntersectionObserver' in window){
+    var map={};tocLinks.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){tocLinks.forEach(function(a){a.classList.remove('on')});var a=map[e.target.id];if(a)a.classList.add('on')}})},{rootMargin:'-20% 0px -70% 0px'});
+    Object.keys(map).forEach(function(id){var h=d.getElementById(id);if(h)io.observe(h)});
+  }
+
+  // copy helpers
+  function copyText(text,label){
+    var done=function(){toast(label||'Copied')};
+    try{navigator.clipboard.writeText(text).then(done,function(){fallback()})}catch(e){fallback()}
+    function fallback(){var ta=d.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';d.body.appendChild(ta);ta.select();try{d.execCommand('copy');done()}catch(e){toast('Select and copy the text')}ta.remove()}
+  }
+  d.querySelectorAll('[data-copy-link]').forEach(function(b){b.addEventListener('click',function(){copyText(b.getAttribute('data-copy-link')||location.href,'Link copied')})});
+  d.querySelectorAll('.formula .copy').forEach(function(b){b.addEventListener('click',function(){copyText(b.parentNode.getAttribute('data-plain'),'Formula copied')})});
+
+  // index filters + search
+  var chips=[].slice.call(d.querySelectorAll('.chips .chip')), q=d.getElementById('q'), cards=[].slice.call(d.querySelectorAll('[data-pillar]')), empty=d.querySelector('.empty');
+  if(chips.length){
+    var cur='all';
+    function apply(){var term=(q&&q.value||'').trim().toLowerCase();var shown=0;
+      cards.forEach(function(c){var ok=(cur==='all'||c.getAttribute('data-pillar')===cur)&&(!term||c.textContent.toLowerCase().indexOf(term)>-1);c.hidden=!ok;if(ok&&!c.classList.contains('feat'))shown++});
+      var feat=d.querySelector('.feat');var any=shown+(feat&&!feat.hidden?1:0);if(empty)empty.hidden=any>0}
+    chips.forEach(function(ch){ch.addEventListener('click',function(){cur=ch.getAttribute('data-f');chips.forEach(function(c){c.setAttribute('aria-pressed',c===ch?'true':'false')});apply()})});
+    if(q)q.addEventListener('input',apply);
+  }
+
+
+  // agent permission planner
+  d.querySelectorAll('[data-planner]').forEach(function(pl){
+    var ex=JSON.parse(pl.getAttribute('data-example')), tb=pl.querySelector('tbody'), note=pl.querySelector('.pl-note');
+    var CTRL=['Runs alone, scoped and logged','Runs alone, logged and rate-limited','Waits for a person to approve each action','Remove from the agent’s key; a person does it'];
+    function tier(r){if(r[4])return 3;if(!r[1])return 0;if(r[3]||!r[2])return 2;return 1}
+    function yn(v,i,dis){return '<label class="tg"><input type="checkbox" data-i="'+i+'"'+(v?' checked':'')+(dis?' disabled':'')+'><span>'+(v?'Yes':'No')+'</span></label>'}
+    var rows=[];
+    function render(){
+      tb.innerHTML='';var n=[0,0,0,0];
+      rows.forEach(function(r,k){var t=tier(r);n[t]++;var tr=d.createElement('tr');
+        tr.innerHTML='<td><input class="pl-name" aria-label="Tool name" value="'+r[0].replace(/"/g,'&quot;')+'"></td><td>'+yn(r[1],1)+'</td><td>'+yn(r[2],2,!r[1])+'</td><td>'+yn(r[3],3)+'</td><td>'+yn(r[4],4)+'</td><td><span class="tier t'+t+'" title="'+CTRL[t]+'">'+t+'</span></td><td><button class="rm" type="button" aria-label="Remove '+r[0]+'">×</button></td>';
+        tr.querySelector('.pl-name').addEventListener('input',function(e){r[0]=e.target.value;summ()});
+        [].forEach.call(tr.querySelectorAll('input[type=checkbox]'),function(c){c.addEventListener('change',function(){r[+c.getAttribute('data-i')]=c.checked?1:0;render()})});
+        tr.querySelector('.rm').addEventListener('click',function(){rows.splice(k,1);render()});
+        tb.appendChild(tr)});
+      [0,1,2,3].forEach(function(t){pl.querySelector('.tiers-sum [data-t="'+t+'"] b').textContent=n[t]});
+      summ(n)}
+    function summ(n){n=n||[0,1,2,3].map(function(t){return rows.filter(function(r){return tier(r)===t}).length});
+      var tot=rows.length;note.textContent=tot?('Your agent runs '+(n[0]+n[1])+' of '+tot+' tools on its own, asks before '+n[2]+', and should never hold '+n[3]+'.'+(n[3]?' Move those '+n[3]+' onto a separate key.':'')):'Add the tools your agent can call.'}
+    function load(){rows=ex.map(function(r){return r.slice()});render()}
+    pl.querySelector('[data-act="add"]').addEventListener('click',function(){rows.push(['new_tool',1,1,0,0]);render();var ins=tb.querySelectorAll('.pl-name');if(ins.length)ins[ins.length-1].select()});
+    pl.querySelector('[data-act="reset"]').addEventListener('click',load);
+    pl.querySelector('[data-act="copy"]').addEventListener('click',function(){
+      var pol={agent:'my-agent',rule:'tier3=money/keys/delete; tier0=read-only; tier2=external or undo>5min; tier1=other',tools:rows.map(function(r){var t=tier(r);return {tool:r[0],tier:t,control:['auto','auto+log+ratelimit','human_approval','not_granted'][t]}})};
+      copyText(JSON.stringify(pol,null,2),'Policy copied')});
+    load();
+  });
+
+  // MNQ / NQ split calculator
+  d.querySelectorAll('[data-split]').forEach(function(sp){
+    var $=function(id){return sp.querySelector('#'+id)}, ids=['sp-r','sp-s','sp-cm','sp-cn','sp-t'];
+    function money(v,dp){return '$'+v.toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp})}
+    function run(){
+      var r=parseFloat($('sp-r').value)||0, s=parseFloat($('sp-s').value)||0, cm=parseFloat($('sp-cm').value)||0, cn=parseFloat($('sp-cn').value)||0, t=parseFloat($('sp-t').value)||0, vd=$('sp-verdict');
+      if(r<=0||s<=0){$('sp-out').textContent='Enter a budget and stop';vd.className='verdict';vd.textContent='Both the risk budget and the stop must be above zero.';return}
+      var pm=s*2, pn=s*20, allm=Math.floor(r/pm+1e-9), nq=Math.floor(r/pn+1e-9), mnq=Math.floor((r-nq*pn)/pm+1e-9);
+      var useSplit=nq>0&&cn<10*cm, sn=useSplit?nq:0, sm=useSplit?mnq:allm, risk=sn*pn+sm*pm;
+      var costM=allm*cm, costS=sn*cn+sm*cm, save=(costM-costS)*t;
+      $('sp-out').textContent=sm===0&&sn===0?'No trade':(sn?sn+' NQ'+(sm?' + '+sm+' MNQ':''):sm+' MNQ');
+      $('sp-risk').textContent=money(risk,0)+' ('+Math.round(risk/r*100)+'%)';
+      $('sp-allm').textContent=allm+' MNQ';
+      $('sp-alln').textContent=nq+' NQ ('+money(nq*pn,0)+', '+Math.round(nq*pn/r*100)+'%)';
+      $('sp-cost').textContent=money(costM,2)+' / '+money(costS,2);
+      $('sp-save').textContent=money(Math.max(save,0),0);
+      vd.className='verdict';
+      if(allm===0){vd.className='verdict warn';vd.textContent='Even one MNQ ('+money(pm,0)+' at this stop) is more than the budget. Tighten the stop or skip the trade.'}
+      else if(nq===0){vd.textContent='The budget is under one NQ\u2019s risk ('+money(pn,0)+' at this stop), so trade MNQ only.'}
+      else if(cn>=10*cm){vd.textContent='One NQ costs at least as much as ten MNQ at these fees, so stay in MNQ: same risk, finer steps.'}
+      else{vd.textContent='Swap every 10 MNQ for 1 NQ: same risk, '+money(costM-costS,2)+' less per trade, '+money(save,0)+' a month at '+t+' trades.'}
+    }
+    ids.forEach(function(id){$(id).addEventListener('input',run)});
+    run();
+  });
+
+  // MCP config checker
+  d.querySelectorAll('[data-mcpcheck]').forEach(function(mc){
+    var ta=mc.querySelector('#mc-in'), sample=ta.value, rows=mc.querySelector('#mc-rows'), out=mc.querySelector('#mc-out'), vd=mc.querySelector('#mc-verdict'), meter=mc.querySelector('#mc-meter');
+    var NPM={'github':'Switch to GitHub’s own server (github/github-mcp-server)','gitlab':'Remove, or move to a maintained GitLab server you vet','puppeteer':'Remove; if you need a browser tool, vet a maintained one and put it at Tier 2','slack':'Remove, or move to a maintained Slack server you vet','postgres':'Replace; give any database server a read-only user','redis':'Remove, or move to a maintained Redis server you vet','brave-search':'Remove, or move to a maintained search server you vet','google-maps':'Remove, or move to a maintained Maps server you vet','gdrive':'Remove, or move to a maintained Drive server you vet','everart':'Remove','aws-kb-retrieval':'Remove, or move to a maintained AWS server you vet'};
+    var PY={'mcp-server-sqlite':'Remove if unused; otherwise replace with a maintained server','mcp-server-sentry':'Remove, or move to a maintained Sentry server you vet'};
+    function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+    function run(){
+      var txt=ta.value.trim(), cfg;
+      rows.innerHTML=''; meter.style.width='0%';
+      if(!txt){out.textContent='Paste a config';vd.className='verdict';vd.textContent='Paste the JSON from your MCP config file, or load the worked example.';return}
+      try{cfg=JSON.parse(txt)}catch(e){out.textContent='Not valid JSON';vd.className='verdict warn';vd.textContent='The text does not parse as JSON. Copy the whole file, including the outer braces.';return}
+      var srv=cfg.mcpServers||cfg.servers||(cfg.mcp&&cfg.mcp.servers)||{}, names=Object.keys(srv), arch=0, unpinned=0, secrets=0, html='';
+      if(!names.length){out.textContent='No servers found';vd.className='verdict';vd.textContent='Looked for an "mcpServers" or "servers" object and found none.';return}
+      names.forEach(function(n){
+        var s=srv[n]||{}, parts=[s.command||''].concat(s.args||[]), line=parts.join(' '), pkg='', status='Maintained', cls='up', step='Keep; check it again next quarter';
+        var m=line.match(/@modelcontextprotocol\/server-([a-z0-9-]+)(@[\w.\-]+)?/), p=line.match(/\b(mcp-server-[a-z0-9-]+)(==[\w.]+)?/);
+        if(s.url&&!s.command){pkg=s.url;status='Remote';cls='';step='Confirm the service owner runs this endpoint'}
+        else if(m){pkg='@modelcontextprotocol/server-'+m[1]+(m[2]||'');
+          if(NPM[m[1]]){status='Archived';cls='down';step=NPM[m[1]];arch++}
+          else if(!m[2]&&/npx/.test(line)){status='Unpinned';cls='';step='Pin an exact version, e.g. '+'server-'+m[1]+'@x.y.z';unpinned++}}
+        else if(p){pkg=p[1]+(p[2]||'');
+          if(PY[p[1]]){status='Archived';cls='down';step=PY[p[1]];arch++}
+          else if(!p[2]){status='Unpinned';cls='';step='Pin an exact version, e.g. '+p[1]+'==x.y.z';unpinned++}}
+        else{pkg=line||'(unknown)';status='Check owner';cls='';step='Confirm who maintains it and when it last shipped'}
+        var env=s.env||{}, leak=Object.keys(env).filter(function(k){var v=String(env[k]||'');return /TOKEN|KEY|SECRET|PASSWORD|PAT/i.test(k)&&v&&!/^\$\{/.test(v)});
+        if(leak.length){secrets++;step+='. Move '+leak.join(', ')+' to an environment variable'}
+        html+='<tr><td>'+esc(n)+'</td><td class="mono">'+esc((function(x){x=x.replace('@modelcontextprotocol/','');return x.length>40?x.slice(0,39)+'…':x})(pkg))+'</td><td class="'+cls+'">'+status+(leak.length?' · secret':'')+'</td><td>'+esc(step)+'</td></tr>';
+      });
+      rows.innerHTML=html; meter.style.width=Math.round(arch/names.length*100)+'%';
+      out.textContent=arch+' of '+names.length+' archived';
+      var msg=[]; if(arch)msg.push(arch+' server'+(arch>1?'s':'')+' run code nobody patches. Replace or remove '+(arch>1?'them':'it')+' first.');
+      if(unpinned)msg.push(unpinned+' unpinned install'+(unpinned>1?'s':'')+' will pull whatever version npm or PyPI serves next.');
+      if(secrets)msg.push(secrets+' server'+(secrets>1?'s hold':' holds')+' a secret in plain text in the config.');
+      if(!msg.length)msg.push('No archived packages, unpinned installs or plain-text secrets found. Re-run this after any agent adds a server.');
+      vd.className='verdict'+(arch||secrets?' warn':''); vd.textContent=msg.join(' ');
+    }
+    ta.addEventListener('input',run);
+    mc.querySelector('[data-act="ex"]').addEventListener('click',function(){ta.value=sample;run()});
+    mc.querySelector('[data-act="clear"]').addEventListener('click',function(){ta.value='';run();ta.focus()});
+    run();
+  });
+
+  // ranking drop triage
+  d.querySelectorAll('[data-triage]').forEach(function(tr){
+    var $=function(id){return tr.querySelector('#'+id)}, ids=['t-c0','t-c1','t-i0','t-i1','t-p0','t-p1','t-fold'], ma=0;
+    var EX={'ex-a':[12400,9300,410000,395000,8.1,8.4,35],'ex-b':[12400,8060,410000,287000,7.9,12.6,30]};
+    var segs=[].slice.call(tr.querySelectorAll('[data-seg="ma"] button'));
+    function pct(n,dp){return (n*100).toFixed(dp==null?0:dp)+'%'}
+    function run(){
+      var v=ids.map(function(i){return +$(i).value||0}), C0=v[0],C1=v[1],I0=v[2],I1=v[3],P0=v[4],P1=v[5],F=v[6];
+      var dc=C0>0?C1/C0-1:0, ctr0=I0>0?C0/I0:0, ctr1=I1>0?C1/I1:0, dp=P1-P0, si=0;
+      if(C0>0&&C1>0&&I0>0&&I1>0&&C1<C0){si=Math.log(I1/I0)/Math.log(C1/C0);si=Math.max(0,Math.min(1,si))}
+      $('t-dc').textContent=(dc>0?'+':dc<0?'−':'')+Math.abs(dc*100).toFixed(1)+'%';
+      $('t-si').textContent=pct(si); $('t-sc').textContent=pct(1-si);
+      $('t-ctr').textContent=pct(ctr0,2)+' → '+pct(ctr1,2);
+      $('t-dp').textContent=Math.abs(dp).toFixed(1)+(dp>0?' lower':dp<0?' higher':'');
+      $('t-meter').style.width=Math.round(si*100)+'%';
+      var out=$('t-out'), vd=$('t-verdict'), warn=false, title, msg;
+      if(ma){title='Fix the report';warn=true;msg='A manual action or security issue explains the drop on its own. Follow the fix Google lists in that report, then request a review.'}
+      else if(!(C0>0)||dc>-0.10){title='Noise';msg='Clicks moved less than 10%. Leave the pages alone and compare the same windows again in 7 days.'}
+      else if(F>=60){title='Page or template';warn=true;msg=Math.round(F)+'% of the lost clicks sit in one folder. Inspect three of its lost URLs, then check that folder’s last deploy for noindex, canonical or redirect changes.'}
+      else if(si<0.5){title='Results page';msg='CTR carries '+pct(1-si)+' of the drop and Google still shows you. Check your top 20 queries for new AI Overviews or rich results, then rewrite titles and snippets.'}
+      else if(dp<3){title='Demand';msg='Impressions carry '+pct(si)+' of the drop but top queries held their places. Open the 16-month view and Google Trends before you change anything.'}
+      else{title='Ranking loss';warn=true;msg='Impressions carry '+pct(si)+' of the drop and top queries lost '+dp.toFixed(1)+' places. Check Crawl stats and Page indexing first. If both are clean, log the date against the October spikes and re-check two weeks after volatility settles.'}
+      out.textContent=title; vd.className='verdict'+(warn?' warn':''); vd.textContent=msg;
+    }
+    ids.forEach(function(i){$(i).addEventListener('input',run)});
+    segs.forEach(function(b){b.addEventListener('click',function(){ma=+b.getAttribute('data-v');segs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});run()})});
+    [].forEach.call(tr.querySelectorAll('[data-act^="ex-"]'),function(b){b.addEventListener('click',function(){var e=EX[b.getAttribute('data-act')];ids.forEach(function(i,k){$(i).value=e[k]});ma=0;segs.forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-v')==='0'?'true':'false')});run()})});
+    run();
+  });
+
+  // backtest trust check
+  d.querySelectorAll('[data-btcheck]').forEach(function(bc){
+    var $=function(id){return bc.querySelector('#'+id)}, ids=['b-n','b-y','b-sr','b-oos','b-t','b-m','b-sd','b-c','b-sl'];
+    var EX=[240,4,1.6,0.7,610,15.2,118,1.5,1];
+    function ninv(p){var a=[-39.6968302866538,220.946098424521,-275.928510446969,138.357751867269,-30.6647980661472,2.50662827745924],b=[-54.4760987982241,161.585836858041,-155.698979859887,66.8013118877197,-13.2806815528857],c=[-0.00778489400243029,-0.322396458041136,-2.40075827716184,-2.54973253934373,4.37466414146497,2.93816398269878],e=[0.00778469570904146,0.32246712907004,2.445134137143,3.75440866190742],q,r;
+      if(p<0.02425){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      if(p>1-0.02425){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((e[0]*q+e[1])*q+e[2])*q+e[3])*q+1)}
+      q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)}
+    function ncdf(x){var t=1/(1+0.2316419*Math.abs(x)),y=t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));var p=1-Math.exp(-x*x/2)/Math.sqrt(2*Math.PI)*y;return x>=0?p:1-p}
+    function hurdle(N){if(N<=1)return 0;var g=0.5772156649;return (1-g)*ninv(1-1/N)+g*ninv(1-1/(N*Math.E))}
+    function money(n){return (n<0?'−$':'$')+Math.abs(n).toFixed(2)}
+    function mark(el,ok,txt){el.textContent=txt+(ok?' · pass':' · fail');el.className=ok?'ok':'no'}
+    function run(){
+      var v=ids.map(function(i){return +$(i).value||0}),N=Math.max(1,Math.round(v[0])),Y=v[1],SR=v[2],OOS=v[3],T=v[4],M=v[5],SD=v[6],C=v[7],SL=v[8],tick=+$('b-inst').value;
+      var slip=SL*tick*2, sNet=M-slip, sCost=C+2*slip, ratio=sCost>0?sNet/sCost:(sNet>0?99:0);
+      var ok2=ratio>=2, t=SD>0&&T>0?M/SD*Math.sqrt(T):0, ok3=t>=2;
+      var q=252, Tn=Math.max(2,q*Y), sr=SR/Math.sqrt(q), sr0=hurdle(N)/Math.sqrt(Tn), z=(sr-sr0)*Math.sqrt(Tn-1)/Math.sqrt(1+0.5*sr*sr), dsr=Y>0?ncdf(z):0, ok4=dsr>=0.95;
+      var wfe=SR>0?OOS/SR:0, ok5=wfe>=0.5;
+      mark($('b-r2'),ok2,money(sNet)+' · '+ratio.toFixed(1)+'× cost');
+      mark($('b-r3'),ok3,t.toFixed(2));
+      mark($('b-r4'),ok4,(Y>0?(hurdle(N)/Math.sqrt(Y)).toFixed(2):'–')+' · DSR '+Math.round(dsr*100)+'%');
+      mark($('b-r5'),ok5,Math.round(wfe*100)+'%');
+      var n=[ok2,ok3,ok4,ok5].filter(Boolean).length;
+      $('b-out').textContent=n+' / 4'; $('b-meter').style.width=(n*25)+'%';
+      var vd=$('b-verdict'), msg;
+      if(!ok2)msg='Check 2 fails: with slippage doubled, each trade nets '+money(sNet)+' against '+money(sCost)+' of cost. The edge lives in your fill assumption. Re-test with realistic fills before anything else.';
+      else if(!ok3)msg='Check 3 fails: a t-stat of '+t.toFixed(2)+' means '+Math.round(T)+' trades cannot separate this edge from noise. You need about '+Math.ceil(Math.pow(2*SD/Math.max(M,0.01),2))+' trades at this average and spread.';
+      else if(!ok4)msg='Check 4 fails: '+N+' variations over '+Y+' years can produce a Sharpe of '+(hurdle(N)/Math.sqrt(Y)).toFixed(2)+' from luck alone, so your '+SR.toFixed(2)+' has a '+Math.round(dsr*100)+'% chance of being real skill. Cut the variations or add years of data.';
+      else if(!ok5)msg='Check 5 fails: unseen data kept '+Math.round(wfe*100)+'% of the in-sample Sharpe. Below 50%, most of the in-sample result was fitted to noise.';
+      else msg='All four numeric checks pass. Run checks 1, 6 and 7 by hand before you trade it with real money.';
+      vd.className='verdict'+(n<4?' warn':''); vd.textContent=msg;
+    }
+    ids.concat(['b-inst']).forEach(function(i){$(i).addEventListener('input',run)});
+    bc.querySelector('[data-act="ex"]').addEventListener('click',function(){ids.forEach(function(i,k){$(i).value=EX[k]});$('b-inst').selectedIndex=0;run()});
+    run();
+  });
+
+  // calculators
+  d.querySelectorAll('[data-calc]').forEach(function(calc){
+    var tabs=[].slice.call(calc.querySelectorAll('.tab')), panes=[].slice.call(calc.querySelectorAll('[data-pane]'));
+    tabs.forEach(function(t){t.addEventListener('click',function(){tabs.forEach(function(x){x.setAttribute('aria-selected',x===t?'true':'false')});panes.forEach(function(p){p.hidden=p.getAttribute('data-pane')!==t.getAttribute('data-tab')})})});
+    var $=function(id){return calc.querySelector('#'+id)}, fmt=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+
+    // sizing
+    var preset=$('s-preset'),room=$('s-room'),inst=$('s-inst'),stop=$('s-stop'),loss=$('s-loss');
+    function size(){
+      var opt=preset.options[preset.selectedIndex];
+      var R=+room.value||0, pv=+inst.value, S=+stop.value||0, N=+loss.value||0;
+      var per=S*pv*N, max=per>0?Math.floor(R/per):0;
+      var mini=+inst.options[inst.selectedIndex].getAttribute('data-mini');
+      var capMicros=+opt.getAttribute('data-cap')||0, cap=capMicros?(mini?Math.floor(capMicros/10):capMicros):0;
+      $('s-out').textContent=max; $('s-unit').textContent=inst.options[inst.selectedIndex].getAttribute('data-sym')+' contracts';
+      $('s-per').textContent=fmt(per); $('s-each').textContent=fmt(S*pv);
+      $('s-cap').textContent=cap?cap+' '+inst.options[inst.selectedIndex].getAttribute('data-sym'):'Not set';
+      var old=+opt.getAttribute('data-old')||0;
+      $('s-oldrow').hidden=!old; if(old){$('s-old').textContent=(per>0?Math.floor(old/per):0)+' at '+fmt(old)}
+      $('s-meter').style.width=(cap?Math.min(100,max/cap*100):0)+'%';
+      var v=$('s-verdict');
+      if(max===0){v.className='verdict warn';v.textContent='This stop is too wide for the room you have. Tighten the stop, survive fewer losses, or trade a smaller contract.'}
+      else if(cap&&max>=cap){v.className='verdict';v.textContent='The firm’s contract cap ('+cap+') binds before the drawdown does. Stay at or below the cap.'}
+      else{v.className='verdict';v.textContent='The drawdown limits you before the firm’s cap does. '+max+' contracts lets you take '+N+' full stops in a row and still have '+fmt(R-max*per)+' of room left.'}
+    }
+    preset.addEventListener('change',function(){var o=preset.options[preset.selectedIndex];if(o.getAttribute('data-room'))room.value=o.getAttribute('data-room');size()});
+    [room,inst,stop,loss].forEach(function(el){el.addEventListener('input',size)});
+    size();
+
+    // consistency
+    var tgt=$('c-target'),best=$('c-best'),capBtns=[].slice.call(calc.querySelectorAll('[data-cap-pct]')),pct=.4;
+    function cons(){
+      var T=+tgt.value||0,B=+best.value||0, need=Math.max(T,pct>0?B/pct:0);
+      $('c-out').textContent=fmt(need); $('c-extra').textContent=need>T?fmt(need-T)+' above target':'None';
+      $('c-stop').textContent=fmt(pct*T); $('c-days').textContent=Math.ceil(1/pct-1e-9);
+      $('c-pctl').textContent=Math.round(pct*100)+'%';
+      var v=$('c-verdict');
+      if(need>T){v.className='verdict warn';v.textContent='Your best day is '+Math.round(B/T*100)+'% of the target, so you have to keep trading to '+fmt(need)+' before you qualify. A daily stop-win at '+fmt(pct*T)+' prevents this.'}
+      else{v.className='verdict';v.textContent='Your best day fits inside the '+Math.round(pct*100)+'% cap. Keep every day at or under '+fmt(pct*T)+' and the target is all you need.'}
+    }
+    capBtns.forEach(function(b){b.addEventListener('click',function(){pct=+b.getAttribute('data-cap-pct');capBtns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});cons()})});
+    [tgt,best].forEach(function(el){el.addEventListener('input',cons)});
+    var cp=$('c-preset'); if(cp)cp.addEventListener('change',function(){tgt.value=cp.value;cons()});
+    cons();
+  });
+})();
+</script>
+</body>
+</html>

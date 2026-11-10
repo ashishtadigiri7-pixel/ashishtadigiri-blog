@@ -1,6 +1,109 @@
 {
   "posts": [
     {
+      "slug": "mnq-vs-nq",
+      "status": "live",
+      "date": "2026-11-10",
+      "title": "Micros are now half of CME's index futures volume. MNQ vs NQ: when to switch.",
+      "title_html": "Micros are now half of CME's index futures volume. <span class=\"grad\">MNQ vs NQ: when to switch.</span>",
+      "dek": "MNQ hit 2.9 million contracts a day in October, up 74%. One rule tells you when to stay in micros, when to use the mini, and how mixing both cuts your fees for the same risk.",
+      "excerpt": "MNQ volume is up 74%. When to trade the micro, when the mini, and the split rule that keeps your risk and cuts your fees, with a calculator.",
+      "pillar": "lab",
+      "read": 6,
+      "keyword": "MNQ vs NQ",
+      "keywords": [
+        "micro Nasdaq futures",
+        "MNQ position size",
+        "when to switch from MNQ to NQ",
+        "Micro E-mini Nasdaq-100",
+        "NQ point value",
+        "futures commission cost micros"
+      ],
+      "seo_title": "MNQ vs NQ: When to Switch, and the Split That Cuts Your Fees",
+      "meta": "MNQ vs NQ: one rule for when to trade micros, when the mini, and how a mix of both keeps the same risk at lower fees. Worked example and calculator.",
+      "toc": [
+        [
+          "what-cme-reported",
+          "What CME reported"
+        ],
+        [
+          "the-difference",
+          "MNQ vs NQ: the difference"
+        ],
+        [
+          "split-rule",
+          "The split rule"
+        ],
+        [
+          "worked-example",
+          "Worked example: three accounts"
+        ],
+        [
+          "stay-micro",
+          "When to stay all-micro"
+        ],
+        [
+          "in-code",
+          "Put it in your sizing"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "split"
+      ],
+      "faq": [
+        [
+          "What is the difference between MNQ and NQ?",
+          "MNQ, the Micro E-mini Nasdaq-100 future, is one tenth the size of NQ, the E-mini Nasdaq-100. MNQ is worth $2 per index point and NQ $20 per point. Both track the same index at the same prices, so a stop of a given number of points is the same on either; only the dollar risk per contract differs."
+        ],
+        [
+          "When should I switch from MNQ to NQ?",
+          "Switch once your risk budget per trade covers at least one NQ at your stop, which is the stop in points times $20, and one NQ round turn costs less than ten MNQ round turns at your broker. Below that budget, or when the NQ costs ten times the micro or more, stay in MNQ."
+        ],
+        [
+          "Can I trade NQ and MNQ at the same time?",
+          "Yes. Size the trade in micros, then replace every full block of ten MNQ with one NQ. The split carries the same risk as the all-micro size, because ten MNQ equal one NQ point for point, and you pay commission on fewer contracts. Check your prop firm's contract caps before mixing."
+        ],
+        [
+          "How much did MNQ volume grow in October 2026?",
+          "CME Group reported Micro E-mini Nasdaq-100 futures average daily volume of 2.9 million contracts in October 2026, up 74% year on year. All Micro E-mini equity index futures and options averaged 4.4 million contracts a day, half of CME's equity index volume."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Trading Nasdaq futures or running a prop firm?",
+        "heading": "Size every order from the rules, not by hand.",
+        "body": "I build position-sizing consoles, risk engines and automated execution for futures traders and prop firms. Budget, stop, fees and firm limits go in once, and every order comes out sized.",
+        "bullets": [
+          "Position-sizing and target/stop consoles for Nasdaq and gold futures",
+          "Risk engines that enforce daily loss limits and drawdown on their own",
+          "Fixed price, agreed before any code. NDA available."
+        ],
+        "secondary": [
+          "See Project Vault",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "CME Group: Record October ADV of 30 million contracts, up 15% year over year (3 Nov 2026)",
+          "https://www.cmegroup.com/media-room/press-releases/2026/11/03/cme_group_reportsrecordoctoberadvof30millioncontractsup15yearove.html"
+        ],
+        [
+          "CME Group: Micro E-mini Nasdaq-100 futures contract specifications",
+          "https://cmegroup.com/trading/equity-index/us-index/micro-e-mini-nasdaq-100_contractSpecs_futures.html"
+        ],
+        [
+          "CME Group: Micro E-mini equity index futures products overview",
+          "https://www.cmegroup.com/education/courses/understanding-micro-futures-contracts-at-cme-group/micro-e-mini-futures/micro-e-mini-equity-index-futures-products-overview"
+        ]
+      ],
+      "retrieved": "9 Nov 2026",
+      "disclaimer": "Educational content, not financial advice. Volume figures are from CME Group's release of 3 November 2026; contract sizes from CME's specifications, checked on 9 November 2026. The fees in the worked example and calculator defaults are hypothetical; use your broker's actual costs. No affiliate links."
+    },
+    {
       "slug": "deprecated-mcp-servers",
       "status": "live",
       "date": "2026-11-06",

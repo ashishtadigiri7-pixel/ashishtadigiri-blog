@@ -77,6 +77,32 @@
     load();
   });
 
+  // MNQ / NQ split calculator
+  d.querySelectorAll('[data-split]').forEach(function(sp){
+    var $=function(id){return sp.querySelector('#'+id)}, ids=['sp-r','sp-s','sp-cm','sp-cn','sp-t'];
+    function money(v,dp){return '$'+v.toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp})}
+    function run(){
+      var r=parseFloat($('sp-r').value)||0, s=parseFloat($('sp-s').value)||0, cm=parseFloat($('sp-cm').value)||0, cn=parseFloat($('sp-cn').value)||0, t=parseFloat($('sp-t').value)||0, vd=$('sp-verdict');
+      if(r<=0||s<=0){$('sp-out').textContent='Enter a budget and stop';vd.className='verdict';vd.textContent='Both the risk budget and the stop must be above zero.';return}
+      var pm=s*2, pn=s*20, allm=Math.floor(r/pm+1e-9), nq=Math.floor(r/pn+1e-9), mnq=Math.floor((r-nq*pn)/pm+1e-9);
+      var useSplit=nq>0&&cn<10*cm, sn=useSplit?nq:0, sm=useSplit?mnq:allm, risk=sn*pn+sm*pm;
+      var costM=allm*cm, costS=sn*cn+sm*cm, save=(costM-costS)*t;
+      $('sp-out').textContent=sm===0&&sn===0?'No trade':(sn?sn+' NQ'+(sm?' + '+sm+' MNQ':''):sm+' MNQ');
+      $('sp-risk').textContent=money(risk,0)+' ('+Math.round(risk/r*100)+'%)';
+      $('sp-allm').textContent=allm+' MNQ';
+      $('sp-alln').textContent=nq+' NQ ('+money(nq*pn,0)+', '+Math.round(nq*pn/r*100)+'%)';
+      $('sp-cost').textContent=money(costM,2)+' / '+money(costS,2);
+      $('sp-save').textContent=money(Math.max(save,0),0);
+      vd.className='verdict';
+      if(allm===0){vd.className='verdict warn';vd.textContent='Even one MNQ ('+money(pm,0)+' at this stop) is more than the budget. Tighten the stop or skip the trade.'}
+      else if(nq===0){vd.textContent='The budget is under one NQ\u2019s risk ('+money(pn,0)+' at this stop), so trade MNQ only.'}
+      else if(cn>=10*cm){vd.textContent='One NQ costs at least as much as ten MNQ at these fees, so stay in MNQ: same risk, finer steps.'}
+      else{vd.textContent='Swap every 10 MNQ for 1 NQ: same risk, '+money(costM-costS,2)+' less per trade, '+money(save,0)+' a month at '+t+' trades.'}
+    }
+    ids.forEach(function(id){$(id).addEventListener('input',run)});
+    run();
+  });
+
   // MCP config checker
   d.querySelectorAll('[data-mcpcheck]').forEach(function(mc){
     var ta=mc.querySelector('#mc-in'), sample=ta.value, rows=mc.querySelector('#mc-rows'), out=mc.querySelector('#mc-out'), vd=mc.querySelector('#mc-verdict'), meter=mc.querySelector('#mc-meter');

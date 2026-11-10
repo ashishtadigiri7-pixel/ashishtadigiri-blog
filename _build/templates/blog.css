@@ -323,3 +323,6 @@ table.pl td{padding:8px}
 @media (max-width:600px){[data-mcpcheck] .mc-body{padding:14px}[data-mcpcheck] table.mc th:nth-child(2),[data-mcpcheck] table.mc td:nth-child(2){display:none}[data-mcpcheck] table.mc td,[data-mcpcheck] table.mc th{padding:10px 10px}}
 @media (max-width:600px){[data-mcpcheck] table.mc{min-width:0;table-layout:fixed}[data-mcpcheck] table.mc th:nth-child(1){width:27%}[data-mcpcheck] table.mc th:nth-child(3){width:25%}[data-mcpcheck] table.mc td{overflow-wrap:anywhere;font-size:13px}}
 @media (max-width:600px){[data-mcpcheck] table.mc th:nth-child(1){width:28%}[data-mcpcheck] table.mc th:nth-child(3){width:30%}[data-mcpcheck] table.mc td:nth-child(3){overflow-wrap:normal;font-size:12.5px}}
+/* MNQ / NQ split calculator */
+[data-split] .row2 .field label{min-height:2.6em;display:flex;align-items:flex-end}
+[data-split] .big .v{font-size:clamp(30px,5vw,40px);letter-spacing:-.03em}

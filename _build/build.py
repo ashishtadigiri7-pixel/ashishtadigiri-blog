@@ -344,6 +344,26 @@ def mcpcheck_component():
 </div>
 <p class="note">Checks package names against the 11 npm packages marked deprecated on the registry and the 2 archived Python servers (sqlite, sentry) as of 5 November 2026, flags unpinned npx installs and secrets typed straight into the config. It runs in your browser; nothing you paste leaves the page. Delete real tokens before you paste if you prefer.</p>"""
 
+def split_component():
+    return """<div class="calc" data-split>
+<div class="calc-head"><span class="lbl">MNQ / NQ split calculator</span></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2"><div class="field"><label for="sp-r">Risk budget per trade ($)</label><input id="sp-r" type="number" inputmode="decimal" min="0" step="50" value="1000"></div>
+<div class="field"><label for="sp-s">Stop (points)</label><input id="sp-s" type="number" inputmode="decimal" min="0.25" step="0.25" value="30"></div></div>
+<div class="row2"><div class="field"><label for="sp-cm">MNQ cost per round turn ($)</label><input id="sp-cm" type="number" inputmode="decimal" min="0" step="0.05" value="1.00"></div>
+<div class="field"><label for="sp-cn">NQ cost per round turn ($)</label><input id="sp-cn" type="number" inputmode="decimal" min="0" step="0.05" value="4.00"></div></div>
+<div class="field"><label for="sp-t">Trades per month</label><input id="sp-t" type="number" inputmode="numeric" min="0" step="1" value="20"></div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Send</span>
+<div class="big"><span class="v" id="sp-out">1 NQ + 6 MNQ</span></div>
+<ul class="lines"><li>Risk at the stop <b id="sp-risk">$960 (96%)</b></li><li>All-MNQ size <b id="sp-allm">16 MNQ</b></li><li>All-NQ size <b id="sp-alln">1 NQ ($600, 60%)</b></li><li>Cost a trade, MNQ / split <b id="sp-cost">$16.00 / $10.00</b></li><li>Saving per month <b id="sp-save">$120</b></li></ul>
+<div class="verdict" id="sp-verdict"></div>
+</div></div>
+</div>
+<p class="note">MNQ is $2 per point and NQ $20 per point (CME contract specifications). The default costs are hypothetical: enter your broker's all-in cost per round turn, including commission and exchange fees. Runs in your browser; nothing you enter leaves the page.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -363,6 +383,7 @@ def build_post(p):
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
     body = body.replace("{{TRIAGE}}", triage_component() if "triage" in p.get("components", []) else "")
+    body = body.replace("{{SPLIT}}", split_component() if "split" in p.get("components", []) else "")
     body = body.replace("{{MCPCHECK}}", mcpcheck_component() if "mcpcheck" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))
     body = body.replace("{{SITE}}", SITE if PREVIEW else "")
