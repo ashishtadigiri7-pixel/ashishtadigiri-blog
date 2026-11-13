@@ -77,6 +77,22 @@
     load();
   });
 
+  // core update seasonal check
+  d.querySelectorAll('[data-seasonal]').forEach(function(se){
+    var $=function(id){return se.querySelector('#'+id)}, ids=['se-a0','se-a1','se-b0','se-b1'];
+    function pct(v){return (v>=0?'+':'\u2212')+Math.abs(v*100).toFixed(1)+'%'}
+    function run(){
+      var a0=parseFloat($('se-a0').value)||0,a1=parseFloat($('se-a1').value)||0,b0=parseFloat($('se-b0').value)||0,b1=parseFloat($('se-b1').value)||0,vd=$('se-verdict');
+      if(a0<=0||b0<=0||b1<=0){$('se-out').textContent='Enter all four';$('se-raw').textContent='\u2013';$('se-season').textContent='\u2013';vd.className='verdict';vd.textContent='All four weeks need clicks above zero. No data from last year? Use the week-on-week change and treat late-November gains as seasonal.';return}
+      var raw=a1/a0-1, season=b1/b0-1, adj=(a1/a0)/(b1/b0)-1;
+      $('se-out').textContent=pct(adj); $('se-raw').textContent=pct(raw); $('se-season').textContent=pct(season);
+      if(adj<-0.10){vd.className='verdict warn';vd.textContent='A real drop: '+pct(adj)+' against your normal seasonal pattern'+(raw>0?', even though raw clicks are up '+pct(raw)+'.':'.')+' Run the ranking drop triage on these two weeks.'}
+      else if(adj>0.10){vd.className='verdict';vd.textContent='A real gain of '+pct(adj)+' after the season is taken out. Note which pages gained and leave them alone.'}
+      else{vd.className='verdict';vd.textContent='Inside \u00b110%: noise. Leave pages that rank alone.'}
+    }
+    ids.forEach(function(id){$(id).addEventListener('input',run)}); run();
+  });
+
   // MNQ / NQ split calculator
   d.querySelectorAll('[data-split]').forEach(function(sp){
     var $=function(id){return sp.querySelector('#'+id)}, ids=['sp-r','sp-s','sp-cm','sp-cn','sp-t'];

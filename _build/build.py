@@ -364,6 +364,25 @@ def split_component():
 </div>
 <p class="note">MNQ is $2 per point and NQ $20 per point (CME contract specifications). The default costs are hypothetical: enter your broker's all-in cost per round turn, including commission and exchange fees. Runs in your browser; nothing you enter leaves the page.</p>"""
 
+def seasonal_component():
+    return """<div class="calc" data-seasonal>
+<div class="calc-head"><span class="lbl">Core update seasonal check</span></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2"><div class="field"><label for="se-a0">This year, week before</label><input id="se-a0" type="number" inputmode="numeric" min="0" step="100" value="8000"></div>
+<div class="field"><label for="se-a1">This year, week after</label><input id="se-a1" type="number" inputmode="numeric" min="0" step="100" value="10400"></div></div>
+<div class="row2"><div class="field"><label for="se-b0">Last year, week before</label><input id="se-b0" type="number" inputmode="numeric" min="0" step="100" value="7500"></div>
+<div class="field"><label for="se-b1">Last year, week after</label><input id="se-b1" type="number" inputmode="numeric" min="0" step="100" value="10500"></div></div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Update effect, seasonally adjusted</span>
+<div class="big"><span class="v" id="se-out">−7.1%</span></div>
+<ul class="lines"><li>Raw change this year <b id="se-raw">+30.0%</b></li><li>Normal seasonal change (last year) <b id="se-season">+40.0%</b></li></ul>
+<div class="verdict" id="se-verdict"></div>
+</div></div>
+</div>
+<p class="note">Enter total clicks for each week from Search Console, Performance. "Before" is the week before the update started; "after" is the first full week after it ends. Match last year's weeks by going back 364 days so weekdays line up. Runs in your browser; nothing you enter leaves the page.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -383,6 +402,7 @@ def build_post(p):
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
     body = body.replace("{{TRIAGE}}", triage_component() if "triage" in p.get("components", []) else "")
+    body = body.replace("{{SEASONAL}}", seasonal_component() if "seasonal" in p.get("components", []) else "")
     body = body.replace("{{SPLIT}}", split_component() if "split" in p.get("components", []) else "")
     body = body.replace("{{MCPCHECK}}", mcpcheck_component() if "mcpcheck" in p.get("components", []) else "")
     body = body.replace("{{CTA}}", cta_component(p["cta"]))

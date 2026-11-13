@@ -1,0 +1,89 @@
+<p class="lede">Google started the <strong>November 2026 core update</strong> on 10 November. Its status dashboard says the rollout "may take up to 2 weeks to complete", which runs to 24 November, three days before Black Friday. Google's advice is to wait a full week after it finishes, then compare a week of Search Console data with the week before the update. This year that "full week" lands on Black Friday and Cyber Monday, when traffic jumps for reasons that have nothing to do with the update. Compare the weeks Google's way and seasonal growth can hide a real loss. This note gives you a way to strip the season out with last year's numbers, a rule for what to do with the result, and a calculator that runs it.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>The rollout can run until 24 November. Until it ends, any change you see is unfinished, and any edit you make blurs the reading.</li>
+    <li>Divide this year's change by last year's change over the same weeks. That gives you the update's effect with the holiday ramp taken out.</li>
+    <li>Inside ±10% after adjustment, leave the site alone. Below −10%, run a full triage on the pages that lost ground.</li>
+  </ul>
+</div>
+
+<h2 id="what-happened"><span class="no">01</span>What is the November 2026 core update?</h2>
+<p>A core update is a broad change to how Google ranks pages, not a penalty and not aimed at any one kind of site. Google's Search Status Dashboard logged this one at 10:06 Pacific time on 10 November 2026, and says it applies worldwide and to all languages.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Date (2026)</th><th>What happens</th></tr></thead>
+  <tbody>
+    <tr><td>Tue 10 Nov</td><td>Core update starts</td></tr>
+    <tr><td>Tue 24 Nov</td><td>Latest finish if the rollout takes the full 2 weeks</td></tr>
+    <tr><td>Thu 26 Nov</td><td>Thanksgiving (US)</td></tr>
+    <tr><td>Fri 27 Nov</td><td>Black Friday</td></tr>
+    <tr><td>Mon 30 Nov</td><td>Cyber Monday</td></tr>
+    <tr><td>Tue 1 Dec</td><td>First day a full post-update week exists, if it finishes on the 24th</td></tr>
+  </tbody>
+</table>
+</div>
+<p>It is Google's third core update of 2026. The March update took just over 12 days to roll out and the May update just under 12, so a finish shortly before Thanksgiving is likely.</p>
+
+<h2 id="the-problem"><span class="no">02</span>Why a week-on-week comparison fails in November</h2>
+<p>Google's core update guidance says to confirm the rollout has finished, wait "at least a full week" after it completes, and compare that week "with a week before" the update started. That works in a quiet month. In late November, the week after the update is the busiest shopping week of the year for many sites, so traffic rises whether the update helped you or not.</p>
+<p>The fix is to measure how much your traffic normally grows across the same two weeks, using last year's Search Console data, and take that growth out. Search Console keeps 16 months of performance data, so last November is still there.</p>
+
+<h2 id="method"><span class="no">03</span>The seasonal adjustment: one division</h2>
+<div class="formula" data-plain="Adjusted change = (this year after / this year before) / (last year after / last year before) - 1"><button class="copy" type="button">Copy</button><span class="k">Adjusted change</span> = (this year after ÷ this year before) ÷ (last year after ÷ last year before) − 1</div>
+<p>To make the weeks line up, go back 364 days, not one calendar year. That keeps Tuesday matched with Tuesday and Black Friday with Black Friday:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Window</th><th>This year</th><th>Last year (364 days earlier)</th></tr></thead>
+  <tbody>
+    <tr><td>Before the update</td><td>Tue 3 to Mon 9 Nov 2026</td><td>Tue 4 to Mon 10 Nov 2025</td></tr>
+    <tr><td>After the update</td><td>Tue 1 to Mon 7 Dec 2026</td><td>Tue 2 to Mon 8 Dec 2025</td></tr>
+  </tbody>
+</table>
+</div>
+<p>If the rollout finishes later than 24 November, move both "after" windows forward by the same number of days. In Search Console, open Performance, set the date range to Compare, enter each pair, and note total clicks. Do the same with impressions if you want to see whether visibility or click-through changed.</p>
+
+<h2 id="worked-example"><span class="no">04</span>Worked example: one shop, two outcomes</h2>
+<p>A <strong>hypothetical</strong> online shop, clicks from Search Console:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th></th><th class="num">Before</th><th class="num">After</th><th class="num">Raw change</th></tr></thead>
+  <tbody>
+    <tr><td>Last year (2025)</td><td class="num">7,500</td><td class="num">10,500</td><td class="num">+40%</td></tr>
+    <tr><td>This year, case A</td><td class="num">8,000</td><td class="num">10,400</td><td class="num up">+30%</td></tr>
+    <tr><td>This year, case B</td><td class="num">8,000</td><td class="num">9,200</td><td class="num up">+15%</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>Case A:</strong> 1.30 ÷ 1.40 − 1 = <strong>−7.1%</strong>. Traffic grew 30%, but the shop normally grows 40% across these weeks. A 7% shortfall is inside the noise band. Change nothing.</p>
+<p><strong>Case B:</strong> 1.15 ÷ 1.40 − 1 = <strong>−17.9%</strong>. The raw number still says +15%, and on Google's week-on-week view it looks like a good month. Against its own seasonal pattern, the shop lost nearly a fifth of its search traffic. That is a real drop, and it would have gone unnoticed until January.</p>
+
+<div class="box">
+  <h4>Decision rule</h4>
+  <ul>
+    <li><strong>Adjusted change between −10% and +10%:</strong> noise. Don't touch pages that rank.</li>
+    <li><strong>Below −10%:</strong> run the <a href="{{SITE}}/blog/google-ranking-drop-triage/">Google ranking drop triage</a> on the same two weeks to find which pages and queries lost ground, and whether visibility or click-through fell.</li>
+    <li><strong>Above +10%:</strong> note which pages gained, and leave them alone. Don't let a winning page get rewritten for the sales.</li>
+    <li><strong>No data from last year</strong> (new site): use Google's week-on-week check, and treat any gain in late November as seasonal until December data proves otherwise.</li>
+  </ul>
+</div>
+
+<p>Run your own numbers. The calculator opens with case A loaded:</p>
+
+{{SEASONAL}}
+
+<h2 id="during-rollout"><span class="no">05</span>What to do between now and Black Friday</h2>
+<ul>
+  <li><strong>Freeze content on pages that rank.</strong> Google advises against "quick fix" changes during core updates. An edit made mid-rollout also makes it impossible to tell whether the update or your change moved the page.</li>
+  <li><strong>Do fix anything broken.</strong> Errors, pages dropping out of the index, slow checkout pages and broken product feeds have nothing to do with the update. Fix them the day you find them.</li>
+  <li><strong>Write down your dates now.</strong> Note when the rollout ends on Google's status dashboard, then pull your two pairs of weeks one full week later.</li>
+  <li><strong>Don't lean on search alone for the sale.</strong> If organic traffic carries your Black Friday, line up email and any paid campaigns now, so a mid-rollout dip doesn't cost you the week.</li>
+</ul>
+
+<h2 id="help"><span class="no">06</span>When the numbers point to a real drop</h2>
+<p>A drop that survives the seasonal adjustment is a content and quality question, and the fix takes weeks, not a sale weekend. That is the work in <a href="{{SITE}}/#work">Project Atlas</a>, where I took a 25,000-post site from a C to a high A on PageSpeed, and in the technical audits I run before any content changes. If your adjusted number comes out below −10% in December, that is the <a href="{{SITE}}/#services">SEO and site performance work</a> I take on.</p>
+
+{{FAQ}}
+
+{{CTA}}

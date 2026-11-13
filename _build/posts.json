@@ -1,6 +1,109 @@
 {
   "posts": [
     {
+      "slug": "november-2026-core-update",
+      "status": "live",
+      "date": "2026-11-13",
+      "title": "The November 2026 core update ends days before Black Friday. Read it right.",
+      "title_html": "The November 2026 core update ends days before Black Friday. <span class=\"grad\">Read it right.</span>",
+      "dek": "Google's rollout can run to 24 November, and the week you're told to measure is Black Friday week. One division takes the season out, so a real drop can't hide behind holiday traffic.",
+      "excerpt": "The core update may run to 24 November. How to measure it with the holiday ramp taken out, a ±10% rule for what to do, and a calculator.",
+      "pillar": "web",
+      "read": 6,
+      "keyword": "November 2026 core update",
+      "keywords": [
+        "core update Black Friday",
+        "Google core update seasonality",
+        "compare core update traffic year over year",
+        "Search Console compare dates core update",
+        "Google core update 2026 rollout",
+        "core update recovery ecommerce"
+      ],
+      "seo_title": "November 2026 Core Update: How to Read It Past Black Friday",
+      "meta": "The November 2026 core update runs into Black Friday week. Strip the seasonal jump out of your Search Console numbers with one division and a calculator.",
+      "toc": [
+        [
+          "what-happened",
+          "What the update is"
+        ],
+        [
+          "the-problem",
+          "Why week-on-week fails"
+        ],
+        [
+          "method",
+          "The seasonal adjustment"
+        ],
+        [
+          "worked-example",
+          "Worked example: one shop"
+        ],
+        [
+          "during-rollout",
+          "Before Black Friday"
+        ],
+        [
+          "help",
+          "When the drop is real"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "seasonal"
+      ],
+      "faq": [
+        [
+          "When did the November 2026 core update start?",
+          "Google started the November 2026 core update on 10 November 2026 at 10:06 Pacific time, according to its Search Status Dashboard. Google said the rollout may take up to two weeks to complete, which would put the latest finish on 24 November, three days before Black Friday."
+        ],
+        [
+          "How long should I wait before checking the core update's impact?",
+          "Google recommends confirming the update has finished, then waiting at least a full week before analysing your site in Search Console. If the rollout ends on 24 November, the first full week of data runs from 1 to 7 December 2026."
+        ],
+        [
+          "How do I separate the core update from Black Friday traffic?",
+          "Divide this year's change by last year's change over the same weeks. Take clicks for the week before the update and the week after it ends, then the same two weeks 364 days earlier. The result shows the update's effect with the usual seasonal rise taken out."
+        ],
+        [
+          "Should I change my content during the core update rollout?",
+          "Google advises against quick-fix changes during core updates and suggests not editing content that already performs well. Fix broken pages, indexing errors and speed problems straight away, but hold content rewrites until the rollout ends and the seasonally adjusted numbers show a real drop."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Selling online through the holidays?",
+        "heading": "Know whether the update or the season moved your traffic.",
+        "body": "I run technical SEO audits and performance turnarounds for sites that live on search traffic, and I read core update data with the season taken out before anything gets rewritten.",
+        "bullets": [
+          "A seasonally adjusted read of your Search Console data after the update",
+          "A technical audit of indexing, speed and templates before any content changes",
+          "Fixed price, agreed before any work starts. NDA available."
+        ],
+        "secondary": [
+          "See Project Atlas",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "Google Search Status Dashboard: November 2026 core update",
+          "https://status.search.google.com/incidents/WLxcJyC6jMWMfryxsKMc"
+        ],
+        [
+          "Google Search Central: Google Search's core updates and your website",
+          "https://developers.google.com/search/updates/core-updates"
+        ],
+        [
+          "PPC Land: Google's core update shifts rankings for up to 2 weeks before Black Friday (10 Nov 2026)",
+          "https://ppc.land/googles-core-update-shifts-rankings-for-up-to-2-weeks-before-black-friday/"
+        ]
+      ],
+      "retrieved": "12 Nov 2026",
+      "disclaimer": "Rollout dates come from Google's Search Status Dashboard as checked on 12 November 2026; the update may finish earlier or later. Past rollout lengths are as reported by PPC Land. The shop in the worked example is hypothetical."
+    },
+    {
       "slug": "mnq-vs-nq",
       "status": "live",
       "date": "2026-11-10",
