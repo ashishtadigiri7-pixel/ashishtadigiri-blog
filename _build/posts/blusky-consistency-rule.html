@@ -1,0 +1,81 @@
+<p class="lede">On 9 November, BluSky loosened the <strong>consistency rule</strong> on its Propel evaluation from 34% to 55%, and cut the minimum profitable days from 3 to 2. On paper the first test got easier. The catch is the next phase: BluSky's Buffer Zone still runs a 34% rule, and the 300K plan runs 21%. A trading style that passes Phase 1 with one big day can fail the very next step on that same habit. This note shows how the BluSky consistency rule is calculated, a worked example where a trader hits the target and is still out of consistency, and a calculator that tells you exactly how much more you need.</p>
+
+<div class="box">
+  <h4>Key takeaways</h4>
+  <ul>
+    <li>BluSky compares your biggest day with the <strong>sum of your profitable days</strong>, not your net profit. Losing days don't count either way.</li>
+    <li>Hitting the profit target is not the same as passing. If your best day is too big a share, you need more profitable days on top.</li>
+    <li>Set a daily stop-win for each phase: 55% of the target in Phase 1, 34% in the Buffer Zone (21% on the 300K).</li>
+  </ul>
+</div>
+
+<h2 id="what-changed"><span class="no">01</span>What changed on BluSky's Propel plans</h2>
+<p>BluSky's help centre now lists these Phase 1 (evaluation) rules for Propel. The change was logged on 9 November 2026.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Phase 1 rule</th><th class="num">Before</th><th class="num">After</th></tr></thead>
+  <tbody>
+    <tr><td>Consistency (25K to 200K)</td><td class="num">34%</td><td class="num up">55%</td></tr>
+    <tr><td>Consistency (300K)</td><td class="num">21%</td><td class="num up">55%</td></tr>
+    <tr><td>Largest single day, 50K</td><td class="num">$1,020</td><td class="num up">$1,650</td></tr>
+    <tr><td>Largest single day, 300K</td><td class="num">$4,200</td><td class="num up">$11,000</td></tr>
+    <tr><td>Minimum profitable days</td><td class="num">3</td><td class="num up">2</td></tr>
+    <tr><td>Reset price, 50K</td><td class="num">$79</td><td class="num down">$89</td></tr>
+  </tbody>
+</table>
+</div>
+<p>The Buffer Zone, the phase between the evaluation and the Sim Funded account, did not move. It still uses 34% on the 25K to 200K plans and 21% on the 300K, against smaller targets.</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Propel 50K</th><th class="num">Target</th><th class="num">Consistency</th><th class="num">Biggest day allowed</th></tr></thead>
+  <tbody>
+    <tr><td>Phase 1, evaluation</td><td class="num">$3,000</td><td class="num">55%</td><td class="num">$1,650</td></tr>
+    <tr><td>Phase 2, Buffer Zone</td><td class="num">$3,000</td><td class="num">34%</td><td class="num">$1,020</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="how-it-works"><span class="no">02</span>How the BluSky consistency rule is calculated</h2>
+<p>BluSky takes your largest single profitable day and divides it by the sum of all your profitable days. Losing days are left out. Its help page points out that many firms divide by net profit instead, which shrinks the number you are measured against. Turn the rule around and you get three numbers you can plan with:</p>
+<div class="formula" data-plain="Profitable-day total needed = biggest day / rule. Daily stop-win = rule x target. Minimum profitable days = 1 / rule, rounded up."><button class="copy" type="button">Copy</button><span class="k">Profitable-day total needed</span> = biggest day ÷ rule<br><span class="k">Daily stop-win</span> = rule × target<br><span class="k">Minimum profitable days</span> = 1 ÷ rule, rounded up</div>
+<p>At 55% the minimum is 2 profitable days, as BluSky's page says. At 34% it is 3. At 21% it is 5. Being out of consistency doesn't fail the account at BluSky; it is checked when you try to pass a phase or take a payout, and you fix it by trading on.</p>
+
+<h2 id="worked-example"><span class="no">03</span>Worked example: at the target, still not through</h2>
+<p>A <strong>hypothetical</strong> trader on a Propel 50K evaluation, target $3,000, rule 55%:</p>
+<div class="tablewrap">
+<table class="data">
+  <thead><tr><th>Day</th><th class="num">Result</th></tr></thead>
+  <tbody>
+    <tr><td>Day 1</td><td class="num up">+$1,900</td></tr>
+    <tr><td>Day 2</td><td class="num down">−$400</td></tr>
+    <tr><td>Day 3</td><td class="num up">+$700</td></tr>
+    <tr><td>Day 4</td><td class="num up">+$800</td></tr>
+    <tr><td><strong>Net profit</strong></td><td class="num"><strong>$3,000</strong></td></tr>
+  </tbody>
+</table>
+</div>
+<p>Net profit is exactly on target. Profitable days add up to $1,900 + $700 + $800 = $3,400. The best day is $1,900 ÷ $3,400 = <strong>55.9%</strong>, just over the 55% line. The profitable-day total needed is $1,900 ÷ 0.55 = $3,455, so the trader needs <strong>$55 more</strong> on a profitable day before the phase counts as passed. (At a firm that divides by net profit, the same day would read $1,900 ÷ $3,000 = 63%.)</p>
+<p>Now carry the same habit into the Buffer Zone at 34%. A $1,900 day there needs profitable days totalling $1,900 ÷ 0.34 = <strong>$5,588</strong>, against a $3,000 target. That is $2,588 more in winning days than the target itself asks for, all of it traded with the trailing drawdown live.</p>
+
+<div class="box">
+  <h4>Decision rule</h4>
+  <ul>
+    <li><strong>Phase 1:</strong> stop for the day at 55% of the target ($1,650 on the 50K). Plan for at least 2 profitable days.</li>
+    <li><strong>Buffer Zone:</strong> stop for the day at 34% of the target ($1,020 on the 50K), or 21% on the 300K. Plan for at least 3 profitable days, or 5 on the 300K.</li>
+    <li><strong>Already over the line:</strong> work out the profitable-day total you need with the calculator, and trade small until you reach it. Don't swing for it; a forced day is where the drawdown goes.</li>
+  </ul>
+</div>
+
+<p>Check your own account. The calculator opens with the worked example loaded:</p>
+
+{{CONSIST}}
+
+<h2 id="sizing"><span class="no">04</span>Turn the stop-win into a position size</h2>
+<p>A daily stop-win only works if your normal winning day sits well under it. If your strategy averages a 2:1 winner and the Buffer Zone cap is $1,020, a full-size winner can't be bigger than that, so your risk per trade has to come down to fit. Size from the room you have, as in the <a href="{{SITE}}/blog/bulenox-drawdown-lucid-consistency-rule/">prop firm position sizing formula</a>, and if the answer runs to 10 micros or more, check the <a href="{{SITE}}/blog/mnq-vs-nq/">MNQ vs NQ split</a> before you send it.</p>
+
+<h2 id="tooling"><span class="no">05</span>Make the rule part of the platform, not your memory</h2>
+<p>Consistency rules are easy to break by accident, because the number that matters (your profitable-day total) is rarely on screen. A risk console can track it live, show the stop-win for the current phase and warn before the next trade breaks it. That is what <a href="{{SITE}}/#work">Project Vault</a> does for Nasdaq and gold futures. If you trade prop accounts, or run a prop firm and want the rules enforced in the platform, that is the <a href="{{SITE}}/#services">fintech and trading systems work</a> I take on.</p>
+
+{{FAQ}}
+
+{{CTA}}

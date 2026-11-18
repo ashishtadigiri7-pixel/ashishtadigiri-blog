@@ -77,6 +77,26 @@
     load();
   });
 
+  // consistency rule check
+  d.querySelectorAll('[data-consist]').forEach(function(cs){
+    var $=function(id){return cs.querySelector('#'+id)}, ids=['cs-rule','cs-tgt','cs-best','cs-win','cs-loss'];
+    function m(v){return '$'+Math.round(v).toLocaleString('en-GB')}
+    function run(){
+      var r=(parseFloat($('cs-rule').value)||0)/100,t=parseFloat($('cs-tgt').value)||0,b=parseFloat($('cs-best').value)||0,w=parseFloat($('cs-win').value)||0,l=Math.abs(parseFloat($('cs-loss').value)||0),vd=$('cs-verdict');
+      if(r<=0||r>1){$('cs-out').textContent='Check the rule';vd.className='verdict warn';vd.textContent='Enter the rule as a percentage between 1 and 100.';return}
+      if(b>w){w=b}
+      var need=b/r, more=Math.max(0,Math.ceil(need-w)), net=w-l, toTgt=Math.max(0,t-net), now=w>0?b/w:0;
+      $('cs-now').textContent=(now*100).toFixed(1)+'%'; $('cs-need').textContent=m(Math.ceil(need)); $('cs-net').textContent=m(net)+' of '+m(t);
+      $('cs-stop').textContent=m(r*t); $('cs-days').textContent=Math.ceil(1/r-1e-9);
+      var go=Math.max(more,toTgt); $('cs-out').textContent=m(go);
+      if(b===0){vd.className='verdict';vd.textContent='No winning days yet. Keep each day under '+m(r*t)+' and you will never be out of consistency.'}
+      else if(more===0&&toTgt===0){vd.className='verdict';vd.textContent='Target reached and inside the rule. This phase can pass.'}
+      else if(more>toTgt){vd.className='verdict warn';vd.textContent='Out of consistency: your best day is '+(now*100).toFixed(1)+'% of your winning days. You need '+m(more)+' more in winning days'+(toTgt>0?', which also covers the '+m(toTgt)+' left to the target.':', even though the target is already reached.')+' Trade small until you get there.'}
+      else{vd.className='verdict';vd.textContent=m(toTgt)+' left to the target. '+(more>0?'That also fixes consistency. ':'')+'Keep each day under '+m(r*t)+'.'}
+    }
+    ids.forEach(function(id){$(id).addEventListener('input',run)}); run();
+  });
+
   // core update seasonal check
   d.querySelectorAll('[data-seasonal]').forEach(function(se){
     var $=function(id){return se.querySelector('#'+id)}, ids=['se-a0','se-a1','se-b0','se-b1'];

@@ -383,6 +383,26 @@ def seasonal_component():
 </div>
 <p class="note">Enter total clicks for each week from Search Console, Performance. "Before" is the week before the update started; "after" is the first full week after it ends. Match last year's weeks by going back 364 days so weekdays line up. Runs in your browser; nothing you enter leaves the page.</p>"""
 
+def consist_component():
+    return """<div class="calc" data-consist>
+<div class="calc-head"><span class="lbl">Consistency rule check</span></div>
+<div class="calc-body">
+<div class="inputs">
+<div class="row2"><div class="field"><label for="cs-rule">Consistency rule (%)</label><input id="cs-rule" type="number" inputmode="decimal" min="1" max="100" step="1" value="55"></div>
+<div class="field"><label for="cs-tgt">Profit target ($)</label><input id="cs-tgt" type="number" inputmode="decimal" min="0" step="100" value="3000"></div></div>
+<div class="row2"><div class="field"><label for="cs-best">Biggest winning day ($)</label><input id="cs-best" type="number" inputmode="decimal" min="0" step="50" value="1900"></div>
+<div class="field"><label for="cs-win">All winning days added up ($)</label><input id="cs-win" type="number" inputmode="decimal" min="0" step="50" value="3400"></div></div>
+<div class="field"><label for="cs-loss">All losing days added up ($, as a positive number)</label><input id="cs-loss" type="number" inputmode="decimal" min="0" step="50" value="400"></div>
+</div>
+<div class="out" aria-live="polite">
+<span class="lbl">Still to make</span>
+<div class="big"><span class="v" id="cs-out">$55</span></div>
+<ul class="lines"><li>Your consistency now <b id="cs-now">55.9%</b></li><li>Winning-day total needed <b id="cs-need">$3,455</b></li><li>Net profit vs target <b id="cs-net">$3,000 of $3,000</b></li><li>Daily stop-win for this phase <b id="cs-stop">$1,650</b></li><li>Minimum winning days <b id="cs-days">2</b></li></ul>
+<div class="verdict" id="cs-verdict"></div>
+</div></div>
+</div>
+<p class="note">Uses BluSky's method: biggest winning day divided by the sum of winning days, with losing days left out. Some firms divide by net profit instead; check your firm's help page. Runs in your browser; nothing you enter leaves the page.</p>"""
+
 def cta_component(c, from_post=True):
     bullets = "".join(f"<li>{esc(b)}</li>" for b in c["bullets"])
     sec_label, sec_href = c["secondary"]
@@ -402,6 +422,7 @@ def build_post(p):
     body = body.replace("{{PLANNER}}", planner_component() if "planner" in p.get("components", []) else "")
     body = body.replace("{{BTCHECK}}", btcheck_component() if "btcheck" in p.get("components", []) else "")
     body = body.replace("{{TRIAGE}}", triage_component() if "triage" in p.get("components", []) else "")
+    body = body.replace("{{CONSIST}}", consist_component() if "consist" in p.get("components", []) else "")
     body = body.replace("{{SEASONAL}}", seasonal_component() if "seasonal" in p.get("components", []) else "")
     body = body.replace("{{SPLIT}}", split_component() if "split" in p.get("components", []) else "")
     body = body.replace("{{MCPCHECK}}", mcpcheck_component() if "mcpcheck" in p.get("components", []) else "")

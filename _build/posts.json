@@ -1,6 +1,101 @@
 {
   "posts": [
     {
+      "slug": "blusky-consistency-rule",
+      "status": "live",
+      "date": "2026-11-17",
+      "title": "BluSky loosened its consistency rule to 55%. The next phase still runs 34%.",
+      "title_html": "BluSky loosened its consistency rule to 55%. <span class=\"grad\">The next phase still runs 34%.</span>",
+      "dek": "Passing Phase 1 got easier on 9 November. The Buffer Zone didn't. How the rule is calculated, a trader who hits the target and still isn't through, and a calculator for your own numbers.",
+      "excerpt": "BluSky's Propel evaluation moved to a 55% consistency rule; the Buffer Zone stayed at 34%. How to calculate it, a worked example and a free checker.",
+      "pillar": "prop",
+      "read": 6,
+      "keyword": "BluSky consistency rule",
+      "keywords": [
+        "BluSky Propel rules",
+        "BluSky Buffer Zone",
+        "prop firm consistency rule calculator",
+        "consistency rule profitable days",
+        "prop firm daily stop-win",
+        "prop firm rule changes November 2026"
+      ],
+      "seo_title": "BluSky Consistency Rule: 55% to Pass, 34% Next. Do the Maths",
+      "meta": "BluSky's consistency rule is now 55% on Propel evaluations but 34% in the Buffer Zone. Work out your stop-win and the winning days you still need.",
+      "toc": [
+        [
+          "what-changed",
+          "What changed at BluSky"
+        ],
+        [
+          "how-it-works",
+          "How the rule is calculated"
+        ],
+        [
+          "worked-example",
+          "Worked example"
+        ],
+        [
+          "sizing",
+          "Stop-win to position size"
+        ],
+        [
+          "tooling",
+          "Put it in the platform"
+        ],
+        [
+          "faq",
+          "FAQ"
+        ]
+      ],
+      "components": [
+        "consist"
+      ],
+      "faq": [
+        [
+          "What is BluSky's consistency rule on Propel plans?",
+          "Since 9 November 2026, BluSky's Propel evaluation uses a 55% consistency rule: your biggest winning day can be no more than 55% of all your winning days added up. The Buffer Zone that follows still uses 34% on the 25K to 200K plans and 21% on the 300K."
+        ],
+        [
+          "How does BluSky calculate consistency?",
+          "BluSky divides your largest single profitable day by the sum of your profitable days. Losing days are left out of the calculation. Many other firms divide by net profit instead, which makes the same best day a bigger share and the rule harder to meet."
+        ],
+        [
+          "Can I fail a BluSky account by breaking the consistency rule?",
+          "No. Being out of consistency does not fail the account. BluSky checks it when you try to pass a phase or request a payout, and you fix it by adding more winning days until your biggest day falls within the limit."
+        ],
+        [
+          "What is the minimum number of profitable days to pass?",
+          "Divide 1 by the rule and round up. At 55% that is 2 profitable days, which matches BluSky's own guidance for the Propel evaluation. At the Buffer Zone's 34% it is 3, and at 21% on the 300K plan it is 5."
+        ]
+      ],
+      "cta": {
+        "eyebrow": "Trading prop accounts, or running a prop firm?",
+        "heading": "Let the platform track the rule, not your memory.",
+        "body": "I build risk consoles and rule engines for futures traders and prop firms: consistency, drawdown and stop-win tracked live, with a warning before the trade that breaks them.",
+        "bullets": [
+          "Live consistency and stop-win tracking per phase",
+          "Drawdown-aware position sizing for Nasdaq and gold futures",
+          "Fixed price, agreed before any code. NDA available."
+        ],
+        "secondary": [
+          "See Project Vault",
+          "/#work"
+        ]
+      },
+      "sources": [
+        [
+          "BluSky Help Center: Propel plans, phases, rules and costs",
+          "https://help.blusky.pro/en/articles/16300862-propel-plans-phases-rules-and-costs"
+        ],
+        [
+          "PickAPropFirm: Futures prop firm rule radar (BluSky change logged 9 Nov 2026)",
+          "https://pickapropfirm.com/futures/prop-firm-rule-changes/"
+        ]
+      ],
+      "retrieved": "16 Nov 2026",
+      "disclaimer": "Educational content, not financial advice. Rules and prices are from BluSky's help centre as read on 16 November 2026, with the previous values as logged by PickAPropFirm on 9 November 2026; firms change rules often, so check the current page before you trade. The trader in the worked example is hypothetical. No affiliate links."
+    },
+    {
       "slug": "november-2026-core-update",
       "status": "live",
       "date": "2026-11-13",
